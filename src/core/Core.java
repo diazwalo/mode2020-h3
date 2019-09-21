@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 public class Core extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
 		RenderSystem rs = new RenderSystem(500, null);
 		Stage stageRs = rs.create();
 		stageRs.show();

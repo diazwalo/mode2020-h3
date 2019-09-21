@@ -29,7 +29,7 @@ public class RenderSystem {
         p.getChildren().add(shape);
         
         sc = new Scene(p);
-        
+       
         st.setScene(sc);
         st.setTitle("Système");
         
