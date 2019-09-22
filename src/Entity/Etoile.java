@@ -28,4 +28,22 @@ public class Etoile extends CorpsCeleste {
 	public Etoile(double masse) {
 		this(masse, 0, null, null, null);
 	}
+
+	@Override
+	public double getMasse() {
+		// TODO Auto-generated method stub
+		return this.masse;
+	}
+
+	@Override
+	public double getTaille() {
+		// TODO Auto-generated method stub
+		return this.taille;
+	}
+
+	@Override
+	public Position getPosition() {
+		// TODO Auto-generated method stub
+		return this.position;
+	}
 }

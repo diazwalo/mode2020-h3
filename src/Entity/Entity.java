@@ -9,4 +9,8 @@ public abstract class Entity {
 	protected Position position;
 	protected Vecteur direction;
 	protected Vecteur vitesse;
+	
+	public abstract double getMasse();
+	public abstract double getTaille();
+	public abstract Position getPosition();
 }
