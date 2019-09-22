@@ -8,7 +8,7 @@ public class Planete extends CorpsCeleste {
 	
 	public Planete(double masse, double taille, Position position, Vecteur direction, Vecteur vitesse, Image sprite) {
 		this.masse = masse;
-		this.taille = taille;
+		this.rayon = taille;
 		this.position = position;
 		this.direction = direction;
 		this.vitesse = vitesse;

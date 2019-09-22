@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 
 public abstract class Entity {
 	protected double masse;
-	protected double taille;
+	protected double rayon;
 	protected Position position;
 	protected Vecteur direction;
 	protected Vecteur vitesse;
@@ -18,11 +18,11 @@ public abstract class Entity {
 	public void setMasse(double masse) {
 		this.masse = masse;
 	}
-	public double getTaille() {
-		return taille;
+	public double getRayon() {
+		return rayon;
 	}
-	public void setTaille(double taille) {
-		this.taille = taille;
+	public void setRayon(double rayon) {
+		this.rayon = rayon;
 	}
 	public Position getPosition() {
 		return position;

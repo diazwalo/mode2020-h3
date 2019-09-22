@@ -8,7 +8,7 @@ public class Etoile extends CorpsCeleste {
 	
 	public Etoile(double masse, double taille, Position position, Vecteur direction, Vecteur vitesse, Image sprite) {
 		this.masse = masse;
-		this.taille = taille;
+		this.rayon = taille;
 		this.position = position;
 		this.direction = direction;
 		this.vitesse = vitesse;
@@ -46,9 +46,9 @@ public class Etoile extends CorpsCeleste {
 	}
 
 	@Override
-	public double getTaille() {
+	public double getRayon() {
 		// TODO Auto-generated method stub
-		return this.taille;
+		return this.rayon;
 	}
 
 	@Override
