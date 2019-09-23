@@ -12,6 +12,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import movement.Cardinal;
+import movement.Position;
 
 public class RenderSystem {
 	Stage st;
@@ -46,8 +48,22 @@ public class RenderSystem {
 	private void setActionAnimer(List<Entity> corps) {
 		animer.setOnAction(e -> {
 			for(Entity corpsceleste : corps) {
-				
+				switch(corpsceleste.getDirection().getDirection()) {
+					case NORD :
+						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX(), corpsceleste.getPosition().getPosY()-corpsceleste.getVitesse()));
+						break;
+					case SUD :
+						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX(), corpsceleste.getPosition().getPosY()+corpsceleste.getVitesse()));
+						break;
+					case EST :
+						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()+corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
+						break;
+					case OUEST :
+						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()-corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
+				}
 			}
+			createSystem();
+			
 		});
 	}
 	

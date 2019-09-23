@@ -7,7 +7,7 @@ import movement.Vecteur;
 
 public class Planete extends CorpsCeleste {
 	
-	public Planete(double masse, double taille, Position position, Direction direction, Vecteur vitesse, Image sprite) {
+	public Planete(double masse, double taille, Position position, Direction direction, double vitesse, Image sprite) {
 		this.masse = masse;
 		this.rayon = taille;
 		this.position = position;
@@ -16,27 +16,27 @@ public class Planete extends CorpsCeleste {
 		this.sprite = sprite;
 	}
 	
-	public Planete(double masse, double taille, Position position, Direction direction, Vecteur vitesse) {
+	public Planete(double masse, double taille, Position position, Direction direction, double vitesse) {
 		this(masse, taille, position, direction, vitesse, null);
 	}
 	
 	public Planete(double masse, double taille, Position position, Direction direction) {
-		this(masse, taille, position, direction, null, null);
+		this(masse, taille, position, direction, 0, null);
 	}
 	
 	public Planete(double masse, double taille, Position position) {
-		this(masse, taille, position, null, null, null);
+		this(masse, taille, position, null, 0, null);
 	}
 	
 	public Planete(double masse, double taille) {
-		this(masse, taille, null, null, null, null);
+		this(masse, taille, null, null, 0, null);
 	}
 	
 	public Planete(double masse) {
-		this(masse, 0, null, null, null, null);
+		this(masse, 0, null, null, 0, null);
 	}
 	
 	public Planete() {
-		this(0, 0, null, null, null, null);
+		this(0, 0, null, null, 0, null);
 	}
 }

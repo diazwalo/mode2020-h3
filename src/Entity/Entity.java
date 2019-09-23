@@ -10,7 +10,7 @@ public abstract class Entity {
 	protected double rayon;
 	protected Position position;
 	protected Direction direction;
-	protected Vecteur vitesse;
+	protected double vitesse;
 	protected Image sprite;
 	
 	public double getMasse() {
@@ -37,10 +37,10 @@ public abstract class Entity {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-	public Vecteur getVitesse() {
+	public double getVitesse() {
 		return vitesse;
 	}
-	public void setVitesse(Vecteur vitesse) {
+	public void setVitesse(double vitesse) {
 		this.vitesse = vitesse;
 	}
 	public Image getSprite() {

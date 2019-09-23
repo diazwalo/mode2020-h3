@@ -8,6 +8,8 @@ import Entity.Etoile;
 import ihm.RenderSystem;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import movement.Cardinal;
+import movement.Direction;
 import movement.Position;
 
 public class Core extends Application{
@@ -16,7 +18,7 @@ public class Core extends Application{
 		List<Entity> corps = new ArrayList<Entity>();
 		
 		for (int i = 1; i <= 5; i++) {
-			Entity e = new Etoile(0, 10, new Position(85+i*75, 85+i*75));
+			Entity e = new Etoile(0, 10, new Position(85+i*75, 85+i*75), new Direction(Cardinal.SUD), 25);
 			corps.add(e);
 		}
 		
