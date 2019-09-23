@@ -3,7 +3,7 @@ package ihm;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.org.apache.bcel.internal.classfile.Code;
+//import com.sun.org.apache.bcel.internal.classfile.Code;
 
 import Entity.Entity;
 import javafx.scene.Scene;
@@ -48,7 +48,7 @@ public class RenderSystem {
         sc = new Scene(p);
        
         st.setScene(sc);
-        st.setTitle("Système");
+        st.setTitle("Systï¿½me");
         
         return st;
 	}
