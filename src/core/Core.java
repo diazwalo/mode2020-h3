@@ -15,12 +15,12 @@ public class Core extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		List<Entity> corps = new ArrayList<Entity>();
 		
-		for (int i = 1; i <= 10; i++) {
+		for (int i = 1; i <= 2; i++) {
 			Entity e = new Etoile(0, 10, new Position(85+i*75, 85+i*75));
 			corps.add(e);
 		}
 		
-		RenderSystem rs = new RenderSystem(500, corps);
+		RenderSystem rs = new RenderSystem(100, corps);
 		Stage stageRs = rs.createSystem();
 		stageRs.show();
 	}
