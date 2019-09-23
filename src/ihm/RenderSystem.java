@@ -7,6 +7,7 @@ import java.util.List;
 
 import Entity.Entity;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -19,6 +20,7 @@ public class RenderSystem {
 	List<Circle> corps;
 	final Circle shape;
 	int diametre;
+	Button animer;
 	
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.diametre = rayon * 2;
@@ -27,6 +29,8 @@ public class RenderSystem {
 		this.st = new Stage();
 		this.corps = new ArrayList<Circle>();
 		createCorps(corps);
+		animer = new Button("Animer");
+		setActionAnimer(corps);
 	}
 	
 	private void createCorps(List<Entity> corps) {
@@ -39,16 +43,25 @@ public class RenderSystem {
 		}
 	}
 	
+	private void setActionAnimer(List<Entity> corps) {
+		animer.setOnAction(e -> {
+			for(Entity corpsceleste : corps) {
+				
+			}
+		});
+	}
+	
 	public Stage createSystem() {
 		p = new Pane();
         p.setPrefSize(diametre, diametre);
         
+        p.getChildren().add(animer);
         p.getChildren().add(shape);
         p.getChildren().addAll(corps);
         sc = new Scene(p);
        
         st.setScene(sc);
-        st.setTitle("Systï¿½me");
+        st.setTitle("Système");
         
         return st;
 	}

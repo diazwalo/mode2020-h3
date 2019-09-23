@@ -1,4 +1,4 @@
-package Position;
+package movement;
 
 public class Vecteur {
 	private Position posDepart;

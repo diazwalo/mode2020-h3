@@ -1,12 +1,13 @@
 package Entity;
 
-import Position.Position;
-import Position.Vecteur;
 import javafx.scene.image.Image;
+import movement.Direction;
+import movement.Position;
+import movement.Vecteur;
 
 public class Etoile extends CorpsCeleste {
 	
-	public Etoile(double masse, double taille, Position position, Vecteur direction, Vecteur vitesse, Image sprite) {
+	public Etoile(double masse, double taille, Position position, Direction direction, Vecteur vitesse, Image sprite) {
 		this.masse = masse;
 		this.rayon = taille;
 		this.position = position;
@@ -15,11 +16,11 @@ public class Etoile extends CorpsCeleste {
 		this.sprite = sprite;
 	}
 	
-	public Etoile(double masse, double taille, Position position, Vecteur direction, Vecteur vitesse) {
+	public Etoile(double masse, double taille, Position position, Direction direction, Vecteur vitesse) {
 		this(masse, taille, position, direction, vitesse, null);
 	}
 	
-	public Etoile(double masse, double taille, Position position, Vecteur direction) {
+	public Etoile(double masse, double taille, Position position, Direction direction) {
 		this(masse, taille, position, direction, null, null);
 	}
 	

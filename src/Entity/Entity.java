@@ -1,14 +1,15 @@
 package Entity;
 
-import Position.Position;
-import Position.Vecteur;
 import javafx.scene.image.Image;
+import movement.Direction;
+import movement.Position;
+import movement.Vecteur;
 
 public abstract class Entity {
 	protected double masse;
 	protected double rayon;
 	protected Position position;
-	protected Vecteur direction;
+	protected Direction direction;
 	protected Vecteur vitesse;
 	protected Image sprite;
 	
@@ -30,10 +31,10 @@ public abstract class Entity {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	public Vecteur getDirection() {
+	public Direction getDirection() {
 		return direction;
 	}
-	public void setDirection(Vecteur direction) {
+	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 	public Vecteur getVitesse() {

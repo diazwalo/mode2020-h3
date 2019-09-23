@@ -1,12 +1,13 @@
 package Entity;
 
-import Position.Position;
-import Position.Vecteur;
 import javafx.scene.image.Image;
+import movement.Direction;
+import movement.Position;
+import movement.Vecteur;
 
 public class Planete extends CorpsCeleste {
 	
-	public Planete(double masse, double taille, Position position, Vecteur direction, Vecteur vitesse, Image sprite) {
+	public Planete(double masse, double taille, Position position, Direction direction, Vecteur vitesse, Image sprite) {
 		this.masse = masse;
 		this.rayon = taille;
 		this.position = position;
@@ -15,11 +16,11 @@ public class Planete extends CorpsCeleste {
 		this.sprite = sprite;
 	}
 	
-	public Planete(double masse, double taille, Position position, Vecteur direction, Vecteur vitesse) {
+	public Planete(double masse, double taille, Position position, Direction direction, Vecteur vitesse) {
 		this(masse, taille, position, direction, vitesse, null);
 	}
 	
-	public Planete(double masse, double taille, Position position, Vecteur direction) {
+	public Planete(double masse, double taille, Position position, Direction direction) {
 		this(masse, taille, position, direction, null, null);
 	}
 	

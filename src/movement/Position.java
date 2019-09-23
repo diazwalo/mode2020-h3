@@ -1,4 +1,4 @@
-package Position;
+package movement;
 
 public class Position {
 	private double posx;

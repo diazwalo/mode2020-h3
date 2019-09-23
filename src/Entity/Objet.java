@@ -1,12 +1,13 @@
 package Entity;
 
-import Position.Position;
-import Position.Vecteur;
 import javafx.scene.image.Image;
+import movement.Direction;
+import movement.Position;
+import movement.Vecteur;
 
 public class Objet extends Entity {
 	
-	public Objet(double masse, double taille, Position position, Vecteur direction, Vecteur vitesse, Image sprite) {
+	public Objet(double masse, double taille, Position position, Direction direction, Vecteur vitesse, Image sprite) {
 		this.masse = masse;
 		this.rayon = taille;
 		this.position = position;
@@ -15,11 +16,11 @@ public class Objet extends Entity {
 		this.sprite = sprite;
 	}
 	
-	public Objet(double masse, double taille, Position position, Vecteur direction, Vecteur vitesse) {
+	public Objet(double masse, double taille, Position position, Direction direction, Vecteur vitesse) {
 		this(masse, taille, position, direction, vitesse, null);
 	}
 	
-	public Objet(double masse, double taille, Position position, Vecteur direction) {
+	public Objet(double masse, double taille, Position position, Direction direction) {
 		this(masse, taille, position, direction, null, null);
 	}
 	
