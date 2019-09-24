@@ -12,7 +12,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import movement.Cardinal;
 import movement.Position;
 
 public class RenderSystem {
@@ -30,17 +29,17 @@ public class RenderSystem {
 		shape.setFill(Color.DARKSLATEGREY);
 		this.st = new Stage();
 		this.corps = new ArrayList<Circle>();
-		createCorps(corps);
+		putPlaneteOnSysteme(corps);
 		animer = new Button("Animer");
 		setActionAnimer(corps);
 	}
 	
-	private void createCorps(List<Entity> corps) {
-		Color c = new Color(0.2, 0.2, 0.2, 1);
+	private void putPlaneteOnSysteme(List<Entity> corps) {
+		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
 			Circle tempo = new Circle(entity.getPosition().getPosX(), entity.getPosition().getPosY(), entity.getRayon());
 			tempo.setFill(c);
-			c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
+			//c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
 			this.corps.add(tempo);
 		}
 	}
@@ -62,8 +61,8 @@ public class RenderSystem {
 						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()-corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
 				}
 			}
-			createSystem();
-			
+			//putPlaneteOnSysteme(this.corps);
+			//IL FAUT QU'ON AIT LA LISTE DES ENTITY A LA PLACE DES SHAPES
 		});
 	}
 	
@@ -77,7 +76,7 @@ public class RenderSystem {
         sc = new Scene(p);
        
         st.setScene(sc);
-        st.setTitle("Système");
+        st.setTitle("Systï¿½me");
         
         return st;
 	}
