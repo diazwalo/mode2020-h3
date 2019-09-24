@@ -18,66 +18,78 @@ public class RenderSystem {
 	Stage st;
 	Scene sc;
 	Pane p;
-	List<Circle> corps;
+	List<Circle> shapes;
+	List<Entity> corps;
 	final Circle shape;
 	int diametre;
 	Button animer;
-	
+
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.diametre = rayon * 2;
 		shape = new Circle(rayon, rayon, rayon);
 		shape.setFill(Color.DARKSLATEGREY);
 		this.st = new Stage();
-		this.corps = new ArrayList<Circle>();
+		this.corps = corps;
 		putPlaneteOnSysteme(corps);
 		animer = new Button("Animer");
 		setActionAnimer(corps);
 	}
-	
+
 	private void putPlaneteOnSysteme(List<Entity> corps) {
+		this.shapes = new ArrayList<Circle>();
 		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
 			Circle tempo = new Circle(entity.getPosition().getPosX(), entity.getPosition().getPosY(), entity.getRayon());
 			tempo.setFill(c);
 			//c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
-			this.corps.add(tempo);
+			this.shapes.add(tempo);
 		}
 	}
-	
+
 	private void setActionAnimer(List<Entity> corps) {
 		animer.setOnAction(e -> {
+
 			for(Entity corpsceleste : corps) {
 				switch(corpsceleste.getDirection().getDirection()) {
-					case NORD :
-						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX(), corpsceleste.getPosition().getPosY()-corpsceleste.getVitesse()));
-						break;
-					case SUD :
-						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX(), corpsceleste.getPosition().getPosY()+corpsceleste.getVitesse()));
-						break;
-					case EST :
-						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()+corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
-						break;
-					case OUEST :
-						corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()-corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
+				case NORD :
+					corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX(), corpsceleste.getPosition().getPosY()-corpsceleste.getVitesse()));
+					break;
+				case SUD :
+					corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX(), corpsceleste.getPosition().getPosY()+corpsceleste.getVitesse()));
+					break;
+				case EST :
+					corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()+corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
+					break;
+				case OUEST :
+					corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()-corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
 				}
 			}
-			//putPlaneteOnSysteme(this.corps);
-			//IL FAUT QU'ON AIT LA LISTE DES ENTITY A LA PLACE DES SHAPES
+			putPlaneteOnSysteme(this.corps);
+			majSystem(this.corps);
+
 		});
 	}
-	
+
+	private void majSystem(List<Entity> corps) {
+		// TODO Auto-generated method stub
+		p.getChildren().clear();
+		p.getChildren().add(animer);
+		p.getChildren().add(shape);
+		p.getChildren().addAll(shapes);
+	}
+
 	public Stage createSystem() {
 		p = new Pane();
-        p.setPrefSize(diametre, diametre);
-        
-        p.getChildren().add(animer);
-        p.getChildren().add(shape);
-        p.getChildren().addAll(corps);
-        sc = new Scene(p);
-       
-        st.setScene(sc);
-        st.setTitle("Syst�me");
-        
-        return st;
+		p.setPrefSize(diametre, diametre);
+
+		p.getChildren().add(animer);
+		p.getChildren().add(shape);
+		p.getChildren().addAll(shapes);
+		sc = new Scene(p);
+
+		st.setScene(sc);
+		st.setTitle("Système");
+
+		return st;
 	}
 }
