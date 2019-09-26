@@ -14,25 +14,37 @@ import java.io.InputStreamReader;
 
 public class RecupFichierSource {
 
-    public static String donneeFichier(String cheminFichier){
-        String res = "";
+    private Double G;
+    private int dt;
+    private int fa;
+    private int rayon;
+
+    public static void donneeFichier(String cheminFichier){
         try{
             InputStream flux=new FileInputStream("././ressource/" + cheminFichier);
             InputStreamReader lecture=new InputStreamReader(flux);
             BufferedReader buff=new BufferedReader(lecture);
             String ligne;
             while ((ligne=buff.readLine())!=null){
-                res += ligne + "\n";
+
+
             }
             buff.close();
         }
         catch (Exception e){
             System.out.println(e.toString());
         }
-        return res;
     }
 
-    public static void main(String[] args) {
-        System.out.println(donneeFichier("source.txt"));
+    public void affectationDonné(String fichier){
+        if(!fichier.startsWith("#")){
+            if(fichier.startsWith("PARAMS")){
+
+            }
+        }
     }
+
+//    public static void main(String[] args) {
+  //      System.out.println(donneeFichier("source.txt"));
+    //}
 }
