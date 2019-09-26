@@ -1,18 +1,23 @@
-package ihm;
+package view.ihm;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.sun.org.apache.bcel.internal.classfile.Code;
-
-import Entity.Entity;
+import model.entity.Entity;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import movement.Position;
+import model.movement.Position;
+
+/**
+ * 
+ * @author cleme
+ *
+ */
+
 
 public class RenderSystem {
 	Stage st;

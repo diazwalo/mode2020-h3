@@ -1,4 +1,4 @@
-package movement;
+package model.movement;
 
 public class Direction {
 	private Cardinal direction;

@@ -1,9 +1,8 @@
-package Entity;
+package model.entity;
 
 import javafx.scene.image.Image;
-import movement.Direction;
-import movement.Position;
-import movement.Vecteur;
+import model.movement.Direction;
+import model.movement.Position;
 
 public abstract class Entity {
 	protected double masse;

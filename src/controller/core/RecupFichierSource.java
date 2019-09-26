@@ -1,4 +1,4 @@
-package core;
+package controller.core;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

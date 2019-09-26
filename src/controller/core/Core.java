@@ -1,16 +1,16 @@
-package core;
+package controller.core;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Entity.Entity;
-import Entity.Etoile;
-import ihm.RenderSystem;
+import model.entity.Entity;
+import model.entity.Etoile;
+import view.ihm.RenderSystem;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import movement.Cardinal;
-import movement.Direction;
-import movement.Position;
+import model.movement.Cardinal;
+import model.movement.Direction;
+import model.movement.Position;
 
 public class Core extends Application{
 	@Override

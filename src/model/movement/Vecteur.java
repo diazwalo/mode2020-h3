@@ -1,4 +1,4 @@
-package movement;
+package model.movement;
 
 public class Vecteur {
 	private Position posDepart;
