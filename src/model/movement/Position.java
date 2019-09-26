@@ -1,5 +1,11 @@
 package model.movement;
 
+/**
+ * 
+ * @author cleme
+ *	Position d'une entité, basée sur une coordonnée x et une coordonnée y.
+ */
+
 public class Position {
 	private double posx;
 	private double posy;

@@ -1,22 +1,20 @@
 package view.ihm;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import model.entity.Entity;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import model.entity.Entity;
 import model.movement.Position;
 
 /**
  * 
  * @author cleme
- *
+ *	Permet d'afficher les entités sur un pane, de manière statique ou dynamique.
  */
 
 

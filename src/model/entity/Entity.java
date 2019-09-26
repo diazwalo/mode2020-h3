@@ -4,6 +4,13 @@ import javafx.scene.image.Image;
 import model.movement.Direction;
 import model.movement.Position;
 
+/**
+ * 
+ * @author cleme
+ *	classe abstraite qui nous permet de mettre le code en commun à toutes les entités
+ *	notamment les etoiles, les objets (vaisseau) et les planetes.
+ */
+
 public abstract class Entity {
 	protected double masse;
 	protected double rayon;

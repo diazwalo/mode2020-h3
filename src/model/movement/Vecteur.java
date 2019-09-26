@@ -1,5 +1,12 @@
 package model.movement;
 
+/**
+ * 
+ * @author cleme
+ *	Vecteur avec une position de fin et une position d'arrivée, pour l'instant inutilisée
+ *	mais utile plus tard lorsque les trajectoires seront plus complexe.
+ */
+
 public class Vecteur {
 	private Position posDepart;
 	private Position posArrivee;

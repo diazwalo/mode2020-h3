@@ -2,7 +2,6 @@ package controller.core;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import model.entity.Entity;
 import model.entity.Etoile;
 import view.ihm.RenderSystem;
@@ -11,6 +10,12 @@ import javafx.stage.Stage;
 import model.movement.Cardinal;
 import model.movement.Direction;
 import model.movement.Position;
+
+/**
+ * 
+ * @author cleme
+ *	Classe qui lance le programme de simulation astronomique grâce aux variables récupérées dans RecupFichierSource.
+ */
 
 public class Core extends Application{
 	@Override

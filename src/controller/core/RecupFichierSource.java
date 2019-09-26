@@ -5,6 +5,13 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * 
+ * @author cleme
+ *	Classe récupérant le fichier source et le lit.
+ *	Elle repère et récupère les variables pour les transmettre.
+ */
+
 public class RecupFichierSource {
 
     public static String donneeFichier(String cheminFichier){
