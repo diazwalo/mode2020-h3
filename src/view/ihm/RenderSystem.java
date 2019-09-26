@@ -53,7 +53,7 @@ public class RenderSystem {
 	}*/
 
 	private void putPlaneteOnSysteme(List<Entity> corps) {
-		//this.shapes = new ArrayList<Circle>();
+		this.shapes = new ArrayList<Circle>();
 		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
 			//Image tempo = new Image("img/etoile.png");
