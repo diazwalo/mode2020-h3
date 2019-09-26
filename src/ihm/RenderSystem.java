@@ -8,6 +8,7 @@ import java.util.List;
 import Entity.Entity;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -19,8 +20,10 @@ public class RenderSystem {
 	Scene sc;
 	Pane p;
 	List<Circle> shapes;
+	//List<Image> imgs;
 	List<Entity> corps;
 	final Circle shape;
+	//final Image img;
 	int diametre;
 	Button animer;
 
@@ -34,15 +37,26 @@ public class RenderSystem {
 		animer = new Button("Animer");
 		setActionAnimer(corps);
 	}
+	
+	/*public RenderSystem(int rayon, List<Entity> corps) {
+		this.diametre = rayon * 2;
+		this.st = new Stage();
+		this.corps = corps;
+		this.img= new Image("img/etoile.png");
+		animer = new Button("Animer");
+		setActionAnimer(corps);
+	}*/
 
 	private void putPlaneteOnSysteme(List<Entity> corps) {
-		this.shapes = new ArrayList<Circle>();
+		//this.shapes = new ArrayList<Circle>();
 		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
+			//Image tempo = new Image("img/etoile.png");
 			Circle tempo = new Circle(entity.getPosition().getPosX(), entity.getPosition().getPosY(), entity.getRayon());
 			tempo.setFill(c);
-			//c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
+			c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
 			this.shapes.add(tempo);
+			//this.imgs.add(tempo);
 		}
 	}
 
