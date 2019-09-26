@@ -40,7 +40,7 @@ public class RenderSystem {
 	
 	/*public RenderSystem(int rayon, List<Entity> corps) {
 		this.diametre = rayon * 2;
-		this.st = new Stage();
+		this.st = new Stage(); 
 		this.corps = corps;
 		this.img= new Image("img/etoile.png");
 		animer = new Button("Animer");
