@@ -45,7 +45,8 @@ public class RenderSystem {
 		this.corps = corps;
 		putPlaneteOnSysteme(corps);
 		animer = new Button("Animer");
-		setActionAnimer(corps);
+		//setActionAnimer(corps);
+		setAction(corps);
 	}
 	
 	private void putPlaneteOnSysteme(List<Entity> corps) {
@@ -84,22 +85,44 @@ public class RenderSystem {
 
 		});
 	}
+	
+	
+	private void setAction(List<Entity> corps) {
+		animer.setOnAction(e -> {
+			for(Entity corpsceleste : corps) {
+				double x=corpsceleste.getPosition().getPosX();
+				double y=corpsceleste.getPosition().getPosY();
+				double vitesse = corpsceleste.getVitesse();
+				//double g
+				double xres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+x;
+				double yres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+y;
+				
+				corpsceleste.setPosition(new Position( (corpsceleste.getPosition().getPosX()+xres) , (corpsceleste.getPosition().getPosY()+yres) ));
+			}
+			putPlaneteOnSysteme(this.corps);
+			majSystem(this.corps);
+			
+		});
+	}
+
 
 	private void majSystem(List<Entity> corps) {
 		// TODO Auto-generated method stub
 		p.getChildren().clear();
-		p.getChildren().add(animer);
 		p.getChildren().add(shape);
 		p.getChildren().addAll(shapes);
+		p.getChildren().add(animer);
+
 	}
 
 	public Stage createSystem() {
 		p = new Pane();
 		p.setPrefSize(diametre, diametre);
 		
-		p.getChildren().add(animer);
 		p.getChildren().add(shape);
 		p.getChildren().addAll(shapes);
+		p.getChildren().add(animer);
+
 		
 		GraphicsEnvironment graphicsEnvironment=GraphicsEnvironment.getLocalGraphicsEnvironment();
 		double w = graphicsEnvironment.getMaximumWindowBounds().width;
