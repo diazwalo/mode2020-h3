@@ -37,6 +37,7 @@ public class RenderSystem {
 	final Shape shape;
 	int diametre;
 	Button animer;
+	Scale scale;
 
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.diametre = rayon * 2;
@@ -49,7 +50,6 @@ public class RenderSystem {
 		this.corps = corps;
 		putPlaneteOnSysteme(corps);
 		animer = new Button("Animer");
-		//setActionAnimer(corps);
 		setAction(corps);
 	}
 	
@@ -57,47 +57,20 @@ public class RenderSystem {
 		this.shapes = new ArrayList<Circle>();
 		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
-			//Image tempo = new Image("img/etoile.png");
 			Circle tempo = new Circle(entity.getPosition().getPosX(), entity.getPosition().getPosY(), entity.getRayon());
 			tempo.setFill(c);
 			c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
 			this.shapes.add(tempo);
-			//this.imgs.add(tempo);
 		}
 	}
 
-	private void setActionAnimer(List<Entity> corps) {
-		animer.setOnAction(e -> {
-
-			for(Entity corpsceleste : corps) {
-				switch(corpsceleste.getDirection().getDirection()) {
-				case NORD :
-					corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX(), corpsceleste.getPosition().getPosY()-corpsceleste.getVitesse()));
-					break;
-				case SUD :
-					corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX(), corpsceleste.getPosition().getPosY()+corpsceleste.getVitesse()));
-					break;
-				case EST :
-					corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()+corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
-					break;
-				case OUEST :
-					corpsceleste.setPosition(new Position(corpsceleste.getPosition().getPosX()-corpsceleste.getVitesse(), corpsceleste.getPosition().getPosY()));
-				}
-			}
-			putPlaneteOnSysteme(this.corps);
-			majSystem(this.corps);
-
-		});
-	}
-	
-	
 	private void setAction(List<Entity> corps) {
 		animer.setOnAction(e -> {
 			for(Entity corpsceleste : corps) {
 				double x=corpsceleste.getPosition().getPosX();
 				double y=corpsceleste.getPosition().getPosY();
 				double vitesse = corpsceleste.getVitesse();
-				//double g
+
 				double xres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+x;
 				double yres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+y;
 				
@@ -108,7 +81,6 @@ public class RenderSystem {
 			
 		});
 	}
-
 
 	private void majSystem(List<Entity> corps) {
 		// TODO Auto-generated method stub
@@ -146,6 +118,7 @@ public class RenderSystem {
 		st.setScene(sc);
 		st.setTitle("Système");
 		st.setResizable(false);
+		st.setFullScreen(true);
 
 		return st;
 	}

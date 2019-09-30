@@ -1,4 +1,4 @@
 # Le corps n'a pas de vitesse initiale et tombe sur l'étoile
 PARAMS G=0.01 dt=20 rayon=500
-ETOILE nom=Soleil masse=40
+ETOILE nom=Soleil masse=40 posx=450 posy=450
 OBJET nom=Corps masse=0.01 posx=0 posy=450 vitx=0. vity=0
