@@ -1,13 +1,17 @@
 package view.ihm;
 
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import model.entity.Entity;
 import model.movement.Position;
@@ -15,26 +19,28 @@ import model.movement.Position;
 /**
  * 
  * @author cleme
- *	Permet d'afficher les entités sur un pane, de manière statique ou dynamique.
+ *	Permet d'afficher les entit�s sur un pane, de mani�re statique ou dynamique.
  */
 
 
 public class RenderSystem {
 	Stage st;
 	Scene sc;
+	HBox hb;
 	Pane p;
 	List<Circle> shapes;
-	//List<Image> imgs;
 	List<Entity> corps;
-	final Circle shape;
-	//final Image img;
+	final Shape shape;
 	int diametre;
 	Button animer;
 
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.diametre = rayon * 2;
-		shape = new Circle(rayon, rayon, rayon);
-		shape.setFill(Color.DARKSLATEGREY);
+		
+		shape = new Rectangle(0.0, 0.0, diametre, diametre);
+		
+		shape.setFill(Color.BLACK);
+		
 		this.st = new Stage();
 		this.corps = corps;
 		putPlaneteOnSysteme(corps);
@@ -42,15 +48,6 @@ public class RenderSystem {
 		setActionAnimer(corps);
 	}
 	
-	/*public RenderSystem(int rayon, List<Entity> corps) {
-		this.diametre = rayon * 2;
-		this.st = new Stage(); 
-		this.corps = corps;
-		this.img= new Image("img/etoile.png");
-		animer = new Button("Animer");
-		setActionAnimer(corps);
-	}*/
-
 	private void putPlaneteOnSysteme(List<Entity> corps) {
 		this.shapes = new ArrayList<Circle>();
 		Color c = new Color(0.6, 0.0, 0.6, 1);
@@ -99,15 +96,21 @@ public class RenderSystem {
 	public Stage createSystem() {
 		p = new Pane();
 		p.setPrefSize(diametre, diametre);
-
+		
 		p.getChildren().add(animer);
 		p.getChildren().add(shape);
 		p.getChildren().addAll(shapes);
-		sc = new Scene(p);
+		
+		GraphicsEnvironment graphicsEnvironment=GraphicsEnvironment.getLocalGraphicsEnvironment();
+		double w = graphicsEnvironment.getMaximumWindowBounds().width;
+		double h = graphicsEnvironment.getMaximumWindowBounds().width;
+		sc = new Scene(p, w, h);
 
 		st.setScene(sc);
 		st.setTitle("Système");
+		st.setResizable(false);
 
 		return st;
 	}
 }
+
