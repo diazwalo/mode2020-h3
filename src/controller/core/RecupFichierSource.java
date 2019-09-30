@@ -36,7 +36,7 @@ public class RecupFichierSource {
         }
     }
 
-    public void affectationDonné(String fichier){
+    public void affectationDonnee(String fichier){
         if(!fichier.startsWith("#")){
             if(fichier.startsWith("PARAMS")){
 
