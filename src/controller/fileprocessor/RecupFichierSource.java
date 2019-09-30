@@ -1,4 +1,4 @@
-package controller.core;
+package controller.fileprocessor;
 
 import model.entity.CorpsCeleste;
 import model.entity.ObjetEllipse;
