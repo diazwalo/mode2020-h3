@@ -1,9 +1,6 @@
 package controller.core;
 
-import model.entity.CorpsCeleste;
-import model.entity.ObjetEllipse;
-import model.entity.ObjetFixe;
-import model.entity.ObjetSimule;
+import model.entity.*;
 import model.movement.Position;
 import model.movement.VecteurVitesse;
 
@@ -182,8 +179,27 @@ public class RecupFichierSource {
                                 if(tab[i].startsWith("periode")){
                                     oe.setPeriode(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
                                 }
+
                                 if(tab[i].startsWith("f1")){
-                            //        oe.setObjetFixe1(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    String nom = tab[i].substring(tab[i].indexOf('='));
+                                    CorpsCeleste objetFixe = new ObjetFixe();
+                                    for(CorpsCeleste o : listeCorpsCeleste){
+                                        if(o.getNom().equals(nom)){
+                                            objetFixe = o;
+                                        }
+                                    }
+                                    oe.setObjetFixe1((ObjetFixe) objetFixe);
+                                }
+
+                                if(tab[i].startsWith("f2")){
+                                    String nom = tab[i].substring(tab[i].indexOf('='));
+                                    CorpsCeleste objetFixe = new ObjetFixe();
+                                    for(CorpsCeleste o : listeCorpsCeleste){
+                                        if(o.getNom().equals(nom)){
+                                            objetFixe = o;
+                                        }
+                                    }
+                                    oe.setObjetFixe2((ObjetFixe) objetFixe);
                                 }
                             }
                             listeCorpsCeleste.add(oe);
