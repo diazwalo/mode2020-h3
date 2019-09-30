@@ -1,4 +1,4 @@
-package controller.core;
+package controller.fileprocessor;
 
 import model.entity.*;
 import model.movement.Position;

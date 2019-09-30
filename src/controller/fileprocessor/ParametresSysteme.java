@@ -1,4 +1,4 @@
-package controller.core;
+package controller.fileprocessor;
 
 public class ParametresSysteme {
 
