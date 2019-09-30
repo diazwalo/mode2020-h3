@@ -18,6 +18,7 @@ public abstract class Entity {
 	protected Direction direction;
 	protected double vitesse;
 	protected Image sprite;
+	protected String nom;
 	
 	public double getMasse() {
 		return masse;
@@ -54,5 +55,13 @@ public abstract class Entity {
 	}
 	public void setSprite(Image sprite) {
 		this.sprite = sprite;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 }
