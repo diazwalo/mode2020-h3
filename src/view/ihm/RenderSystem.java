@@ -6,8 +6,10 @@ import java.util.List;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -27,7 +29,9 @@ public class RenderSystem {
 	Stage st;
 	Scene sc;
 	HBox hb;
+	VBox vb;
 	Pane p;
+	TextArea taUp, taDown;
 	List<Circle> shapes;
 	List<Entity> corps;
 	final Shape shape;
@@ -45,7 +49,8 @@ public class RenderSystem {
 		this.corps = corps;
 		putPlaneteOnSysteme(corps);
 		animer = new Button("Animer");
-		setActionAnimer(corps);
+		//setActionAnimer(corps);
+		setAction(corps);
 	}
 	
 	private void putPlaneteOnSysteme(List<Entity> corps) {
@@ -84,27 +89,59 @@ public class RenderSystem {
 
 		});
 	}
+	
+	
+	private void setAction(List<Entity> corps) {
+		animer.setOnAction(e -> {
+			for(Entity corpsceleste : corps) {
+				double x=corpsceleste.getPosition().getPosX();
+				double y=corpsceleste.getPosition().getPosY();
+				double vitesse = corpsceleste.getVitesse();
+				//double g
+				double xres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+x;
+				double yres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+y;
+				
+				corpsceleste.setPosition(new Position( (corpsceleste.getPosition().getPosX()+xres) , (corpsceleste.getPosition().getPosY()+yres) ));
+			}
+			putPlaneteOnSysteme(this.corps);
+			majSystem(this.corps);
+			
+		});
+	}
+
 
 	private void majSystem(List<Entity> corps) {
 		// TODO Auto-generated method stub
 		p.getChildren().clear();
-		p.getChildren().add(animer);
 		p.getChildren().add(shape);
 		p.getChildren().addAll(shapes);
+		p.getChildren().add(animer);
+
 	}
 
 	public Stage createSystem() {
 		p = new Pane();
 		p.setPrefSize(diametre, diametre);
 		
-		p.getChildren().add(animer);
 		p.getChildren().add(shape);
 		p.getChildren().addAll(shapes);
+		p.getChildren().add(animer);
+
+		taUp = new TextArea();
+		taUp = new TextArea("Information Vaisseau : Vitesse 1 km/h.");
+		taDown = new TextArea("Information Planète : Elle est zolie.");
+		
+		hb = new HBox();
+		vb = new VBox();
+		
+		vb.getChildren().addAll(taUp, taDown);
+		
+		hb.getChildren().addAll(p, vb);
 		
 		GraphicsEnvironment graphicsEnvironment=GraphicsEnvironment.getLocalGraphicsEnvironment();
 		double w = graphicsEnvironment.getMaximumWindowBounds().width;
 		double h = graphicsEnvironment.getMaximumWindowBounds().width;
-		sc = new Scene(p, w, h);
+		sc = new Scene(hb, w, h);
 
 		st.setScene(sc);
 		st.setTitle("Système");
