@@ -3,7 +3,7 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 import model.entity.Entity;
-import model.entity.Etoile;
+import model.entity.ObjetFixe;
 import view.ihm.RenderSystem;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -23,7 +23,7 @@ public class Core extends Application{
 		List<Entity> corps = new ArrayList<Entity>();
 		
 		for (int i = 1; i <= 5; i++) {
-			Entity e = new Etoile("test etoile", 0, 10, new Position(85+i*75, 85+i*75), new Direction(Cardinal.SUD), 10);
+			Entity e = new ObjetFixe("test etoile", 0, 10, new Position(85+i*75, 85+i*75), new Direction(Cardinal.SUD), 10);
 			corps.add(e);
 		}
 		

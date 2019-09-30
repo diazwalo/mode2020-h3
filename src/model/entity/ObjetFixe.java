@@ -4,9 +4,9 @@ import javafx.scene.image.Image;
 import model.movement.Direction;
 import model.movement.Position;
 
-public class Etoile extends CorpsCeleste {
+public class ObjetFixe extends CorpsCeleste {
 	
-	public Etoile(String nom, double masse, double taille, Position position, Direction direction, double vitesse, Image sprite) {
+	public ObjetFixe(String nom, double masse, double taille, Position position, Direction direction, double vitesse, Image sprite) {
 		this.masse = masse;
 		this.rayon = taille;
 		this.position = position;
@@ -16,31 +16,31 @@ public class Etoile extends CorpsCeleste {
 		this.nom = nom;
 	}
 	
-	public Etoile(String nom, double masse, double taille, Position position, Direction direction, double vitesse) {
+	public ObjetFixe(String nom, double masse, double taille, Position position, Direction direction, double vitesse) {
 		this(nom, masse, taille, position, direction, vitesse, null);
 	}
 	
-	public Etoile(String nom, double masse, double taille, Position position, Direction direction) {
+	public ObjetFixe(String nom, double masse, double taille, Position position, Direction direction) {
 		this(nom, masse, taille, position, direction, 0, null);
 	}
 	
-	public Etoile(String nom, double masse, double taille, Position position) {
+	public ObjetFixe(String nom, double masse, double taille, Position position) {
 		this(nom, masse, taille, position, null, 0, null);
 	}
 	
-	public Etoile(String nom, double masse, double taille) {
+	public ObjetFixe(String nom, double masse, double taille) {
 		this(nom, masse, taille, null, null, 0, null);
 	}
 	
-	public Etoile(String nom, double masse) {
+	public ObjetFixe(String nom, double masse) {
 		this(nom, masse, 0, null, null, 0, null);
 	}
 	
-	public Etoile(String nom) {
+	public ObjetFixe(String nom) {
 		this(nom, 0, 0, null, null, 0, null);
 	}
 
-	public Etoile() {
+	public ObjetFixe() {
 		this(null, 0, 0, null, null, 0, null);
 	}
 
