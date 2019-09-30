@@ -1,8 +1,11 @@
 package controller.core;
 
 import model.entity.CorpsCeleste;
+import model.entity.ObjetEllipse;
 import model.entity.ObjetFixe;
+import model.entity.ObjetSimule;
 import model.movement.Position;
+import model.movement.VecteurVitesse;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -107,13 +110,14 @@ public class RecupFichierSource {
                 }
             } else {
                 if (tab[1].equals("Fixe")) {
-                    ObjetFixe eto = new ObjetFixe();
-                    eto.setNom(tab[0].substring(0, tab[0].length() - 1));
+                    ObjetFixe of = new ObjetFixe();
+                    of.setNom(tab[0].substring(0, tab[0].length() - 1));
                     Position position = new Position();
+
                     for (int i = 1; i < tab.length - 1; i++) {
 
                         if (tab[i].startsWith("masse")) {
-                            eto.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            of.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
                         }
 
                         if (tab[i].startsWith("posx")) {
@@ -122,11 +126,69 @@ public class RecupFichierSource {
                         if (tab[i].startsWith("posy")) {
                             position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
                         }
-                        eto.setPosition(position);
+                        of.setPosition(position);
                     }
-                    listeCorpsCeleste.add(eto);
+                    listeCorpsCeleste.add(of);
                 } else {
+                    if (tab[1].equals("Simulé")) {
+                        ObjetSimule os = new ObjetSimule();
+                        os.setNom(tab[0].substring(0, tab[0].length() - 1));
+                        Position position = new Position();
+                        VecteurVitesse vecteur = new VecteurVitesse();
 
+                        for (int i = 1; i < tab.length - 1; i++) {
+
+                            if (tab[i].startsWith("masse")) {
+                                os.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            }
+
+                            if (tab[i].startsWith("posx")) {
+                                position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            }
+                            if (tab[i].startsWith("posy")) {
+                                position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            }
+                            os.setPosition(position);
+
+                            if(tab[i].startsWith("vitx")){
+                                vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            }if(tab[i].startsWith("vity")){
+                                vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            }
+                            os.setVecteurVitesse(vecteur);
+                        }
+                        listeCorpsCeleste.add(os);
+                    }
+                    else {
+                        if (tab[1].equals("Ellipse")) {
+                            ObjetEllipse oe = new ObjetEllipse();
+                            oe.setNom(tab[0].substring(0, tab[0].length() - 1));
+                            Position position = new Position();
+
+                            for (int i = 1; i < tab.length - 1; i++) {
+
+                                if (tab[i].startsWith("masse")) {
+                                    oe.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                }
+
+                                if (tab[i].startsWith("posx")) {
+                                    position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                }
+                                if (tab[i].startsWith("posy")) {
+                                    position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                }
+                                oe.setPosition(position);
+
+                                if(tab[i].startsWith("periode")){
+                                    oe.setPeriode(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                }
+                                if(tab[i].startsWith("f1")){
+                            //        oe.setObjetFixe1(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                }
+                            }
+                            listeCorpsCeleste.add(oe);
+                        }
+                    }
                 }
             }
         }
