@@ -24,13 +24,13 @@ public class RecupFichierSource {
     private String fa;
     private String rayon;
 
-    private ArrayList<CorpsCeleste> listeCorpsCeleste = new ArrayList<>();
+    private ArrayList<Entity> listeCorpsCeleste = new ArrayList<Entity>();
 
-    public ArrayList<CorpsCeleste> getListeCorpsCeleste() {
+    public ArrayList<Entity> getListeCorpsCeleste() {
         return listeCorpsCeleste;
     }
 
-    public void setListeCorpsCeleste(ArrayList<CorpsCeleste> listeObjet) {
+    public void setListeCorpsCeleste(ArrayList<Entity> listeObjet) {
         this.listeCorpsCeleste = listeObjet;
     }
 
@@ -89,7 +89,9 @@ public class RecupFichierSource {
     public void affectationDonnee(String fichier) {
         if (!fichier.startsWith("#")) {
             String[] tab = fichier.split(" ");
-            //Ligne PARAMS
+            /**
+             * Ligne de parametres
+             */
             if (tab[0].equals("PARAMS")) {
                 for (int i = 1; i < tab.length - 1; i++) {
                     if (tab[i].startsWith("G")) {
@@ -105,7 +107,11 @@ public class RecupFichierSource {
                         this.rayon = tab[i].substring(6);
                     }
                 }
-            } else {
+            }
+            else {
+                /**
+                 * Objet fixe
+                 */
                 if (tab[1].equals("Fixe")) {
                     ObjetFixe of = new ObjetFixe();
                     of.setNom(tab[0].substring(0, tab[0].length() - 1));
@@ -126,7 +132,11 @@ public class RecupFichierSource {
                         of.setPosition(position);
                     }
                     listeCorpsCeleste.add(of);
-                } else {
+                }
+                else {
+                    /**
+                     * Objet simulé
+                     */
                     if (tab[1].equals("Simulé")) {
                         ObjetSimule os = new ObjetSimule();
                         os.setNom(tab[0].substring(0, tab[0].length() - 1));
@@ -157,6 +167,9 @@ public class RecupFichierSource {
                         listeCorpsCeleste.add(os);
                     }
                     else {
+                        /**
+                         * Objet ellipse
+                         */
                         if (tab[1].equals("Ellipse")) {
                             ObjetEllipse oe = new ObjetEllipse();
                             oe.setNom(tab[0].substring(0, tab[0].length() - 1));
@@ -182,8 +195,8 @@ public class RecupFichierSource {
 
                                 if(tab[i].startsWith("f1")){
                                     String nom = tab[i].substring(tab[i].indexOf('='));
-                                    CorpsCeleste objetFixe = new ObjetFixe();
-                                    for(CorpsCeleste o : listeCorpsCeleste){
+                                    Entity objetFixe = new ObjetFixe();
+                                    for(Entity o : listeCorpsCeleste){
                                         if(o.getNom().equals(nom)){
                                             objetFixe = o;
                                         }
@@ -193,8 +206,8 @@ public class RecupFichierSource {
 
                                 if(tab[i].startsWith("f2")){
                                     String nom = tab[i].substring(tab[i].indexOf('='));
-                                    CorpsCeleste objetFixe = new ObjetFixe();
-                                    for(CorpsCeleste o : listeCorpsCeleste){
+                                    Entity objetFixe = new ObjetFixe();
+                                    for(Entity o : listeCorpsCeleste){
                                         if(o.getNom().equals(nom)){
                                             objetFixe = o;
                                         }
@@ -203,6 +216,48 @@ public class RecupFichierSource {
                                 }
                             }
                             listeCorpsCeleste.add(oe);
+                        }
+                        else{
+                            /**
+                             * Le vaisseau
+                             */
+                            if (tab[1].equals("Simulé")) {
+                                Vaisseau vaisseau = Vaisseau.getInstance();
+                                vaisseau.setNom(tab[0].substring(0, tab[0].length() - 1));
+                                Position position = new Position();
+                                VecteurVitesse vecteur = new VecteurVitesse();
+
+                                for (int i = 1; i < tab.length - 1; i++) {
+
+                                    if (tab[i].startsWith("masse")) {
+                                        vaisseau.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    }
+
+                                    if (tab[i].startsWith("posx")) {
+                                        position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    }
+                                    if (tab[i].startsWith("posy")) {
+                                        position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    }
+                                    vaisseau.setPosition(position);
+
+                                    if(tab[i].startsWith("vitx")){
+                                        vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    }if(tab[i].startsWith("vity")){
+                                        vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    }
+                                    vaisseau.setVecteurVitesse(vecteur);
+
+                                    if (tab[i].startsWith("pretro")) {
+                                        vaisseau.setPretro(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    }
+                                    if (tab[i].startsWith("pprincipal")) {
+                                        vaisseau.setPprincipal(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    }
+
+                                }
+                                listeCorpsCeleste.add(vaisseau);
+                            }
                         }
                     }
                 }
