@@ -10,8 +10,8 @@ import java.io.InputStreamReader;
 /**
  * 
  * @author cleme
- *	Classe récupérant le fichier source et le lit.
- *	Elle repère et récupère les variables pour les transmettre.
+ *	Classe rÃ©cupÃ©rant le fichier source et le lit.
+ *	Elle repÃ¨re et rÃ©cupÃ¨re les variables pour les transmettre.
  */
 
 public class RecupFichierSource {

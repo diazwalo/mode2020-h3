@@ -3,7 +3,7 @@ package model.movement;
 /**
  * 
  * @author cleme
- *	Position d'une entité, basée sur une coordonnée x et une coordonnée y.
+ *	Position d'une entitÃ©, basÃ©e sur une coordonnÃ©e x et une coordonnÃ©e y.
  */
 
 public class Position {

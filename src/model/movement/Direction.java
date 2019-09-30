@@ -3,7 +3,7 @@ package model.movement;
 /**
  * 
  * @author cleme
- *	Direction d'une entité, utilise un ou plusieurs cardinal(aux) pour une trajectoire plus souple.
+ *	Direction d'une entitÃ©ï¿½, utilise un ou plusieurs cardinal(aux) pour une trajectoire plus souple.
  */
 
 public class Direction {

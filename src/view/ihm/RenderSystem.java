@@ -15,7 +15,7 @@ import model.movement.Position;
 /**
  * 
  * @author cleme
- *	Permet d'afficher les entités sur un pane, de manière statique ou dynamique.
+ *	Permet d'afficher les entitÃ©s sur un pane, de maniÃ¨re statique ou dynamique.
  */
 
 

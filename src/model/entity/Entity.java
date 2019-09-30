@@ -7,8 +7,8 @@ import model.movement.Position;
 /**
  * 
  * @author cleme
- *	classe abstraite qui nous permet de mettre le code en commun ‡ toutes les entitÈs
- *	notamment les etoiles, les objets (vaisseau) et les planetes.
+ *	classe abstraite qui nous permet de mettre le code en commun √† toutes les entit√©s
+ *	notamment les etoiles, les objets (vaisseau) et les plan√®tes.
  */
 
 public abstract class Entity {

@@ -3,7 +3,7 @@ package model.movement;
 /**
  * 
  * @author cleme
- *	enumeration pour les points cardinaux, utiles pour calculer la trajectoire des planetes.
+ *	énumération pour les points cardinaux, utiles pour calculer la trajectoire des planètes.
  */
 
 public enum Cardinal {

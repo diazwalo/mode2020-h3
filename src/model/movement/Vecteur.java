@@ -3,8 +3,8 @@ package model.movement;
 /**
  * 
  * @author cleme
- *	Vecteur avec une position de fin et une position d'arrivée, pour l'instant inutilisée
- *	mais utile plus tard lorsque les trajectoires seront plus complexe.
+ *	Vecteur avec une position de fin et une position d'arrivÃ©e, pour l'instant inutilisÃ©e
+ *	mais utile plus tard lorsque les trajectoires seront plus complexes.
  */
 
 public class Vecteur {

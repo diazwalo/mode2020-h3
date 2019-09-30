@@ -3,7 +3,7 @@ package model.entity;
 /**
  * 
  * @author cleme
- *	classe abstraite pour le code commun entre les étoiles et les planètes.
+ *	classe abstraite pour le code commun entre les Ã©toiles et les planÃ¨tes.
  */
 
 public abstract class CorpsCeleste extends Entity {

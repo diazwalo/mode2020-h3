@@ -14,7 +14,7 @@ import model.movement.Position;
 /**
  * 
  * @author cleme
- *	Classe qui lance le programme de simulation astronomique gr‚ce aux variables rÈcupÈrÈes dans RecupFichierSource.
+ *	Classe qui lance le programme de simulation astronomique gr√¢ce aux variables r√©cup√©r√©es dans RecupFichierSource.
  */
 
 public class Core extends Application{
