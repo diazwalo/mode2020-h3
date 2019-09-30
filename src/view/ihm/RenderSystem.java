@@ -62,7 +62,7 @@ public class RenderSystem {
 		}
 	}
 
-	private void setActionAnimer(List<Entity> corps) {
+	/*private void setActionAnimer(List<Entity> corps) {
 		animer.setOnAction(e -> {
 
 			for(Entity corpsceleste : corps) {
@@ -84,18 +84,20 @@ public class RenderSystem {
 			majSystem(this.corps);
 
 		});
-	}
+	}*/
 	
 	
 	private void setAction(List<Entity> corps) {
 		animer.setOnAction(e -> {
 			for(Entity corpsceleste : corps) {
+				double dt = 0.025;
 				double x=corpsceleste.getPosition().getPosX();
 				double y=corpsceleste.getPosition().getPosY();
-				double vitesse = corpsceleste.getVitesse();
+				double vitesse = corpsceleste.getVitessex();
+				//double attraction p = 
 				//double g
-				double xres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+x;
-				double yres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+y;
+				double xres = (1.0/2.0)*1*dt*dt*+vitesse*dt+x;
+				double yres = (1.0/2.0)*vitesse*dt*dt*+vitesse*dt+y;
 				
 				corpsceleste.setPosition(new Position( (corpsceleste.getPosition().getPosX()+xres) , (corpsceleste.getPosition().getPosY()+yres) ));
 			}

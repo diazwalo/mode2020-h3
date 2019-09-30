@@ -8,31 +8,28 @@ package model.movement;
  */
 
 public class Vecteur {
-	private Position posDepart;
-	private Position posArrivee;
+	private double vx;
+	private double vy;
 	
-	public Vecteur(Position posDepart, Position posArrivee) {
-		this.posDepart = posDepart;
-		this.posArrivee = posArrivee;
+	public Vecteur(double posDepart, double posArrivee) {
+		this.vx = posDepart;
+		this.vy = posArrivee;
 	}
 
-	public Position getPosDepart() {
-		return posDepart;
+	public double getvx() {
+		return vx;
 	}
 
-	public void setPosDepart(Position posDepart) {
-		this.posDepart = posDepart;
+	public void setvx(double posDepart) {
+		this.vx = posDepart;
 	}
 
-	public Position getPosArrivee() {
-		return posArrivee;
+	public double getvy() {
+		return vy;
 	}
 
-	public void setPosArrivee(Position posArrivee) {
-		this.posArrivee = posArrivee;
+	public void setvy(double posArrivee) {
+		this.vy = posArrivee;
 	}
 	
-	public String toString() {
-		return "{ vX : "+posDepart.toString()+" , vY : "+posArrivee.toString()+" }";
-	}
 }
