@@ -14,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import model.entity.Entity;
+import model.entity.Etoile;
 import model.movement.Position;
 
 /**
@@ -87,17 +88,19 @@ public class RenderSystem {
 	}*/
 	
 	
-	private void setAction(List<Entity> corps) {
+	private void setAction(List<Entity> corps, Etoile e) {
 		animer.setOnAction(e -> {
 			for(Entity corpsceleste : corps) {
 				double dt = 0.025;
 				double x=corpsceleste.getPosition().getPosX();
 				double y=corpsceleste.getPosition().getPosY();
 				double vitesse = corpsceleste.getVitessex();
+				double g = 6.67* (Math.pow(10, -11));
 				//double attraction p = 
 				//double g
-				double xres = (1.0/2.0)*1*dt*dt*+vitesse*dt+x;
-				double yres = (1.0/2.0)*vitesse*dt*dt*+vitesse*dt+y;
+				//double xres = (1.0/2.0)*1*dt*dt*+vitesse*dt+x;
+				//double yres = (1.0/2.0)*vitesse*dt*dt*+vitesse*dt+y;
+				//double xres = g
 				
 				corpsceleste.setPosition(new Position( (corpsceleste.getPosition().getPosX()+xres) , (corpsceleste.getPosition().getPosY()+yres) ));
 			}
