@@ -1,8 +1,11 @@
 package model.entity;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import model.movement.Direction;
 import model.movement.Position;
+import model.movement.VecteurVitesse;
+
 
 /**
  * 
@@ -16,9 +19,10 @@ public abstract class Entity {
 	protected double rayon;
 	protected Position position;
 	protected Direction direction;
-	protected double vitesse;
+	protected VecteurVitesse vitesse;
 	protected Image sprite;
 	protected String nom;
+	protected Color c;
 	
 	public double getMasse() {
 		return masse;
@@ -44,11 +48,17 @@ public abstract class Entity {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-	public double getVitesse() {
-		return vitesse;
+	public double getVitessex() {
+		return vitesse.getVitx();
 	}
-	public void setVitesse(double vitesse) {
-		this.vitesse = vitesse;
+	public double getVitessey() {
+		return vitesse.getVity();
+	}
+	public void setVitessex(double vitessex) {
+		this.vitesse.setVitx(vitessex);
+	}
+	public void setVitessey(double vitessey) {
+		this.vitesse.setVity(vitessey);
 	}
 	public Image getSprite() {
 		return sprite;

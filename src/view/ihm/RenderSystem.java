@@ -17,12 +17,13 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.entity.Entity;
+import model.entity.ObjetFixe;
 import model.movement.Position;
 
 /**
  * 
  * @author cleme
- *	Permet d'afficher les entit�s sur un pane, de mani�re statique ou dynamique.
+ *	Permet d'afficher les entités sur un pane, de manière statique ou dynamique.
  */
 
 
@@ -35,6 +36,7 @@ public class RenderSystem {
 	TextArea taUp, taDown;
 	List<Circle> shapes;
 	List<Entity> corps;
+	ObjetFixe etoile;
 	final Shape shape;
 	int diametre;
 	Button animer;
@@ -51,7 +53,8 @@ public class RenderSystem {
 		this.corps = corps;
 		putPlaneteOnSysteme(corps);
 		animer = new Button("Animer");
-		setAction(corps);
+		//setActionAnimer(corps);
+		setAction(corps, etoile);
 	}
 	
 	private void putPlaneteOnSysteme(List<Entity> corps) {
@@ -65,15 +68,23 @@ public class RenderSystem {
 		}
 	}
 
-	private void setAction(List<Entity> corps) {
+	private void setAction(List<Entity> corps, ObjetFixe et) {
 		animer.setOnAction(e -> {
 			for(Entity corpsceleste : corps) {
+				double dt = 0.025;
 				double x=corpsceleste.getPosition().getPosX();
 				double y=corpsceleste.getPosition().getPosY();
-				double vitesse = corpsceleste.getVitesse();
+				double vitesse = corpsceleste.getVitessex();
 
 				double xres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+x;
 				double yres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+y;
+				//double vitesse = corpsceleste.getVitessex();
+				double g = 6.67* (Math.pow(10, -11));
+				//double attraction p = 
+				//double g
+				//double xres = (1.0/2.0)*1*dt*dt*+vitesse*dt+x;
+				//double yres = (1.0/2.0)*vitesse*dt*dt*+vitesse*dt+y;
+				//double xres = g
 				
 				corpsceleste.setPosition(new Position( (corpsceleste.getPosition().getPosX()+xres) , (corpsceleste.getPosition().getPosY()+yres) ));
 			}
