@@ -3,7 +3,6 @@ package view.ihm;
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
