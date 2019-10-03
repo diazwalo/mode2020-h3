@@ -31,6 +31,7 @@ public class RenderSystem {
 	Pane p;
 	List<Circle> shapes;
 	List<Entity> corps;
+	Etoile et;
 	final Shape shape;
 	int diametre;
 	Button animer;
@@ -47,7 +48,7 @@ public class RenderSystem {
 		putPlaneteOnSysteme(corps);
 		animer = new Button("Animer");
 		//setActionAnimer(corps);
-		setAction(corps);
+		setAction(corps, et);
 	}
 	
 	private void putPlaneteOnSysteme(List<Entity> corps) {
@@ -88,7 +89,7 @@ public class RenderSystem {
 	}*/
 	
 	
-	private void setAction(List<Entity> corps, Etoile e) {
+	private void setAction(List<Entity> corps, Etoile et) {
 		animer.setOnAction(e -> {
 			for(Entity corpsceleste : corps) {
 				double dt = 0.025;
@@ -98,8 +99,8 @@ public class RenderSystem {
 				double g = 6.67* (Math.pow(10, -11));
 				//double attraction p = 
 				//double g
-				//double xres = (1.0/2.0)*1*dt*dt*+vitesse*dt+x;
-				//double yres = (1.0/2.0)*vitesse*dt*dt*+vitesse*dt+y;
+				double xres = (1.0/2.0)*1*dt*dt*+vitesse*dt+x;
+				double yres = (1.0/2.0)*vitesse*dt*dt*+vitesse*dt+y;
 				//double xres = g
 				
 				corpsceleste.setPosition(new Position( (corpsceleste.getPosition().getPosX()+xres) , (corpsceleste.getPosition().getPosY()+yres) ));
