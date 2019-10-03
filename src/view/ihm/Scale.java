@@ -6,8 +6,7 @@ public class Scale {
 	private double newSacale;
 	
 	public Scale(double px, double expected) {
-		this.newSacale = expected / px;
-		
+		this.newSacale = px / expected;
 	}
 	
 	public double getScale() {

@@ -31,7 +31,7 @@ public class Core extends Application{
 		corps.addAll(rfs.getListeCorpsCeleste());
 
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), corps);
-		Stage stageRs = rs.createSystem();
+		Stage stageRs = rs.createRender();
 		stageRs.show();
 	}
 	
