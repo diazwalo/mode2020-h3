@@ -19,10 +19,13 @@ import java.util.ArrayList;
 
 public class RecupFichierSource {
 
-    private String G;
-    private String dt;
-    private String fa;
-    private String rayon;
+    private double G = -1;
+    private double dt = -1;
+    private double fa = -1;
+    private int rayon = -1;
+
+    private boolean premierPassage = true;
+    private boolean vaisseauUnique = true;
 
     private ArrayList<Entity> listeCorpsCeleste = new ArrayList<Entity>();
 
@@ -34,79 +37,103 @@ public class RecupFichierSource {
         this.listeCorpsCeleste = listeObjet;
     }
 
-    public String getG() {
+    public double getG() {
         return G;
     }
 
-    public void setG(String g) {
+    public void setG(double g) {
         G = g;
     }
 
-    public String getDt() {
+    public double getDt() {
         return dt;
     }
 
-    public void setDt(String dt) {
+    public void setDt(double dt) {
         this.dt = dt;
     }
 
-    public String getFa() {
+    public double getFa() {
         return fa;
     }
 
-    public void setFa(String fa) {
+    public void setFa(double fa) {
         this.fa = fa;
     }
 
-    public String getRayon() {
+    public int getRayon() {
         return rayon;
     }
 
-    public void setRayon(String rayon) {
+    public void setRayon(int rayon) {
         this.rayon = rayon;
     }
 
-    public RecupFichierSource(String chemin){
-        donneeFichier(chemin);
+    public RecupFichierSource(){
+
     }
 
-    public void donneeFichier(String cheminFichier){
+    public int donneeFichier(String cheminFichier){
+        int i;
         try{
             InputStream flux=new FileInputStream("././ressource/astro/" + cheminFichier);
             InputStreamReader lecture=new InputStreamReader(flux);
             BufferedReader buff=new BufferedReader(lecture);
             String ligne;
             while ((ligne=buff.readLine())!=null){
-                this.affectationDonnee(ligne);
+                i = this.affectationDonnee(ligne);
+                if(i != 0){
+                    return 1;
+                }
             }
             buff.close();
         }
         catch (Exception e){
             System.out.println(e.toString());
         }
+        return 0;
     }
 
-    public void affectationDonnee(String fichier) {
-        if (!fichier.startsWith("#")) {
+    public int affectationDonnee(String fichier) {
+        if (!fichier.startsWith("#") || fichier.startsWith(" ")) {
             String[] tab = fichier.split(" ");
             /**
              * Ligne de parametres
              */
+
+            /**
+             * Si la premiere ligne (ormis les commentaires) n'est pas les ligne de PARAMS
+             */
+            if(premierPassage){
+                if(!tab[0].equals("PARAMS")){
+                    System.out.println("La première ligne n'est pas PARAMS");
+                    return 1;
+                }
+            }
             if (tab[0].equals("PARAMS")) {
-                for (int i = 1; i < tab.length - 1; i++) {
+                for (int i = 1; i <= tab.length - 1; i++) {
                     if (tab[i].startsWith("G")) {
-                        this.G = tab[i].substring(2);
+                        this.G = Double.parseDouble(tab[i].substring(2));
                     }
                     if (tab[i].startsWith("dt")) {
-                        this.dt = tab[i].substring(3);
+                        this.dt = Double.parseDouble(tab[i].substring(3));
                     }
                     if (tab[i].startsWith("fa")) {
-                        this.fa = tab[i].substring(3);
+                        this.fa = Double.parseDouble(tab[i].substring(3));
                     }
                     if (tab[i].startsWith("rayon")) {
-                        this.rayon = tab[i].substring(6);
+                        this.rayon = Integer.parseInt(tab[i].substring(6));
                     }
                 }
+
+                /**
+                 * Mauvaise declaration des parametre dans le fichier source
+                 */
+                if(G == -1 || dt == -1 || fa == -1 || rayon == -1){
+                    System.out.println("Problème dans les paramtètre");
+                    return 1;
+                }
+                premierPassage = false;
             }
             else {
                 /**
@@ -117,20 +144,33 @@ public class RecupFichierSource {
                     of.setNom(tab[0].substring(0, tab[0].length() - 1));
                     Position position = new Position();
 
-                    for (int i = 1; i < tab.length - 1; i++) {
+                    for (int i = 1; i <= tab.length - 1; i++) {
 
                         if (tab[i].startsWith("masse")) {
-                            of.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            of.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
 
                         if (tab[i].startsWith("posx")) {
-                            position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
                         if (tab[i].startsWith("posy")) {
-                            position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                            position.setPosY(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
+                        if (tab[i].startsWith("rayon")) {
+                            of.setRayon(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                        }
+
                         of.setPosition(position);
                     }
+
+                    /**
+                     * Mauvaise declaration d'un objet fixe dans le fichier source
+                     */
+                    if(of.getMasse() == 0 || of.getRayon() == 0 || of.getPosition().getPosX() == 0 || of.getPosition().getPosY() == 0 || of.getNom() == null){
+                        System.out.println("Problème de déclaration d'un objet fixe");
+                        return 1;
+                    }
+
                     listeCorpsCeleste.add(of);
                 }
                 else {
@@ -143,24 +183,28 @@ public class RecupFichierSource {
                         Position position = new Position();
                         VecteurVitesse vecteur = new VecteurVitesse();
 
-                        for (int i = 1; i < tab.length - 1; i++) {
+                        for (int i = 1; i <= tab.length - 1; i++) {
 
                             if (tab[i].startsWith("masse")) {
-                                os.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                os.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
 
                             if (tab[i].startsWith("posx")) {
-                                position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
                             if (tab[i].startsWith("posy")) {
-                                position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                position.setPosY(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
                             os.setPosition(position);
 
                             if(tab[i].startsWith("vitx")){
-                                vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }if(tab[i].startsWith("vity")){
-                                vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                            }
+
+                            if (tab[i].startsWith("rayon")) {
+                                os.setRayon(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
                             os.setVecteurVitesse(vecteur);
                         }
@@ -175,26 +219,26 @@ public class RecupFichierSource {
                             oe.setNom(tab[0].substring(0, tab[0].length() - 1));
                             Position position = new Position();
 
-                            for (int i = 1; i < tab.length - 1; i++) {
+                            for (int i = 1; i <= tab.length - 1; i++) {
 
                                 if (tab[i].startsWith("masse")) {
-                                    oe.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    oe.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                 }
 
                                 if (tab[i].startsWith("posx")) {
-                                    position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                 }
                                 if (tab[i].startsWith("posy")) {
-                                    position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                 }
                                 oe.setPosition(position);
 
                                 if(tab[i].startsWith("periode")){
-                                    oe.setPeriode(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                    oe.setPeriode(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                 }
 
                                 if(tab[i].startsWith("f1")){
-                                    String nom = tab[i].substring(tab[i].indexOf('='));
+                                    String nom = tab[i].substring(tab[i].indexOf('=')+1);
                                     Entity objetFixe = new ObjetFixe();
                                     for(Entity o : listeCorpsCeleste){
                                         if(o.getNom().equals(nom)){
@@ -205,7 +249,7 @@ public class RecupFichierSource {
                                 }
 
                                 if(tab[i].startsWith("f2")){
-                                    String nom = tab[i].substring(tab[i].indexOf('='));
+                                    String nom = tab[i].substring(tab[i].indexOf('=')+1);
                                     Entity objetFixe = new ObjetFixe();
                                     for(Entity o : listeCorpsCeleste){
                                         if(o.getNom().equals(nom)){
@@ -221,38 +265,43 @@ public class RecupFichierSource {
                             /**
                              * Le vaisseau
                              */
-                            if (tab[1].equals("Simulé")) {
+                            if (tab[1].equals("Vaisseau")) {
+                                if(!vaisseauUnique){
+                                    System.out.println("Plusieurs vaisseaux définis");
+                                    return 1;
+                                }
+                                vaisseauUnique = false;
                                 Vaisseau vaisseau = Vaisseau.getInstance();
                                 vaisseau.setNom(tab[0].substring(0, tab[0].length() - 1));
                                 Position position = new Position();
                                 VecteurVitesse vecteur = new VecteurVitesse();
 
-                                for (int i = 1; i < tab.length - 1; i++) {
+                                for (int i = 1; i <= tab.length - 1; i++) {
 
                                     if (tab[i].startsWith("masse")) {
-                                        vaisseau.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                        vaisseau.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
 
                                     if (tab[i].startsWith("posx")) {
-                                        position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                        position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
                                     if (tab[i].startsWith("posy")) {
-                                        position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                        position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
                                     vaisseau.setPosition(position);
 
                                     if(tab[i].startsWith("vitx")){
-                                        vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                        vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }if(tab[i].startsWith("vity")){
-                                        vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                        vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
                                     vaisseau.setVecteurVitesse(vecteur);
 
                                     if (tab[i].startsWith("pretro")) {
-                                        vaisseau.setPretro(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                        vaisseau.setPretro(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
                                     if (tab[i].startsWith("pprincipal")) {
-                                        vaisseau.setPprincipal(Double.parseDouble(tab[i].substring(tab[i].indexOf('='))));
+                                        vaisseau.setPprincipal(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
 
                                 }
@@ -263,5 +312,6 @@ public class RecupFichierSource {
                 }
             }
         }
+        return 0;
     }
 }

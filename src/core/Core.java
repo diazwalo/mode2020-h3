@@ -2,14 +2,14 @@ package core;
 
 import java.util.ArrayList;
 import java.util.List;
-import model.entity.Entity;
-import model.entity.ObjetFixe;
-import view.ihm.RenderSystem;
+
+import controller.fileprocessor.RecupFichierSource;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import model.movement.Cardinal;
-import model.movement.Direction;
+import model.entity.Entity;
+import model.entity.ObjetFixe;
 import model.movement.Position;
+import view.ihm.RenderSystem;
 
 /**
  * 
@@ -20,14 +20,17 @@ import model.movement.Position;
 public class Core extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		List<Entity> corps = new ArrayList<Entity>();
-		
-		for (int i = 1; i <= 5; i++) {
-			Entity e = new ObjetFixe("test etoile", 0, 10, new Position(85+i*75, 85+i*75), new Direction(Cardinal.SUD), 10);
-			corps.add(e);
+		List<Entity> corps = new ArrayList<>();
+
+		RecupFichierSource rfs = new RecupFichierSource();
+		if(rfs.donneeFichier("source.txt") != 0){
+			System.out.println("Impossible de lire de fichier");
+			System.exit(1);
 		}
-		
-		RenderSystem rs = new RenderSystem(300, corps);
+
+		corps.addAll(rfs.getListeCorpsCeleste());
+
+		RenderSystem rs = new RenderSystem(rfs.getRayon(), corps);
 		Stage stageRs = rs.createSystem();
 		stageRs.show();
 	}
