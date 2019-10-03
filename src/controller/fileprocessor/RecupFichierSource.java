@@ -22,7 +22,7 @@ public class RecupFichierSource {
     private String G;
     private String dt;
     private String fa;
-    private String rayon;
+    private int rayon;
 
     private ArrayList<Entity> listeCorpsCeleste = new ArrayList<Entity>();
 
@@ -58,11 +58,11 @@ public class RecupFichierSource {
         this.fa = fa;
     }
 
-    public String getRayon() {
+    public int getRayon() {
         return rayon;
     }
 
-    public void setRayon(String rayon) {
+    public void setRayon(int rayon) {
         this.rayon = rayon;
     }
 
@@ -104,7 +104,7 @@ public class RecupFichierSource {
                         this.fa = tab[i].substring(3);
                     }
                     if (tab[i].startsWith("rayon")) {
-                        this.rayon = tab[i].substring(6);
+                        this.rayon = Integer.parseInt(tab[i].substring(6));
                     }
                 }
             }
@@ -127,8 +127,12 @@ public class RecupFichierSource {
                             position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
                         if (tab[i].startsWith("posy")) {
-                            position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                            position.setPosY(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
+                        if (tab[i].startsWith("rayon")) {
+                            of.setRayon(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                        }
+
                         of.setPosition(position);
                     }
                     listeCorpsCeleste.add(of);
@@ -153,7 +157,7 @@ public class RecupFichierSource {
                                 position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
                             if (tab[i].startsWith("posy")) {
-                                position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                position.setPosY(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
                             os.setPosition(position);
 
@@ -161,6 +165,10 @@ public class RecupFichierSource {
                                 vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }if(tab[i].startsWith("vity")){
                                 vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                            }
+
+                            if (tab[i].startsWith("rayon")) {
+                                os.setRayon(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
                             os.setVecteurVitesse(vecteur);
                         }
@@ -267,8 +275,13 @@ public class RecupFichierSource {
 
     public static void main(String[] args) {
         RecupFichierSource recupFichierSource = new RecupFichierSource("source.txt");
+        System.out.println(recupFichierSource.dt);
+        System.out.println(recupFichierSource.G);
+        System.out.println(recupFichierSource.rayon);
+        System.out.println(recupFichierSource.fa);
         System.out.println(recupFichierSource.listeCorpsCeleste.get(0).getNom());
-        System.out.println(recupFichierSource.listeCorpsCeleste.get(0).getMasse());
+        System.out.println(recupFichierSource.listeCorpsCeleste.get(1).getNom());
+
 //        System.out.println(recupFichierSource.listeCorpsCeleste.get(1).getNom());
 //        System.out.println(recupFichierSource.listeCorpsCeleste.get(2).getNom());
 

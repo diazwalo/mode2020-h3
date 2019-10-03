@@ -119,7 +119,7 @@ public class RenderSystem {
 		st.setScene(sc);
 		st.setTitle("Système");
 		st.setResizable(false);
-		st.setFullScreen(true);
+//		st.setFullScreen(true);
 
 		return st;
 	}
