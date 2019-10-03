@@ -115,9 +115,12 @@ public class RenderSystem {
 		p.getChildren().add(animer);
 
 		//TODO : modifier la taille et les set non modif
-		taUp = new TextArea();
 		taUp = new TextArea("Information Vaisseau : Vitesse 1 km/h.");
 		taDown = new TextArea("Information Planète : Elle est zolie.");
+		taUp.setEditable(false);
+		taDown.setEditable(false);
+		taUp.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
+		taDown.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
 		
 		hb = new HBox();
 		vb = new VBox();
