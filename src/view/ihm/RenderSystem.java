@@ -14,7 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.entity.Entity;
 import model.entity.ObjetFixe;
@@ -41,16 +40,20 @@ public class RenderSystem {
 	int diametre;
 	Button animer;
 	Scale scale;
+	private GraphicsEnvironment graphicsEnvironment;
 
 	public RenderSystem(int rayon, List<Entity> corps) {
+		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.diametre = rayon * 2;
 		
-		shape = new Rectangle(0.0, 0.0, diametre, diametre);
+		shape = new Rectangle(0.0, 0.0, this.getHeightWindow(), this.getHeightWindow());
 		
 		shape.setFill(Color.BLACK);
 		
 		this.st = new Stage();
+		
 		this.corps = corps;
+		scale = new Scale(this.getHeightWindow() , rayon);
 		putPlaneteOnSysteme(corps);
 		animer = new Button("Animer");
 		//setActionAnimer(corps);
@@ -105,12 +108,13 @@ public class RenderSystem {
 
 	public Stage createSystem() {
 		p = new Pane();
-		p.setPrefSize(diametre, diametre);
+		p.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 		
 		p.getChildren().add(shape);
 		p.getChildren().addAll(shapes);
 		p.getChildren().add(animer);
 
+		//TODO : modifier la taille et les set non modif
 		taUp = new TextArea();
 		taUp = new TextArea("Information Vaisseau : Vitesse 1 km/h.");
 		taDown = new TextArea("Information Planète : Elle est zolie.");
@@ -122,10 +126,7 @@ public class RenderSystem {
 		
 		hb.getChildren().addAll(p, vb);
 		
-		GraphicsEnvironment graphicsEnvironment=GraphicsEnvironment.getLocalGraphicsEnvironment();
-		double w = graphicsEnvironment.getMaximumWindowBounds().width;
-		double h = graphicsEnvironment.getMaximumWindowBounds().width;
-		sc = new Scene(hb, w, h);
+		sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
 
 		st.setScene(sc);
 		st.setTitle("Système");
@@ -133,6 +134,14 @@ public class RenderSystem {
 //		st.setFullScreen(true);
 
 		return st;
+	}
+	
+	private double getWidthWindow() {
+		return graphicsEnvironment.getMaximumWindowBounds().width;
+	}
+	
+	private double getHeightWindow() {
+		return graphicsEnvironment.getMaximumWindowBounds().height;
 	}
 }
 
