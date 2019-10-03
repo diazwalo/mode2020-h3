@@ -21,13 +21,15 @@ public class Core extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		List<Entity> corps = new ArrayList<>();
-//		corps.add(new ObjetFixe("test", 30, 20, new Position(50, 25)));
 
-		RecupFichierSource rfs = new RecupFichierSource("source.txt");
+		RecupFichierSource rfs = new RecupFichierSource();
+		if(rfs.donneeFichier("source.txt") != 0){
+			System.out.println("Impossible de lire de fichier");
+			System.exit(1);
+		}
 
 		corps.addAll(rfs.getListeCorpsCeleste());
 
-//		corps.get(0).setPosition(new Position(200, 200));
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), corps);
 		Stage stageRs = rs.createSystem();
 		stageRs.show();
