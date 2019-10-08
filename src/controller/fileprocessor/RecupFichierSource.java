@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
 import model.entity.Entity;
 import model.entity.ObjetEllipse;
 import model.entity.ObjetFixe;
@@ -99,8 +100,11 @@ public class RecupFichierSource {
     }
 
     public int affectationDonnee(String fichier) {
-        if (!fichier.startsWith("#") || fichier.startsWith(" ")) {
-            String[] tab = fichier.split(" ");
+        if (!fichier.startsWith("#") && !fichier.startsWith(" ") && !fichier.startsWith("")) {
+            //String[] tab = new String[fichier.split(" ").length];
+            //tab= fichier.split(" ");
+            String[] tab =  fichier.split(" ");
+            
             /**
              * Ligne de parametres
              */
@@ -182,36 +186,40 @@ public class RecupFichierSource {
                      * Objet simulé
                      */
                     if (tab[1].equals("Simulé")) {
-                        ObjetSimule os = new ObjetSimule();
-                        os.setNom(tab[0].substring(0, tab[0].length() - 1));
-                        Vecteur position = new Vecteur();
-                        Vecteur vecteur = new Vecteur();
+                    	String nom=tab[0].substring(0, tab[0].length()-1);
+                    	double masse=0;
+                    	double taille=0;
+                    	Vecteur position = new Vecteur(0, 0);
+                    	double vx=0;
+                    	double vy=0;
+
+                        Image sptrite;
 
                         for (int i = 1; i <= tab.length - 1; i++) {
 
                             if (tab[i].startsWith("masse")) {
-                                os.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                masse =Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
 
                             if (tab[i].startsWith("posx")) {
                                 position.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                
                             }
                             if (tab[i].startsWith("posy")) {
-                                position.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                            	position.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
-                            os.setPosition(position);
 
                             if(tab[i].startsWith("vitx")){
-                                vecteur.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                               vx=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }if(tab[i].startsWith("vity")){
-                                vecteur.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                vy=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
 
                             if (tab[i].startsWith("rayon")) {
-                                os.setRayon(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                               taille=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
-                            os.setVecteurVitesse(vecteur);
                         }
+                        ObjetSimule os = new ObjetSimule(nom, masse, taille, position, vx, vy, null);
                         listeCorpsCeleste.add(os);
                     }
                     else {
