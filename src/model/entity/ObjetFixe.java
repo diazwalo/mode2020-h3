@@ -2,7 +2,6 @@ package model.entity;
 
 import javafx.scene.image.Image;
 import model.movement.Vecteur;
-import model.movement.Vecteur;
 
 public class ObjetFixe extends CorpsCeleste {
 	

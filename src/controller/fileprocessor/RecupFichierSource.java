@@ -218,6 +218,7 @@ public class RecupFichierSource {
                             if (tab[i].startsWith("rayon")) {
                                taille=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
+
                         }
                         ObjetSimule os = new ObjetSimule(nom, masse, taille, position, vx, vy, null);
                         listeCorpsCeleste.add(os);
