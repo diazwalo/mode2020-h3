@@ -6,7 +6,6 @@ package model.movement;
  *	Vecteur avec une position de fin et une position d'arrivée, pour l'instant inutilisée
  *	mais utile plus tard lorsque les trajectoires seront plus complexes.
  */
-
 public class Vecteur {
 	private double x;
 	private double y;

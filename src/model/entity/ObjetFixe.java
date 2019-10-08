@@ -32,7 +32,7 @@ public class ObjetFixe extends CorpsCeleste {
 	public ObjetFixe(String nom, double masse, double taille) {
 		this(nom, masse, taille, null, null, 0,0, null);
 	}
-	
+	 
 	public ObjetFixe(String nom, double masse) {
 		this(nom, masse, 0, null, null, 0,0, null);
 	}
