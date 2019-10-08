@@ -3,7 +3,6 @@ package model.entity;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.movement.Direction;
-import model.movement.Position;
 import model.movement.Vecteur;
 
 
@@ -56,18 +55,31 @@ public abstract class Entity {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-	public double getVitessex() {
+
+	public double getVitesseX() {
+		//TODO : test
+		//System.out.println(vitesse);
 		return vitesse.getx();
 	}
-	public double getVitessey() {
+	
+	public double getVitesseY() {
 		return vitesse.gety();
 	}
-	public void setVitessex(double vitessex) {
+
+
+	public void setVitesseX(double vitessex) {
 		this.vitesse.setx(vitessex);
 	}
-	public void setVitessey(double vitessey) {
+	
+	public void setVitesseY(double vitessey) {
 		this.vitesse.sety(vitessey);
 	}
+	
+	public void setVitesse(double vitX, double vitY) {
+		this.vitesse.setx(vitX);
+		this.vitesse.sety(vitY);
+	}
+	
 	public Image getSprite() {
 		return sprite;
 	}

@@ -76,7 +76,8 @@ public class RecupFichierSource {
 
     }
 
-    public int donneeFichier(String cheminFichier){
+    @SuppressWarnings("resource")
+	public int donneeFichier(String cheminFichier){
         int i;
         try{
             InputStream flux=new FileInputStream("././ressource/astro/" + cheminFichier);

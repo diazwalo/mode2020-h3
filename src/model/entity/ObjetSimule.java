@@ -8,7 +8,9 @@ public class ObjetSimule extends CorpsCeleste {
 
     public ObjetSimule(){
         super();
-        vecteurVitesse = new Vecteur();
+		if(this.vecteurVitesse == null) {
+			vecteurVitesse = new Vecteur(1, 1);
+		}
     }
 
     public Vecteur getVecteurVitesse() {
