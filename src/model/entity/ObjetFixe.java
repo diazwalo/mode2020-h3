@@ -2,30 +2,30 @@ package model.entity;
 
 import javafx.scene.image.Image;
 import model.movement.Direction;
-import model.movement.Position;
-import model.movement.VecteurVitesse;
+import model.movement.Vecteur;
+import model.movement.Vecteur;
 
 public class ObjetFixe extends CorpsCeleste {
 	
-	public ObjetFixe(String nom, double masse, double taille, Position position, Direction direction, double vx, double vy, Image sprite) {
+	public ObjetFixe(String nom, double masse, double taille, Vecteur position, Direction direction, double vx, double vy, Image sprite) {
 		this.masse = masse;
 		this.rayon = taille;
 		this.position = position;
 		this.direction = direction;
-		this.vitesse = new VecteurVitesse(vx,vy);
+		this.vitesse = new Vecteur(vx,vy);
 		this.sprite = sprite;
 		this.nom = nom;
 	}
 	
-	public ObjetFixe(String nom, double masse, double taille, Position position, Direction direction, double vx, double vy) {
+	public ObjetFixe(String nom, double masse, double taille, Vecteur position, Direction direction, double vx, double vy) {
 		this(nom, masse, taille, position, direction, vx, vy, null);
 	}
 	
-	public ObjetFixe(String nom, double masse, double taille, Position position, Direction direction) {
+	public ObjetFixe(String nom, double masse, double taille, Vecteur position, Direction direction) {
 		this(nom, masse, taille, position, direction, 0,0, null);
 	}
 	
-	public ObjetFixe(String nom, double masse, double taille, Position position) {
+	public ObjetFixe(String nom, double masse, double taille, Vecteur position) {
 		this(nom, masse, taille, position, null, 0,0, null);
 	}
 	
@@ -58,7 +58,7 @@ public class ObjetFixe extends CorpsCeleste {
 	}
 
 	@Override
-	public Position getPosition() {
+	public Vecteur getPosition() {
 		// TODO Auto-generated method stub
 		return this.position;
 	}

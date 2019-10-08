@@ -1,14 +1,17 @@
 package controller.fileprocessor;
 
-import model.entity.*;
-import model.movement.Position;
-import model.movement.VecteurVitesse;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import model.entity.Entity;
+import model.entity.ObjetEllipse;
+import model.entity.ObjetFixe;
+import model.entity.ObjetSimule;
+import model.entity.Vaisseau;
+import model.movement.Vecteur;
 
 /**
  * 
@@ -142,7 +145,7 @@ public class RecupFichierSource {
                 if (tab[1].equals("Fixe")) {
                     ObjetFixe of = new ObjetFixe();
                     of.setNom(tab[0].substring(0, tab[0].length() - 1));
-                    Position position = new Position();
+                    Vecteur position = new Vecteur();
 
                     for (int i = 1; i <= tab.length - 1; i++) {
 
@@ -151,10 +154,10 @@ public class RecupFichierSource {
                         }
 
                         if (tab[i].startsWith("posx")) {
-                            position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                            position.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
                         if (tab[i].startsWith("posy")) {
-                            position.setPosY(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                            position.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
                         if (tab[i].startsWith("rayon")) {
                             of.setRayon(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
@@ -166,7 +169,7 @@ public class RecupFichierSource {
                     /**
                      * Mauvaise declaration d'un objet fixe dans le fichier source
                      */
-                    if(of.getMasse() == 0 || of.getRayon() == 0 || of.getPosition().getPosX() == 0 || of.getPosition().getPosY() == 0 || of.getNom() == null){
+                    if(of.getMasse() == 0 || of.getRayon() == 0 || of.getPosition().getx() == 0 || of.getPosition().gety() == 0 || of.getNom() == null){
                         System.out.println("Problème de déclaration d'un objet fixe");
                         return 1;
                     }
@@ -180,8 +183,8 @@ public class RecupFichierSource {
                     if (tab[1].equals("Simulé")) {
                         ObjetSimule os = new ObjetSimule();
                         os.setNom(tab[0].substring(0, tab[0].length() - 1));
-                        Position position = new Position();
-                        VecteurVitesse vecteur = new VecteurVitesse();
+                        Vecteur position = new Vecteur();
+                        Vecteur vecteur = new Vecteur();
 
                         for (int i = 1; i <= tab.length - 1; i++) {
 
@@ -190,17 +193,17 @@ public class RecupFichierSource {
                             }
 
                             if (tab[i].startsWith("posx")) {
-                                position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                position.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
                             if (tab[i].startsWith("posy")) {
-                                position.setPosY(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                position.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
                             os.setPosition(position);
 
                             if(tab[i].startsWith("vitx")){
-                                vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                vecteur.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }if(tab[i].startsWith("vity")){
-                                vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                vecteur.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
 
                             if (tab[i].startsWith("rayon")) {
@@ -217,7 +220,7 @@ public class RecupFichierSource {
                         if (tab[1].equals("Ellipse")) {
                             ObjetEllipse oe = new ObjetEllipse();
                             oe.setNom(tab[0].substring(0, tab[0].length() - 1));
-                            Position position = new Position();
+                            Vecteur position = new Vecteur();
 
                             for (int i = 1; i <= tab.length - 1; i++) {
 
@@ -226,10 +229,10 @@ public class RecupFichierSource {
                                 }
 
                                 if (tab[i].startsWith("posx")) {
-                                    position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                    position.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                 }
                                 if (tab[i].startsWith("posy")) {
-                                    position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                    position.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                 }
                                 oe.setPosition(position);
 
@@ -273,8 +276,8 @@ public class RecupFichierSource {
                                 vaisseauUnique = false;
                                 Vaisseau vaisseau = Vaisseau.getInstance();
                                 vaisseau.setNom(tab[0].substring(0, tab[0].length() - 1));
-                                Position position = new Position();
-                                VecteurVitesse vecteur = new VecteurVitesse();
+                                Vecteur position = new Vecteur();
+                                Vecteur vecteur = new Vecteur();
 
                                 for (int i = 1; i <= tab.length - 1; i++) {
 
@@ -283,17 +286,17 @@ public class RecupFichierSource {
                                     }
 
                                     if (tab[i].startsWith("posx")) {
-                                        position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                        position.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
                                     if (tab[i].startsWith("posy")) {
-                                        position.setPosX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                        position.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
                                     vaisseau.setPosition(position);
 
                                     if(tab[i].startsWith("vitx")){
-                                        vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                        vecteur.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }if(tab[i].startsWith("vity")){
-                                        vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                        vecteur.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
                                     vaisseau.setVecteurVitesse(vecteur);
 

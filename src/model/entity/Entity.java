@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.movement.Direction;
 import model.movement.Position;
-import model.movement.VecteurVitesse;
+import model.movement.Vecteur;
 
 
 /**
@@ -17,12 +17,20 @@ import model.movement.VecteurVitesse;
 public abstract class Entity {
 	protected double masse;
 	protected double rayon;
-	protected Position position;
+	protected Vecteur position;
 	protected Direction direction;
-	protected VecteurVitesse vitesse;
+	protected Vecteur vitesse;
 	protected Image sprite;
 	protected String nom;
 	protected Color c;
+	
+	public Vecteur getAcceleration(Vecteur force) {
+		return new Vecteur(force.getx()/this.masse, force.gety()/this.masse);
+	}
+	
+	public Vecteur getForce(Entity other) {
+		return new Vecteur(other.getPosition().getx()-this.position.getx(), other.position.gety()-this.position.gety());
+	}
 	
 	public double getMasse() {
 		return masse;
@@ -36,11 +44,11 @@ public abstract class Entity {
 	public void setRayon(double rayon) {
 		this.rayon = rayon;
 	}
-	public Position getPosition() {
+	public Vecteur getPosition() {
 		return position;
 	}
-	public void setPosition(Position position) {
-		this.position = position;
+	public void setPosition(Vecteur position2) {
+		this.position = position2;
 	}
 	public Direction getDirection() {
 		return direction;
@@ -49,16 +57,16 @@ public abstract class Entity {
 		this.direction = direction;
 	}
 	public double getVitessex() {
-		return vitesse.getVitx();
+		return vitesse.getx();
 	}
 	public double getVitessey() {
-		return vitesse.getVity();
+		return vitesse.gety();
 	}
 	public void setVitessex(double vitessex) {
-		this.vitesse.setVitx(vitessex);
+		this.vitesse.setx(vitessex);
 	}
 	public void setVitessey(double vitessey) {
-		this.vitesse.setVity(vitessey);
+		this.vitesse.sety(vitessey);
 	}
 	public Image getSprite() {
 		return sprite;

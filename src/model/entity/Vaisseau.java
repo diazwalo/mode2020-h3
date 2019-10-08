@@ -1,9 +1,6 @@
 package model.entity;
 
-import javafx.scene.image.Image;
-import model.movement.Direction;
-import model.movement.Position;
-import model.movement.VecteurVitesse;
+import model.movement.Vecteur;
 
 public class Vaisseau extends Entity {
 	private Vaisseau(){}
@@ -15,13 +12,13 @@ public class Vaisseau extends Entity {
 	}
 
 	double pretro, pprincipal;
-	VecteurVitesse vecteurVitesse = new VecteurVitesse();
+	Vecteur vecteurVitesse = new Vecteur();
 
-	public VecteurVitesse getVecteurVitesse() {
+	public Vecteur getVecteurVitesse() {
 		return vecteurVitesse;
 	}
 
-	public void setVecteurVitesse(VecteurVitesse vecteurVitesse) {
+	public void setVecteurVitesse(Vecteur vecteurVitesse) {
 		this.vecteurVitesse = vecteurVitesse;
 	}
 

@@ -3,6 +3,7 @@ package view.ihm;
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -16,7 +17,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import model.entity.Entity;
 import model.entity.ObjetFixe;
-import model.movement.Position;
+import model.movement.Vecteur;
 
 /**
  * 
@@ -114,8 +115,8 @@ public class RenderSystem {
 		this.shapes = new ArrayList<Circle>();
 		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
-			Circle tempo = new Circle(entity.getPosition().getPosX()*(this.scale.getScale()), 
-									  entity.getPosition().getPosY()*(this.scale.getScale()), 
+			Circle tempo = new Circle(entity.getPosition().getx()*(this.scale.getScale()), 
+									  entity.getPosition().gety()*(this.scale.getScale()), 
 									  entity.getRayon()*(this.scale.getScale()));
 			
 			//TODO : si il y a une couleur pour la planete dans entity -> lui assigner
@@ -165,8 +166,8 @@ public class RenderSystem {
 		this.animer.setOnAction(e -> {
 			for(Entity corpsceleste : corps) {
 				double dt = 0.025;
-				double x=corpsceleste.getPosition().getPosX();
-				double y=corpsceleste.getPosition().getPosY();
+				double x=corpsceleste.getPosition().getx();
+				double y=corpsceleste.getPosition().gety();
 				double vitesse = corpsceleste.getVitessex();
 
 				double xres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+x;
@@ -179,7 +180,7 @@ public class RenderSystem {
 				//double yres = (1.0/2.0)*vitesse*dt*dt*+vitesse*dt+y;
 				//double xres = g
 				
-				corpsceleste.setPosition(new Position( (corpsceleste.getPosition().getPosX()+xres) , (corpsceleste.getPosition().getPosY()+yres) ));
+				corpsceleste.setPosition(new Vecteur( (corpsceleste.getPosition().getx()+xres) , (corpsceleste.getPosition().gety()+yres) ));
 			}
 			putPlaneteOnSysteme(this.corps);
 			majSystem(this.corps);
