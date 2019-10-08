@@ -15,8 +15,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import model.entity.CorpsCeleste;
 import model.entity.Entity;
 import model.entity.ObjetFixe;
+import model.entity.ObjetSimule;
 import model.movement.Position;
 
 /**
@@ -46,19 +48,33 @@ public class RenderSystem {
 		this.scale = new Scale(this.getHeightWindow() , rayon*2);
 		this.setBackground(Color.BLACK);
 		this.corps = corps;
-		//this.applicateScailOnSystem();
+		this.applicateScailOnSystem();
 		putPlaneteOnSysteme(corps);
 	}
 	
 	private void applicateScailOnSystem() {
 		for (Entity entity : corps) {
-			Position posTempo = entity.getPosition();
-			posTempo.setPosX(posTempo.getPosX() * this.scale.getScale());
-			posTempo.setPosY(posTempo.getPosY() * this.scale.getScale());
-			entity.setPosition(posTempo);
 			
-			entity.setVitesseX(entity.getVitesseX() * this.scale.getScale());
-			entity.setVitesseY(entity.getVitesseY() * this.scale.getScale());
+			//TODO : Test
+			
+			/*if(entity instanceof ObjetSimule) {
+				CorpsCeleste cc = ((CorpsCeleste)(entity));
+				Position posTempo = cc.getPosition();
+				posTempo.setPosX(posTempo.getPosX() * this.scale.getScale());
+				posTempo.setPosY(posTempo.getPosY() * this.scale.getScale());
+				cc.setPosition(posTempo);
+				
+				cc.setVitesseX(cc.getVitesseX() * this.scale.getScale());
+				cc.setVitesseY(cc.getVitesseY() * this.scale.getScale());
+			}else {*/
+				Position posTempo = entity.getPosition();
+				posTempo.setPosX(posTempo.getPosX() * this.scale.getScale());
+				posTempo.setPosY(posTempo.getPosY() * this.scale.getScale());
+				entity.setPosition(posTempo);
+				
+				entity.setVitesseX(entity.getVitesseX() * this.scale.getScale());
+				entity.setVitesseY(entity.getVitesseY() * this.scale.getScale());
+			//}
 		}
 	}
 
