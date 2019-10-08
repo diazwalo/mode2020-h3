@@ -24,11 +24,12 @@ public class Core extends Application{
 
 		RecupFichierSource rfs = new RecupFichierSource();
 		if(rfs.donneeFichier("source.txt") != 0){
-			System.out.println("Impossible de lire de fichier");
+			System.out.println("Impossible de lire le fichier");
 			System.exit(1);
 		}
 
 		corps.addAll(rfs.getListeCorpsCeleste());
+
 
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), corps);
 		Stage stageRs = rs.createRender();

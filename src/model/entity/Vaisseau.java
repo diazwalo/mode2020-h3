@@ -14,14 +14,6 @@ public class Vaisseau extends Entity {
 	double pretro, pprincipal;
 	Vecteur vecteurVitesse = new Vecteur();
 
-	public Vecteur getVecteurVitesse() {
-		return vecteurVitesse;
-	}
-
-	public void setVecteurVitesse(Vecteur vecteurVitesse) {
-		this.vecteurVitesse = vecteurVitesse;
-	}
-
 	public double getPretro() {
 		return pretro;
 	}

@@ -308,7 +308,7 @@ public class RecupFichierSource {
                                     }if(tab[i].startsWith("vity")){
                                         vecteur.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
-                                    vaisseau.setVecteurVitesse(vecteur);
+                                    vaisseau.setVitesse(vecteur.getx(), vecteur.gety());
 
                                     if (tab[i].startsWith("pretro")) {
                                         vaisseau.setPretro(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
