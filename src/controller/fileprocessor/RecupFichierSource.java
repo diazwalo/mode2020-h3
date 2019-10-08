@@ -182,7 +182,7 @@ public class RecupFichierSource {
                      * Objet simulé
                      */
                     if (tab[1].equals("Simulé")) {
-                        ObjetSimule os = new ObjetSimule();
+                        ObjetSimule os = new ObjetSimule("os", 0, 0, null, 0, 0, null);
                         os.setNom(tab[0].substring(0, tab[0].length() - 1));
                         Vecteur position = new Vecteur();
                         Vecteur vecteur = new Vecteur();
@@ -210,7 +210,7 @@ public class RecupFichierSource {
                             if (tab[i].startsWith("rayon")) {
                                 os.setRayon(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
-                            os.setVecteurVitesse(vecteur);
+                            os.setVitesse(vecteur);
                         }
                         listeCorpsCeleste.add(os);
                     }

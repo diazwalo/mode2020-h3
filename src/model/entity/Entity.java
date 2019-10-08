@@ -2,7 +2,6 @@ package model.entity;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import model.movement.Direction;
 import model.movement.Vecteur;
 
 
@@ -17,7 +16,6 @@ public abstract class Entity {
 	protected double masse;
 	protected double rayon;
 	protected Vecteur position;
-	protected Direction direction;
 	protected Vecteur vitesse;
 	protected Image sprite;
 	protected String nom;
@@ -49,12 +47,7 @@ public abstract class Entity {
 	public void setPosition(Vecteur position2) {
 		this.position = position2;
 	}
-	public Direction getDirection() {
-		return direction;
-	}
-	public void setDirection(Direction direction) {
-		this.direction = direction;
-	}
+
 
 	public double getVitesseX() {
 		//TODO : test
