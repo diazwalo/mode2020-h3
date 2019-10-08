@@ -40,7 +40,7 @@ public class RenderSystem {
 	private Button animer;
 	private Scale scale;
 	private GraphicsEnvironment graphicsEnvironment;
-
+ 
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(this.getHeightWindow() , rayon*2);

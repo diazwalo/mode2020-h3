@@ -294,7 +294,7 @@ public class RecupFichierSource {
                                     if (tab[i].startsWith("masse")) {
                                         vaisseau.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
-
+ 
                                     if (tab[i].startsWith("posx")) {
                                         position.setx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }

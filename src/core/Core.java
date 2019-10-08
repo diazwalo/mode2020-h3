@@ -21,7 +21,7 @@ public class Core extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		List<Entity> corps = new ArrayList<>();
-
+ 
 		RecupFichierSource rfs = new RecupFichierSource();
 		if(rfs.donneeFichier("source.txt") != 0){
 			System.out.println("Impossible de lire le fichier");
