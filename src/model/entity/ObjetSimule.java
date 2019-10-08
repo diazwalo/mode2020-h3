@@ -1,8 +1,5 @@
 package model.entity;
 
-import javafx.scene.image.Image;
-import model.movement.Direction;
-import model.movement.Position;
 import model.movement.VecteurVitesse;
 
 public class ObjetSimule extends CorpsCeleste {
@@ -11,7 +8,9 @@ public class ObjetSimule extends CorpsCeleste {
 
     public ObjetSimule(){
         super();
-        vecteurVitesse = new VecteurVitesse();
+        if(this.vecteurVitesse == null) {
+        	vecteurVitesse = new VecteurVitesse(1, 1);
+        }
     }
 
     public VecteurVitesse getVecteurVitesse() {

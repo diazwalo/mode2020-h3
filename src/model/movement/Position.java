@@ -7,36 +7,36 @@ package model.movement;
  */
 
 public class Position {
-	private double posx;
-	private double posy;
+	private double posX;
+	private double posY;
 	
 	public Position(double posx, double posy) {
-		this.posx = posx;
-		this.posy = posy;
+		this.posX = posx;
+		this.posY = posy;
 	}
 	
 	public Position() {
-		posx = 0.0;
-		posy = 0.0;
+		posX = 0.0;
+		posY = 0.0;
 	}
 	
 	public void setPosX(double posx) {
-		this.posx = posx;
+		this.posX = posx;
 	}
 	
 	public void setPosY(double posy) {
-		this.posy = posy;
+		this.posY = posy;
 	}
 	
 	public double getPosX() {
-		return posx;
+		return posX;
 	}
 	
 	public double getPosY() {
-		return posy;
+		return posY;
 	}
 	
 	public String toString() {
-		return "[ x : "+posx+", y : "+posy+" ]";
+		return "[ x : "+this.posX+", y : "+this.posY+" ]";
 	}
 }

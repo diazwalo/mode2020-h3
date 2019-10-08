@@ -1,8 +1,5 @@
 package model.entity;
 
-import javafx.scene.image.Image;
-import model.movement.Direction;
-import model.movement.Position;
 import model.movement.VecteurVitesse;
 
 public class Vaisseau extends Entity {

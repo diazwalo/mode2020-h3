@@ -8,34 +8,34 @@ package model.movement;
  */
 
 public class VecteurVitesse {
-	private double vitx;
-	private double vity;
+	private double vitX;
+	private double vitY;
 
 	public VecteurVitesse() {
 	}
 
 	public VecteurVitesse(double vitx, double vity) {
-		this.vitx = vitx;
-		this.vity = vity;
+		this.vitX = vitx;
+		this.vitY = vity;
 	}
 
-	public double getVitx() {
-		return vitx;
+	public double getVitX() {
+		return vitX;
 	}
 
-	public void setVitx(double vitx) {
-		this.vitx = vitx;
+	public void setVitX(double vitx) {
+		this.vitX = vitx;
 	}
 
-	public double getVity() {
-		return vity;
+	public double getVitY() {
+		return vitY;
 	}
 
-	public void setVity(double vity) {
-		this.vity = vity;
+	public void setVitY(double vity) {
+		this.vitY = vity;
 	}
 	
 	public String toString() {
-		return "{ vX : "+ vitx +" , vY : "+ vity +" }";
+		return "{ vX : "+ this.vitX +" , vY : "+ this.vitY +" }";
 	}
 }

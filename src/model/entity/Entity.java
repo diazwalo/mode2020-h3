@@ -48,18 +48,26 @@ public abstract class Entity {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-	public double getVitessex() {
-		return vitesse.getVitx();
+	public double getVitesseX() {
+		//TODO : test
+		//System.out.println(vitesse);
+		return vitesse.getVitX();
 	}
-	public double getVitessey() {
-		return vitesse.getVity();
+	public double getVitesseY() {
+		return vitesse.getVitY();
 	}
-	public void setVitessex(double vitessex) {
-		this.vitesse.setVitx(vitessex);
+	public void setVitesseX(double vitessex) {
+		this.vitesse.setVitX(vitessex);
 	}
-	public void setVitessey(double vitessey) {
-		this.vitesse.setVity(vitessey);
+	public void setVitesseY(double vitessey) {
+		this.vitesse.setVitY(vitessey);
 	}
+	
+	public void setVitesse(double vitX, double vitY) {
+		this.vitesse.setVitX(vitX);
+		this.vitesse.setVitY(vitY);
+	}
+	
 	public Image getSprite() {
 		return sprite;
 	}

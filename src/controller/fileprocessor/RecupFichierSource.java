@@ -73,7 +73,8 @@ public class RecupFichierSource {
 
     }
 
-    public int donneeFichier(String cheminFichier){
+    @SuppressWarnings("resource")
+	public int donneeFichier(String cheminFichier){
         int i;
         try{
             InputStream flux=new FileInputStream("././ressource/astro/" + cheminFichier);
@@ -198,9 +199,9 @@ public class RecupFichierSource {
                             os.setPosition(position);
 
                             if(tab[i].startsWith("vitx")){
-                                vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                vecteur.setVitX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }if(tab[i].startsWith("vity")){
-                                vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                vecteur.setVitY(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                             }
 
                             if (tab[i].startsWith("rayon")) {
@@ -291,9 +292,9 @@ public class RecupFichierSource {
                                     vaisseau.setPosition(position);
 
                                     if(tab[i].startsWith("vitx")){
-                                        vecteur.setVitx(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                        vecteur.setVitX(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }if(tab[i].startsWith("vity")){
-                                        vecteur.setVity(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                                        vecteur.setVitY(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
                                     vaisseau.setVecteurVitesse(vecteur);
 

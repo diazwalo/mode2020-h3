@@ -43,12 +43,25 @@ public class RenderSystem {
 
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		scale = new Scale(this.getHeightWindow() , rayon*2);
+		this.scale = new Scale(this.getHeightWindow() , rayon*2);
 		this.setBackground(Color.BLACK);
 		this.corps = corps;
+		//this.applicateScailOnSystem();
 		putPlaneteOnSysteme(corps);
 	}
 	
+	private void applicateScailOnSystem() {
+		for (Entity entity : corps) {
+			Position posTempo = entity.getPosition();
+			posTempo.setPosX(posTempo.getPosX() * this.scale.getScale());
+			posTempo.setPosY(posTempo.getPosY() * this.scale.getScale());
+			entity.setPosition(posTempo);
+			
+			entity.setVitesseX(entity.getVitesseX() * this.scale.getScale());
+			entity.setVitesseY(entity.getVitesseY() * this.scale.getScale());
+		}
+	}
+
 	/**
 	 * Crée la partie gauche du programme : le tableau de bord.
 	 * Ce tableau de bord contient :
@@ -133,7 +146,6 @@ public class RenderSystem {
 	 * @param corps
 	 */
 	private void majSystem(List<Entity> corps) {
-		//TODO : Ajouter la mise à jour du tableau de bord.
 		p.getChildren().clear();
 		p.getChildren().add(background);
 		p.getChildren().addAll(shapes);
@@ -164,20 +176,24 @@ public class RenderSystem {
 	 */
 	private void setAction(List<Entity> corps, ObjetFixe et) {
 		this.animer.setOnAction(e -> {
+			int idx = 0;
 			for(Entity corpsceleste : corps) {
+				//TODO : test
+				System.out.println(corpsceleste.getNom() + ", idx:" + idx++);
 				double dt = 0.025;
 				double x=corpsceleste.getPosition().getPosX();
 				double y=corpsceleste.getPosition().getPosY();
-				double vitesse = corpsceleste.getVitessex();
-
-				double xres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+x;
-				double yres = (1.0/2.0)*vitesse*0.25*0.25*+vitesse*0.25+y;
-				//double vitesse = corpsceleste.getVitessex();
+				double vitesseX = corpsceleste.getVitesseX();
+				double vitesseY = corpsceleste.getVitesseX();
+				
+				double xres = (1.0/2.0)*vitesseX*0.25*0.25*+vitesseX*0.25+x;
+				double yres = (1.0/2.0)*vitesseY*0.25*0.25*+vitesseY*0.25+y;
+				
 				double g = 6.67* (Math.pow(10, -11));
 				//double attraction p = 
 				//double g
-				//double xres = (1.0/2.0)*1*dt*dt*+vitesse*dt+x;
-				//double yres = (1.0/2.0)*vitesse*dt*dt*+vitesse*dt+y;
+				//double xres = (1.0/2.0)*1*dt*dt*+vitesseX*dt+x;
+				//double yres = (1.0/2.0)*vitesseX*dt*dt*+vitesseY*dt+y;
 				//double xres = g
 				
 				corpsceleste.setPosition(new Position( (corpsceleste.getPosition().getPosX()+xres) , (corpsceleste.getPosition().getPosY()+yres) ));
