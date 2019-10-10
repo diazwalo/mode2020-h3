@@ -94,7 +94,7 @@ public class RecupFichierSource {
             buff.close();
         }
         catch (Exception e){
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         return 0;
     }
@@ -148,8 +148,7 @@ public class RecupFichierSource {
                  * Objet fixe
                  */
             	double masse=0;
-            	double taille=0;
-            	double rayonobjet=0;
+            	double rayonobjet=2;
             	Vecteur position = new Vecteur(0, 0);
             	double vx=0;
             	double vy=0;
@@ -176,7 +175,7 @@ public class RecupFichierSource {
                         }
 
                     }
-                    of= new ObjetFixe(nomf, masse, taille, position, 0, 0, null, null);
+                    of= new ObjetFixe(nomf, masse, rayonobjet, position, 0, 0, null, null);
 
 
                     /**
@@ -218,11 +217,11 @@ public class RecupFichierSource {
                             }
 
                             if (tab[i].startsWith("rayon")) {
-                               taille=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                               rayonobjet=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
 
                         }
-                        ObjetSimule os = new ObjetSimule(noms, masse, taille, position, vx, vy, null, null);
+                        ObjetSimule os = new ObjetSimule(noms, masse, rayonobjet, position, vx, vy, null, null);
                         listeCorpsCeleste.add(os);
                     }
                     else {
@@ -287,7 +286,7 @@ public class RecupFichierSource {
                                 vaisseauUnique = false;
                                 Vaisseau vaisseau = Vaisseau.getInstance();
                                 vaisseau.setNom(tab[0].substring(0, tab[0].length() - 1));
-                                Vecteur vecteur = new Vecteur();
+                                Vecteur vecteur = new Vecteur(0,0);
 
                                 for (int i = 1; i <= tab.length - 1; i++) {
 

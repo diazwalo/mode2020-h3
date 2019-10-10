@@ -52,19 +52,6 @@ public class RenderSystem {
 	
 	private void applicateScailOnSystem() {
 		for (Entity entity : corps) {
-			
-			//TODO : Test
-			
-			/*if(entity instanceof ObjetSimule) {
-				CorpsCeleste cc = ((CorpsCeleste)(entity));
-				Position posTempo = cc.getPosition();
-				posTempo.setPosX(posTempo.getPosX() * this.scale.getScale());
-				posTempo.setPosY(posTempo.getPosY() * this.scale.getScale());
-				cc.setPosition(posTempo);
-				
-				cc.setVitesseX(cc.getVitesseX() * this.scale.getScale());
-				cc.setVitesseY(cc.getVitesseY() * this.scale.getScale());
-			}else {*/
 				Vecteur posTempo = entity.getPosition();
 				posTempo.setx(posTempo.getx() * this.scale.getScale());
 				posTempo.sety(posTempo.gety() * this.scale.getScale());
@@ -72,7 +59,6 @@ public class RenderSystem {
 				
 				entity.setVitesseX(entity.getVitesseX() * this.scale.getScale());
 				entity.setVitesseY(entity.getVitesseY() * this.scale.getScale());
-			//}
 		}
 	}
 
