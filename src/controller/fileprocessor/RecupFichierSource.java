@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import model.entity.Entity;
 import model.entity.ObjetEllipse;
 import model.entity.ObjetFixe;
@@ -150,6 +151,7 @@ public class RecupFichierSource {
             	double masse=0;
             	double rayonobjet=2;
             	Vecteur position = new Vecteur(0, 0);
+            	Color c = new Color(0.0, 0.0, 0.0, 1.0);
             	double vx=0;
             	double vy=0;
 
@@ -219,9 +221,19 @@ public class RecupFichierSource {
                             if (tab[i].startsWith("rayon")) {
                                rayonobjet=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
+                            
+                            if(tab[i].startsWith("couleurRed")) {
+                            	c = new Color(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)), c.getGreen(), c.getBlue(), c.getOpacity());
+                            }
+                            if(tab[i].startsWith("couleurGreen")) {
+                            	c = new Color(c.getRed(), Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)), c.getBlue(), c.getOpacity());
+                            }
+                            if(tab[i].startsWith("couleurBlue")) {
+                            	c = new Color(c.getRed(), c.getGreen(), Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)), c.getOpacity());
+                            }
 
                         }
-                        ObjetSimule os = new ObjetSimule(noms, masse, rayonobjet, position, vx, vy, null, null);
+                        ObjetSimule os = new ObjetSimule(noms, masse, rayonobjet, position, vx, vy, null, c);
                         listeCorpsCeleste.add(os);
                     }
                     else {

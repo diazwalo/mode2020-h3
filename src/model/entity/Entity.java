@@ -104,4 +104,12 @@ public abstract class Entity {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
+	
+	public Color getColor() {
+		return this.c;
+	}
+	
+	public void setColoo(Color c) {
+		this.c = c;
+	}
 }

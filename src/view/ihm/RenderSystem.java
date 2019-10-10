@@ -133,8 +133,11 @@ public class RenderSystem {
 									  entity.getRayon()*(this.scale.getScale()));
 			
 			//TODO : si il y a une couleur pour la planete dans entity -> lui assigner
-			
-			tempo.setFill(c);
+			if(entity.getColor() == null) {
+				tempo.setFill(c);
+			}else {
+				tempo.setFill(entity.getColor());
+			}
 			c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
 			this.shapes.add(tempo);
 		}
