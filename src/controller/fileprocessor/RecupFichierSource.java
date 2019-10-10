@@ -100,7 +100,7 @@ public class RecupFichierSource {
     }
 
     public int affectationDonnee(String fichier) {
-        if (!fichier.startsWith("#") && !fichier.startsWith(" ") && !fichier.startsWith("")) {
+        if (!fichier.startsWith("#") && !fichier.startsWith(" ") && !fichier.isEmpty()) {
             //String[] tab = new String[fichier.split(" ").length];
             //tab= fichier.split(" ");
             String[] tab =  fichier.split(" ");
