@@ -12,7 +12,7 @@ public class Vaisseau extends Entity {
 	}
 
 	double pretro, pprincipal;
-	Vecteur vecteurVitesse = new Vecteur();
+	Vecteur vecteurVitesse = new Vecteur(0,0);
 
 	public double getPretro() {
 		return pretro;

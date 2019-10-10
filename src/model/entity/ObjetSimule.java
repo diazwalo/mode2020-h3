@@ -8,7 +8,7 @@ public class ObjetSimule extends Entity {
 
 	
     public ObjetSimule(String nom, double masse, double taille, Vecteur position, double vx, double vy, Image sprite, Color c) {
-		super(masse, 1.00, position, vx, vy, sprite, nom, c);
+		super(masse, 10.00, position, vx, vy, sprite, nom, c);
 	}
 
     public Vecteur getVitesse() {
