@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.movement.Vecteur;
 
-
 /**
  * 
  * @author cleme
@@ -58,7 +57,6 @@ public abstract class Entity {
 		return vitesse.gety();
 	}
 
-
 	public void setVitesseX(double vitessex) {
 		this.vitesse.setx(vitessex);
 	}
@@ -70,6 +68,14 @@ public abstract class Entity {
 	public void setVitesse(double vitX, double vitY) {
 		this.vitesse.setx(vitX);
 		this.vitesse.sety(vitY);
+	}
+
+	public double getVitessex() {
+		return vitesse.getx();
+	}
+	
+	public double getVitessey() {
+		return vitesse.gety();
 	}
 	
 	public Image getSprite() {

@@ -7,6 +7,7 @@ package model.movement;
  *	mais utile plus tard lorsque les trajectoires seront plus complexes.
  */
 public class Vecteur {
+
 	private double x;
 	private double y;
 
