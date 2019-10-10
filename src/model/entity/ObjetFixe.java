@@ -1,58 +1,17 @@
 package model.entity;
 
+import javafx.scene.paint.Color;
+
 import javafx.scene.image.Image;
 import model.movement.Vecteur;
 
-public class ObjetFixe extends CorpsCeleste {
+public class ObjetFixe extends Entity {
 	
-	public ObjetFixe(String nom, double masse, double taille, Vecteur position, double vx, double vy, Image sprite) {
-		this.masse = masse;
-		this.rayon = taille;
-		this.position = position;
-		this.vitesse = new Vecteur(vx,vy);
-		this.sprite = sprite;
-		this.nom = nom;
-	}
-	
-	public ObjetFixe(String nom, double masse, double taille, Vecteur position, double vx, double vy) {
-		this(nom, masse, taille, position, vx, vy, null);
-	}
-	
-	public ObjetFixe(String nom, double masse, double taille, Vecteur position) {
-		this(nom, masse, taille, position, 0,0, null);
-	}
-	
-	public ObjetFixe(String nom, double masse, double taille) {
-		this(nom, masse, taille, null, 0,0, null);
-	}
-	 
-	public ObjetFixe(String nom, double masse) {
-		this(nom, masse, 0, null, 0,0, null);
-	}
-	
-	public ObjetFixe(String nom) {
-		this(nom, 0, 0, null, 0,0, null);
+	public ObjetFixe(String nom, double masse, double taille, Vecteur position, double vx, double vy, Image sprite, Color c) {
+		super(masse, 10.00, position, vx, vy, sprite, nom, c);
 	}
 
 	public ObjetFixe() {
-		this(null, 0, 0, null, 0,0, null);
-	}
-
-	@Override
-	public double getMasse() {
-		// TODO Auto-generated method stub
-		return this.masse;
-	}
-
-	@Override
-	public double getRayon() {
-		// TODO Auto-generated method stub
-		return this.rayon;
-	}
-
-	@Override
-	public Vecteur getPosition() {
-		// TODO Auto-generated method stub
-		return this.position;
+		super(0, 0, null, null, null,null, null);
 	}
 }

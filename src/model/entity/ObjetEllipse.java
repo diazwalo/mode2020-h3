@@ -1,6 +1,6 @@
 package model.entity;
 
-public class ObjetEllipse extends CorpsCeleste {
+public class ObjetEllipse extends Entity {
     ObjetFixe objetFixe1;
     ObjetFixe objetFixe2;
     double periode;

@@ -1,18 +1,14 @@
 package model.entity;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import model.movement.Vecteur;
 
-public class ObjetSimule extends CorpsCeleste {
+public class ObjetSimule extends Entity {
 
 	
-    public ObjetSimule(String nom, double masse, double taille, Vecteur position, double vx, double vy, Image sprite) {
-		this.masse = masse;
-		this.rayon = taille;
-		this.position = position;
-		this.vitesse = new Vecteur(vx,vy);
-		this.sprite = sprite;
-		this.nom = nom;
+    public ObjetSimule(String nom, double masse, double taille, Vecteur position, double vx, double vy, Image sprite, Color c) {
+		super(masse, 10.00, position, vx, vy, sprite, nom, c);
 	}
 
     public Vecteur getVitesse() {
