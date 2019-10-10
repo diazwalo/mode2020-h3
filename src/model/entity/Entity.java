@@ -46,6 +46,18 @@ public abstract class Entity {
 		return new Vecteur(other.getPosition().getx()-this.position.getx(), other.position.gety()-this.position.gety());
 	}
 	
+	public double getForcesOnEntity_Norm(Entity other) {
+		return (Vecteur.getG()*((this.masse*other.getMasse())/Math.pow(this.getForce(other).getNorme(), 2)));
+	}
+	
+	public Vecteur getForcesOnEntity(Entity other) {
+//		return new Vecteur(this.getForce(other).getx()*getForcesOnEntity_Norm(other),
+//						   this.getForce(other).gety()*getForcesOnEntity_Norm(other));
+		Vecteur forces = this.getForce(other).multiplyWithVariable(getForcesOnEntity_Norm(other));
+		return forces;
+	}
+	
+
 	public double getMasse() {
 		return masse;
 	}
