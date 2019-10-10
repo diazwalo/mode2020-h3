@@ -94,7 +94,7 @@ public class RecupFichierSource {
             buff.close();
         }
         catch (Exception e){
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         return 0;
     }
@@ -286,7 +286,7 @@ public class RecupFichierSource {
                                 vaisseauUnique = false;
                                 Vaisseau vaisseau = Vaisseau.getInstance();
                                 vaisseau.setNom(tab[0].substring(0, tab[0].length() - 1));
-                                Vecteur vecteur = new Vecteur();
+                                Vecteur vecteur = new Vecteur(0,0);
 
                                 for (int i = 1; i <= tab.length - 1; i++) {
 
