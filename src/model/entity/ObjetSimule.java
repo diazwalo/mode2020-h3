@@ -12,7 +12,7 @@ public class ObjetSimule extends Entity {
 	}
 
     public Vecteur getVitesse() {
-        return vitesse;
+        return vitesse; 
     }
 
     public void setVitesse(Vecteur vitesse) {
