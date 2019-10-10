@@ -35,7 +35,7 @@ public abstract class Entity {
 	}
 	
 	public Entity() {
-		this(0.0,0.0,null, null, null, null, null);
+		this(0.0,0.0,null, new Vecteur(0.0, 0.0), null, null, null);
 	}
 	
 	public Vecteur getAcceleration(Vecteur force) {
