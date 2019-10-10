@@ -40,7 +40,7 @@ public class RenderSystem {
 	private Button animer;
 	private Scale scale;
 	private GraphicsEnvironment graphicsEnvironment;
- 
+
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(this.getHeightWindow() , rayon*2);
@@ -48,6 +48,7 @@ public class RenderSystem {
 		this.corps = corps;
 		this.applicateScailOnSystem();
 		putPlaneteOnSysteme(corps);
+
 	}
 	
 	private void applicateScailOnSystem() {
@@ -155,7 +156,7 @@ public class RenderSystem {
 		p.getChildren().add(animer);
 
 	}
-	
+
 	/**
 	 * Retourne la largeur de l'écran.
 	 * @return largeur de l'écran

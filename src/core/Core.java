@@ -7,8 +7,6 @@ import controller.fileprocessor.RecupFichierSource;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.entity.Entity;
-import model.entity.ObjetFixe;
-import model.movement.Position;
 import view.ihm.RenderSystem;
 
 /**

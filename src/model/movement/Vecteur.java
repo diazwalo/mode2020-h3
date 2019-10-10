@@ -7,9 +7,11 @@ package model.movement;
  *	mais utile plus tard lorsque les trajectoires seront plus complexes.
  */
 public class Vecteur {
+
 	private double x;
 	private double y;
-
+	private static final double G = 6.67*Math.pow(10, -11);
+	
 	public Vecteur(double x, double y) {
 		this.x = x;
 		this.y = y;
@@ -37,6 +39,14 @@ public class Vecteur {
 	
 	public double getNorme() {
 		return Math.sqrt(this.x*this.x+this.y*this.y);
+	}
+	
+	public Vecteur multiplyWithVariable(double variable){
+		return new Vecteur(this.x * variable, this.y * variable);
+	}
+	
+	public static double getG() {
+		return G;
 	}
 	
 	public String toString() {
