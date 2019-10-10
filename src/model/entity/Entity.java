@@ -21,6 +21,24 @@ public abstract class Entity {
 	protected String nom;
 	protected Color c;
 	
+	public Entity(double masse, double rayon, Vecteur position, Vecteur vitesse, Image sprite, String nom, Color c) {
+		this.masse=masse;
+		this.rayon=rayon;
+		this.position=position;
+		this.vitesse=vitesse;
+		this.sprite=sprite;
+		this.nom=nom;
+		this.c=c;
+	}
+	
+	public Entity(double masse, double rayon, Vecteur position, double vx, double vy, Image sprite, String nom, Color c) {
+		this(masse, rayon, position, new Vecteur(vx,vy), sprite, nom, c);
+	}
+	
+	public Entity() {
+		this(0.0,0.0,null, null, null, null, null);
+	}
+	
 	public Vecteur getAcceleration(Vecteur force) {
 		return new Vecteur(force.getx()/this.masse, force.gety()/this.masse);
 	}

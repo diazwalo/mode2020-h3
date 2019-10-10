@@ -23,7 +23,7 @@ public class Univers {
 		ArrayList<Entity> newEntities = new ArrayList<Entity>();
 		newEntities.add(new ObjetFixe());
 		for(int i = 0; i < 5; i++) {
-			newEntities.add(new ObjetSimule("CorpsCeleste", 5.972*Math.pow(10, 24), 6371, new Vecteur(150000000, 0), -30, 0, null));
+			newEntities.add(new ObjetSimule("CorpsCeleste", 5.972*Math.pow(10, 24), 6371, new Vecteur(150000000, 0), -30, 0, null, null));
 		}
 		univers = new Univers(newEntities);
 	}

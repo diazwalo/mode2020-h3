@@ -220,7 +220,7 @@ public class RecupFichierSource {
                             }
 
                         }
-                        ObjetSimule os = new ObjetSimule(nom, masse, taille, position, vx, vy, null);
+                        ObjetSimule os = new ObjetSimule(nom, masse, taille, position, vx, vy, null, null);
                         listeCorpsCeleste.add(os);
                     }
                     else {
