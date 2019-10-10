@@ -147,15 +147,22 @@ public class RecupFichierSource {
                 /**
                  * Objet fixe
                  */
+            	double masse=0;
+            	double taille=0;
+            	double rayonobjet=0;
+            	Vecteur position = new Vecteur(0, 0);
+            	double vx=0;
+            	double vy=0;
+
+                Image sptrite;
                 if (tab[1].equals("Fixe")) {
-                    ObjetFixe of = new ObjetFixe();
-                    of.setNom(tab[0].substring(0, tab[0].length() - 1));
-                    Vecteur position = new Vecteur();
+                    ObjetFixe of;
+                    String nomf=tab[0].substring(0, tab[0].length() - 1);
 
                     for (int i = 1; i <= tab.length - 1; i++) {
 
                         if (tab[i].startsWith("masse")) {
-                            of.setMasse(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                            masse=(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
 
                         if (tab[i].startsWith("posx")) {
@@ -165,16 +172,17 @@ public class RecupFichierSource {
                             position.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
                         if (tab[i].startsWith("rayon")) {
-                            of.setRayon(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
+                            rayonobjet=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                         }
 
-                        of.setPosition(position);
                     }
+                    of= new ObjetFixe(nomf, masse, taille, position, 0, 0, null, null);
+
 
                     /**
                      * Mauvaise declaration d'un objet fixe dans le fichier source
                      */
-                    if(of.getMasse() == 0 || of.getRayon() == 0 || of.getPosition().getx() == 0 || of.getPosition().gety() == 0 || of.getNom() == null){
+                    if(masse == 0 || rayon == 0 || position.getx() == 0 || position.gety() == 0 || nomf == null){
                         System.out.println("Problème de déclaration d'un objet fixe");
                         return 1;
                     }
@@ -186,14 +194,8 @@ public class RecupFichierSource {
                      * Objet simulé
                      */
                     if (tab[1].equals("Simulé")) {
-                    	String nom=tab[0].substring(0, tab[0].length()-1);
-                    	double masse=0;
-                    	double taille=0;
-                    	Vecteur position = new Vecteur(0, 0);
-                    	double vx=0;
-                    	double vy=0;
-
-                        Image sptrite;
+                    	String noms=tab[0].substring(0, tab[0].length()-1);
+                    	
 
                         for (int i = 1; i <= tab.length - 1; i++) {
 
@@ -220,7 +222,7 @@ public class RecupFichierSource {
                             }
 
                         }
-                        ObjetSimule os = new ObjetSimule(nom, masse, taille, position, vx, vy, null, null);
+                        ObjetSimule os = new ObjetSimule(noms, masse, taille, position, vx, vy, null, null);
                         listeCorpsCeleste.add(os);
                     }
                     else {
@@ -228,9 +230,8 @@ public class RecupFichierSource {
                          * Objet ellipse
                          */
                         if (tab[1].equals("Ellipse")) {
-                            ObjetEllipse oe = new ObjetEllipse();
+                            ObjetEllipse oe= new ObjetEllipse();
                             oe.setNom(tab[0].substring(0, tab[0].length() - 1));
-                            Vecteur position = new Vecteur();
 
                             for (int i = 1; i <= tab.length - 1; i++) {
 
@@ -286,7 +287,6 @@ public class RecupFichierSource {
                                 vaisseauUnique = false;
                                 Vaisseau vaisseau = Vaisseau.getInstance();
                                 vaisseau.setNom(tab[0].substring(0, tab[0].length() - 1));
-                                Vecteur position = new Vecteur();
                                 Vecteur vecteur = new Vecteur();
 
                                 for (int i = 1; i <= tab.length - 1; i++) {
