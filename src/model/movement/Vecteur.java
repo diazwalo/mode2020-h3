@@ -39,6 +39,11 @@ public class Vecteur {
 		return Math.sqrt(this.x*this.x+this.y*this.y);
 	}
 	
+	public void multiplyWithVariable(double variable){
+		this.x = x * variable;
+		this.y = y * variable;
+	}
+	
 	public String toString() {
 		return "{ vX : "+ x +" , vY : "+ y +" }";
 	}
