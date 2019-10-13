@@ -151,7 +151,10 @@ public class RecupFichierSource {
             	double masse=0;
             	double rayonobjet=2;
             	Vecteur position = new Vecteur(0, 0);
-            	Color c = new Color(0.0, 0.0, 0.0, 1.0);
+            	Color c = null;
+            	double red = -1;
+            	double green = -1;
+            	double blue = -1;
             	double vx=0;
             	double vy=0;
 
@@ -176,8 +179,22 @@ public class RecupFichierSource {
                             rayonobjet=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                         }
 
+                        if(tab[i].startsWith("couleurRed")) {
+                        	red = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                        }
+                        if(tab[i].startsWith("couleurGreen")) {
+                        	green = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                        }
+                        if(tab[i].startsWith("couleurBlue")) {
+                        	blue = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                        }
                     }
-                    of= new ObjetFixe(nomf, masse, rayonobjet, position, 0, 0, null, null);
+                    
+                    if(red >= 0.0 && red <=1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
+                    	c = new Color(red, green, blue, 1.0);
+                    }
+                    
+                    of= new ObjetFixe(nomf, masse, rayonobjet, position, 0, 0, null, c);
 
 
                     /**
@@ -223,15 +240,18 @@ public class RecupFichierSource {
                             }
                             
                             if(tab[i].startsWith("couleurRed")) {
-                            	c = new Color(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)), c.getGreen(), c.getBlue(), c.getOpacity());
+                            	red = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
                             if(tab[i].startsWith("couleurGreen")) {
-                            	c = new Color(c.getRed(), Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)), c.getBlue(), c.getOpacity());
+                            	green = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
                             if(tab[i].startsWith("couleurBlue")) {
-                            	c = new Color(c.getRed(), c.getGreen(), Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)), c.getOpacity());
+                            	blue = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
-
+                        }
+                        
+                        if(red >= 0.0 && red <=1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
+                        	c = new Color(red, green, blue, 1.0);
                         }
                         ObjetSimule os = new ObjetSimule(noms, masse, rayonobjet, position, vx, vy, null, c);
                         listeCorpsCeleste.add(os);
@@ -261,6 +281,16 @@ public class RecupFichierSource {
                                 if(tab[i].startsWith("periode")){
                                     oe.setPeriode(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                 }
+                                
+                                if(tab[i].startsWith("couleurRed")) {
+                                	red = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                                }
+                                if(tab[i].startsWith("couleurGreen")) {
+                                	green = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                                }
+                                if(tab[i].startsWith("couleurBlue")) {
+                                	blue = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                                }
 
                                 if(tab[i].startsWith("f1")){
                                     String nom = tab[i].substring(tab[i].indexOf('=')+1);
@@ -283,6 +313,10 @@ public class RecupFichierSource {
                                     }
                                     oe.setObjetFixe2((ObjetFixe) objetFixe);
                                 }
+                                
+                            }
+                            if(red >= 0.0 && red <=1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
+                            	c = new Color(red, green, blue, 1.0);
                             }
                             listeCorpsCeleste.add(oe);
                         }
@@ -327,7 +361,20 @@ public class RecupFichierSource {
                                     if (tab[i].startsWith("pprincipal")) {
                                         vaisseau.setPprincipal(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                                     }
-
+                                    
+                                    if(tab[i].startsWith("couleurRed")) {
+                                    	red = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                                    }
+                                    if(tab[i].startsWith("couleurGreen")) {
+                                    	green = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                                    }
+                                    if(tab[i].startsWith("couleurBlue")) {
+                                    	blue = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
+                                    }
+                                }
+                                
+                                if(red >= 0.0 && red <=1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
+                                	c = new Color(red, green, blue, 1.0);
                                 }
                                 listeCorpsCeleste.add(vaisseau);
                             }
