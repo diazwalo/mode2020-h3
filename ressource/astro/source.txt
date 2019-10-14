@@ -1,7 +1,7 @@
 # Le corps n'a pas de vitesse initiale et tombe sur l'étoile
 
 PARAMS G=0.01 dt=20 rayon=400 fa=20
-ETOILE: Fixe masse=40 posx=200 posy=220 rayon=100
-OBJET: Simulé masse=0.01 posx=50 posy=50 vitx=12 vity=12 rayon=5
+ETOILE: Fixe masse=40 posx=200 posy=220 rayon=100 couleurRed=2.0 couleurGreen=1.0 couleurBlue=0.0
+OBJET: Simulé masse=0.01 posx=50 posy=50 vitx=12 vity=12 rayon=20
 LUNE: Simulé masse=5 posx=150 posy=100 rayon=10
-X: Vaisseau masse=2 posx=50 posx=200
+X: Vaisseau masse=2 posx=50 posx=200 couleurRed=0.0 couleurGreen=1.0 couleurBlue=0.0
