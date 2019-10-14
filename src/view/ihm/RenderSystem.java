@@ -4,9 +4,11 @@ import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -133,13 +135,13 @@ public class RenderSystem {
 									  entity.getPosition().gety()*(this.scale.getScale()), 
 									  entity.getRayon()*(this.scale.getScale()));
 			
-			//TODO : si il y a une couleur pour la planete dans entity -> lui assigner
 			if(entity.getColor() == null) {
 				tempo.setFill(c);
+				c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.65)%1, (c.getBlue()+0.70)%1, 1.0);
 			}else {
 				tempo.setFill(entity.getColor());
 			}
-			c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
+			
 			this.shapes.add(tempo);
 		}
 	}
