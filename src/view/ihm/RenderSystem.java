@@ -139,7 +139,8 @@ public class RenderSystem {
 		this.p.getChildren().add(background);
 		this.p.getChildren().addAll(shapes);
 		this.p.getChildren().add(animer);
-
+		this.setMouseEventOnSysteme();
+		
 		this.hb = new HBox();
 		this.hb.getChildren().addAll(p, vb);
 	}
@@ -257,6 +258,19 @@ public class RenderSystem {
 	private void setBackground(Color c) {
 		this.background = new Rectangle(0.0, 0.0, this.getHeightWindow(), this.getHeightWindow());
 		this.background.setFill(c);
+	}
+	
+	public Entity getEntityTargeted(double posX, double posY) {
+		// TODO : Retourne l'entité à la position (posX, posY)
+		
+		return null;
+	}
+	
+	public void setMouseEventOnSysteme() {
+		this.p.setOnMouseClicked(e -> {
+			Shape target = (Shape) e.getTarget();
+			this.getEntityTargeted(target.getLayoutX(), target.getLayoutY());
+		});
 	}
 }
 
