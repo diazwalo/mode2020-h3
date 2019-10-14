@@ -4,6 +4,7 @@ import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -100,8 +101,12 @@ public class RenderSystem {
 		tavx.setEditable(false);
 		tavy.setEditable(false);
 		taforce.setEditable(false);
+		tavx.setMaxHeight(10);
+		tavx.setMaxWidth(100);
+
 		hb1=new HBox();
 		hb1.getChildren().addAll(lbvx, tavx);
+		
 		hb2=new HBox();
 		hb2.getChildren().addAll(lbvy,tavy);
 		hb3 = new HBox();
@@ -109,9 +114,11 @@ public class RenderSystem {
 		vb1=new VBox();
 		vb1.getChildren().addAll(lb1, hb1, hb2,hb3);
 		
-		
+		lb1.setAlignment(Pos.CENTER);
+
 		this.vb = new VBox();
-		this.vb.getChildren().addAll(vb1, taDown);
+		this.vb.getChildren().addAll(vb1);
+		this.vb.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
 	}
 
 	/**
