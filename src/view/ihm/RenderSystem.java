@@ -4,9 +4,13 @@ import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -17,6 +21,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import model.entity.Entity;
 import model.entity.ObjetFixe;
+import model.entity.Vaisseau;
 import model.movement.Vecteur;
 
 /**
@@ -40,6 +45,20 @@ public class RenderSystem {
 	private Button animer;
 	private Scale scale;
 	private GraphicsEnvironment graphicsEnvironment;
+	
+	private HBox hb1;
+	private HBox hb2;
+	private HBox hb3;
+	private VBox vb1;
+	private Label lb1;
+	private Label lbvx;
+	private Label lbvy;
+	private Label lbforce;
+	private TextArea tavx;
+	private TextArea tavy;
+	private TextArea taforce;
+	
+	
 
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -58,8 +77,9 @@ public class RenderSystem {
 				posTempo.sety(posTempo.gety() * this.scale.getScale());
 				entity.setPosition(posTempo);
 				
-				entity.setVitesseX(entity.getVitesseX() * this.scale.getScale());
-				entity.setVitesseY(entity.getVitesseY() * this.scale.getScale());
+				entity.setVitesse(entity.getVitesse().multiplyWithVariable(this.scale.getScale()));
+//				entity.setVitesseX(entity.getVitesseX() * this.scale.getScale());
+//				entity.setVitesseY(entity.getVitesseY() * this.scale.getScale());
 		}
 	}
 
@@ -69,16 +89,37 @@ public class RenderSystem {
 	 * 		- Les informations relatives au vaisseau.
 	 * 		- Les informations relatives a la planète séléctionnée.
 	 */
-	public void createRenderInformation() {
-		this.taUp = new TextArea("Information Vaisseau : Vitesse 1 km/h.");
-		this.taDown = new TextArea("Information Planète : Elle est zolie.");
-		this.taUp.setEditable(false);
-		this.taDown.setEditable(false);
-		this.taUp.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
-		this.taDown.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
+	public void createRenderInformation(Vaisseau v) {
+		lb1=  new Label("Informations vaisseau :");
+		lbvx= new Label("Vitesse en x :");
+		tavx= new TextArea(v.getVitesse().getx()+"");
+		tavy= new TextArea(v.getVitesse().gety()+"");
+		lbvy= new Label("Vitesse en y :");
+		lbforce= new Label("Force subi par le vaisseau :");
+		taforce = new TextArea(/*v.getForcesOnEntity(etoile)*/"");
 		
+		lb1.setStyle("-fx-font-weight: bold;");
+		tavx.setEditable(false);
+		tavy.setEditable(false);
+		taforce.setEditable(false);
+		tavx.setMaxHeight(10);
+		tavx.setMaxWidth(100);
+
+		hb1=new HBox();
+		hb1.getChildren().addAll(lbvx, tavx);
+		
+		hb2=new HBox();
+		hb2.getChildren().addAll(lbvy,tavy);
+		hb3 = new HBox();
+		hb3.getChildren().addAll(lbforce, taforce);
+		vb1=new VBox();
+		vb1.getChildren().addAll(lb1, hb1, hb2,hb3);
+		
+		lb1.setAlignment(Pos.CENTER);
+
 		this.vb = new VBox();
-		this.vb.getChildren().addAll(taUp, taDown);
+		this.vb.getChildren().addAll(vb1);
+		this.vb.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
 	}
 
 	/**
@@ -99,7 +140,8 @@ public class RenderSystem {
 		this.p.getChildren().add(background);
 		this.p.getChildren().addAll(shapes);
 		this.p.getChildren().add(animer);
-
+		this.setMouseEventOnSysteme();
+		
 		this.hb = new HBox();
 		this.hb.getChildren().addAll(p, vb);
 	}
@@ -109,7 +151,7 @@ public class RenderSystem {
 	 * @return Le Stage 
 	 */
 	public Stage createRender() {
-		this.createRenderInformation();
+		this.createRenderInformation(Vaisseau.getInstance());
 		this.createRenderSystem();
 		
 		this.sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
@@ -133,10 +175,13 @@ public class RenderSystem {
 									  entity.getPosition().gety()*(this.scale.getScale()), 
 									  entity.getRayon()*(this.scale.getScale()));
 			
-			//TODO : si il y a une couleur pour la planete dans entity -> lui assigner
+			if(entity.getColor() == null) {
+				tempo.setFill(c);
+				c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.65)%1, (c.getBlue()+0.70)%1, 1.0);
+			}else {
+				tempo.setFill(entity.getColor());
+			}
 			
-			tempo.setFill(c);
-			c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.3)%1, (c.getBlue()+0.4)%1, 1.0);
 			this.shapes.add(tempo);
 		}
 	}
@@ -185,13 +230,13 @@ public class RenderSystem {
 
 				double x=corpsceleste.getPosition().getx();
 				double y=corpsceleste.getPosition().gety();
-				double vitesseX = corpsceleste.getVitesseX();
-				double vitesseY = corpsceleste.getVitesseX();
+				double vitesseX = corpsceleste.getVitesse().getx();
+				double vitesseY = corpsceleste.getVitesse().gety();
 				
 				double xres = (1.0/2.0)*vitesseX*0.25*0.25*+vitesseX*0.25+x;
 				double yres = (1.0/2.0)*vitesseY*0.25*0.25*+vitesseY*0.25+y;
 
-				double g = 6.67* (Math.pow(10, -11));
+				double g = Vecteur.getG();
 				//double attraction p = 
 				//double g
 				//double xres = (1.0/2.0)*1*dt*dt*+vitesseX*dt+x;
@@ -214,6 +259,19 @@ public class RenderSystem {
 	private void setBackground(Color c) {
 		this.background = new Rectangle(0.0, 0.0, this.getHeightWindow(), this.getHeightWindow());
 		this.background.setFill(c);
+	}
+	
+	public Entity getEntityTargeted(double posX, double posY) {
+		// TODO : Retourne l'entité à la position (posX, posY)
+		
+		return null;
+	}
+	
+	public void setMouseEventOnSysteme() {
+		this.p.setOnMouseClicked(e -> {
+			Shape target = (Shape) e.getTarget();
+			this.getEntityTargeted(target.getLayoutX(), target.getLayoutY());
+		});
 	}
 }
 

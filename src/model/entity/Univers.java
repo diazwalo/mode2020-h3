@@ -27,4 +27,9 @@ public class Univers {
 		}
 		univers = new Univers(newEntities);
 	}
+	
+	public List<Entity> getEntities() {
+		return entities;
+	}
+	
 }

@@ -1,2 +1,8 @@
+<<<<<<< HEAD
 eclipse.preferences.version=1
 encoding/<project>=UTF-8
+=======
+eclipse.preferences.version=1
+encoding//src/view/ihm/RenderSystem.java=UTF-8
+encoding/<project>=UTF-8
+>>>>>>> 26f87dec91efe670130cd0d1be7e674a4d69196f
