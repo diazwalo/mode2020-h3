@@ -35,8 +35,8 @@ public class RenderSystem {
 	private Stage st;
 	private Scene sc;
 	private HBox hb;
-	private VBox vb;
-	private Pane p;
+	private VBox renderInfo;
+	private Pane renderSystem;
 	private TextArea taUp, taDown;
 	private List<Circle> shapes;
 	private List<Entity> corps;
@@ -46,17 +46,24 @@ public class RenderSystem {
 	private Scale scale;
 	private GraphicsEnvironment graphicsEnvironment;
 	
-	private HBox hb1;
-	private HBox hb2;
-	private HBox hb3;
-	private VBox vb1;
-	private Label lb1;
-	private Label lbvx;
-	private Label lbvy;
-	private Label lbforce;
-	private TextArea tavx;
-	private TextArea tavy;
-	private TextArea taforce;
+	private VBox vBoxInfoVaiseau;
+	private VBox vBoxInfoPlanete;
+	
+	private Label labelVaisseau;
+	private Label labelVitXVaisseau;
+	private Label labelVitYVaisseau;
+	private TextArea textVitXVaisseau;
+	private TextArea textVitYVaisseau;
+	private Label labelForceSurVaiseau;
+	private TextArea textForceSurVaiseau;
+	
+	private Label labelPlanete;
+	private Label labelVitXPlanete;
+	private Label labelVitYPlanete;
+	private TextArea textVitXPlanete;
+	private TextArea textVitYPlanete;
+	private Label labelForceSurPlanete;
+	private TextArea textForceSurPlanete;
 	
 	
 
@@ -71,7 +78,9 @@ public class RenderSystem {
 	}
 	
 	private void applicateScailOnSystem() {
+		int x = 0;
 		for (Entity entity : corps) {
+			System.out.println("la "+(x++));
 				Vecteur posTempo = entity.getPosition();
 				posTempo.setx(posTempo.getx() * this.scale.getScale());
 				posTempo.sety(posTempo.gety() * this.scale.getScale());
@@ -89,37 +98,55 @@ public class RenderSystem {
 	 * 		- Les informations relatives au vaisseau.
 	 * 		- Les informations relatives a la planète séléctionnée.
 	 */
-	public void createRenderInformation(Vaisseau v) {
-		lb1=  new Label("Informations vaisseau :");
-		lbvx= new Label("Vitesse en x :");
-		tavx= new TextArea(v.getVitesse().getx()+"");
-		tavy= new TextArea(v.getVitesse().gety()+"");
-		lbvy= new Label("Vitesse en y :");
-		lbforce= new Label("Force subi par le vaisseau :");
-		taforce = new TextArea(/*v.getForcesOnEntity(etoile)*/"");
+	public void createRenderInformation(Vaisseau v, Entity e) {
+		labelVaisseau=  new Label("Informations vaisseau :");
+		labelVitXVaisseau = new Label("Vitesse en x :");
+		labelVitYVaisseau = new Label("Vitesse en y :");
+		textVitXVaisseau = new TextArea("    - " + v.getVitesse().getx()+" km/h");
+		textVitYVaisseau = new TextArea("    - " + v.getVitesse().gety()+" km/h");
+		labelForceSurVaiseau = new Label("Force subi par le vaisseau :");
+		textForceSurVaiseau = new TextArea(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
 		
-		lb1.setStyle("-fx-font-weight: bold;");
-		tavx.setEditable(false);
-		tavy.setEditable(false);
-		taforce.setEditable(false);
-		tavx.setMaxHeight(10);
-		tavx.setMaxWidth(100);
+		if(e != null) {
+			labelPlanete =  new Label("Informations " + e.getNom() + " :");
+			labelVitXPlanete = new Label("Vitesse en x : ");
+			labelVitYPlanete = new Label("Vitesse en y : ");
+			textVitXPlanete = new TextArea("    - " + e.getVitesse().getx()+"");
+			textVitYPlanete = new TextArea("    - " + e.getVitesse().gety()+"");
+			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
+			textForceSurPlanete = new TextArea(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
+		}else {
+			labelPlanete =  new Label("Informations ... :");
+			labelVitXPlanete = new Label("Vitesse en x : ");
+			labelVitYPlanete = new Label("Vitesse en y : ");
+			textVitXPlanete = new TextArea("    - 0.0 km/h");
+			textVitYPlanete = new TextArea("    - 0.0 km/h");
+			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
+			textForceSurPlanete = new TextArea(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
+		}
+		
+		labelVaisseau.setStyle("-fx-font-weight: bold;");
+		labelPlanete.setStyle("-fx-font-weight: bold;");
+		textVitXVaisseau.setEditable(false);
+		textVitYVaisseau.setEditable(false);
+		textForceSurVaiseau.setEditable(false);
+		textVitXPlanete.setEditable(false);
+		textVitYPlanete.setEditable(false);
+		textForceSurPlanete.setEditable(false);
+		//tavx.setMaxHeight(10);
+		//tavx.setMaxWidth(100);
 
-		hb1=new HBox();
-		hb1.getChildren().addAll(lbvx, tavx);
-		
-		hb2=new HBox();
-		hb2.getChildren().addAll(lbvy,tavy);
-		hb3 = new HBox();
-		hb3.getChildren().addAll(lbforce, taforce);
-		vb1=new VBox();
-		vb1.getChildren().addAll(lb1, hb1, hb2,hb3);
-		
-		lb1.setAlignment(Pos.CENTER);
+		vBoxInfoVaiseau = new VBox();
+		vBoxInfoPlanete= new VBox();
+		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, labelVitXVaisseau, textVitXVaisseau, labelVitYVaisseau, textVitYVaisseau, labelForceSurVaiseau, textForceSurVaiseau);
+		vBoxInfoPlanete.getChildren().addAll(labelPlanete, labelVitXPlanete, textVitXPlanete, labelVitYPlanete, textVitYPlanete, labelForceSurPlanete, textForceSurPlanete);
 
-		this.vb = new VBox();
-		this.vb.getChildren().addAll(vb1);
-		this.vb.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
+		labelVaisseau.setAlignment(Pos.CENTER);
+		labelPlanete.setAlignment(Pos.CENTER);
+
+		this.renderInfo = new VBox();
+		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
+		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
 	}
 
 	/**
@@ -130,20 +157,20 @@ public class RenderSystem {
 	 */
 	public void createRenderSystem() {
 		this.st = new Stage();
-		this.p = new Pane();
-		this.p.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
+		this.renderSystem = new Pane();
+		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
 		this.animer = new Button("Animer");
 		this.animer.setLayoutX(getHeightWindow()/2.0);
 		setAction(corps, etoile);
 		
-		this.p.getChildren().add(background);
-		this.p.getChildren().addAll(shapes);
-		this.p.getChildren().add(animer);
+		this.renderSystem.getChildren().add(background);
+		this.renderSystem.getChildren().addAll(shapes);
+		this.renderSystem.getChildren().add(animer);
 		this.setMouseEventOnSysteme();
 		
 		this.hb = new HBox();
-		this.hb.getChildren().addAll(p, vb);
+		this.hb.getChildren().addAll(renderSystem, renderInfo);
 	}
 	
 	/**
@@ -151,7 +178,7 @@ public class RenderSystem {
 	 * @return Le Stage 
 	 */
 	public Stage createRender() {
-		this.createRenderInformation(Vaisseau.getInstance());
+		this.createRenderInformation(Vaisseau.getInstance(), null);
 		this.createRenderSystem();
 		
 		this.sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
@@ -192,10 +219,10 @@ public class RenderSystem {
 	 * @param corps
 	 */
 	private void majSystem(List<Entity> corps) {
-		p.getChildren().clear();
-		p.getChildren().add(background);
-		p.getChildren().addAll(shapes);
-		p.getChildren().add(animer);
+		renderSystem.getChildren().clear();
+		renderSystem.getChildren().add(background);
+		renderSystem.getChildren().addAll(shapes);
+		renderSystem.getChildren().add(animer);
 
 	}
 
@@ -268,7 +295,7 @@ public class RenderSystem {
 	}
 	
 	public void setMouseEventOnSysteme() {
-		this.p.setOnMouseClicked(e -> {
+		this.renderSystem.setOnMouseClicked(e -> {
 			Shape target = (Shape) e.getTarget();
 			this.getEntityTargeted(target.getLayoutX(), target.getLayoutY());
 		});
