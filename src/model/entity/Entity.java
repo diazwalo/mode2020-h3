@@ -100,14 +100,6 @@ public abstract class Entity {
 		this.vitesse.sety(vitY);
 	}
 
-	public double getVitessex() {
-		return vitesse.getx();
-	}
-	
-	public double getVitessey() {
-		return vitesse.gety();
-	}
-	
 	public Image getSprite() {
 		return sprite;
 	}

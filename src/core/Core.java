@@ -7,6 +7,7 @@ import controller.fileprocessor.RecupFichierSource;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.entity.Entity;
+import model.entity.Vaisseau;
 import view.ihm.RenderSystem;
 
 /**
@@ -27,7 +28,6 @@ public class Core extends Application{
 		}
 
 		corps.addAll(rfs.getListeCorpsCeleste());
-
 
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), corps);
 		Stage stageRs = rs.createRender();

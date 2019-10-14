@@ -1,11 +1,16 @@
 package model.entity;
 
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import model.movement.Vecteur;
 
 public class Vaisseau extends Entity {
-	private Vaisseau(){}
+	private Vaisseau(double masse, double rayon, Vecteur position, Vecteur vitesse, Image sprite, String nom, Color c){
+		super(masse, rayon, position, vitesse, sprite, nom,c);
+		
+	}
 
-	private static Vaisseau INSTANCE = new Vaisseau();
+	private static Vaisseau INSTANCE = new Vaisseau(10, 2, new Vecteur(2, 2), new Vecteur(1, 1), null, "toto", null);
 
 	public static Vaisseau getInstance(){
 		return INSTANCE;

@@ -7,6 +7,7 @@ import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
@@ -19,6 +20,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import model.entity.Entity;
 import model.entity.ObjetFixe;
+import model.entity.Vaisseau;
 import model.movement.Vecteur;
 
 /**
@@ -42,6 +44,20 @@ public class RenderSystem {
 	private Button animer;
 	private Scale scale;
 	private GraphicsEnvironment graphicsEnvironment;
+	
+	private HBox hb1;
+	private HBox hb2;
+	private HBox hb3;
+	private VBox vb1;
+	private Label lb1;
+	private Label lbvx;
+	private Label lbvy;
+	private Label lbforce;
+	private TextArea tavx;
+	private TextArea tavy;
+	private TextArea taforce;
+	
+	
 
 	public RenderSystem(int rayon, List<Entity> corps) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -71,16 +87,31 @@ public class RenderSystem {
 	 * 		- Les informations relatives au vaisseau.
 	 * 		- Les informations relatives a la planète séléctionnée.
 	 */
-	public void createRenderInformation() {
-		this.taUp = new TextArea("Information Vaisseau : Vitesse 1 km/h.");
-		this.taDown = new TextArea("Information Planète : Elle est zolie.");
-		this.taUp.setEditable(false);
-		this.taDown.setEditable(false);
-		this.taUp.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
-		this.taDown.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
+	public void createRenderInformation(Vaisseau v) {
+		lb1=  new Label("Informations vaisseau :");
+		lbvx= new Label("Vitesse en x :");
+		tavx= new TextArea(v.getVitesseX()+"");
+		tavy= new TextArea(v.getVitesseY()+"");
+		lbvy= new Label("Vitesse en y :");
+		lbforce= new Label("Force subi par le vaisseau :");
+		taforce = new TextArea(/*v.getForcesOnEntity(etoile)*/"");
+		
+		lb1.setStyle("-fx-font-weight: bold;");
+		tavx.setEditable(false);
+		tavy.setEditable(false);
+		taforce.setEditable(false);
+		hb1=new HBox();
+		hb1.getChildren().addAll(lbvx, tavx);
+		hb2=new HBox();
+		hb2.getChildren().addAll(lbvy,tavy);
+		hb3 = new HBox();
+		hb3.getChildren().addAll(lbforce, taforce);
+		vb1=new VBox();
+		vb1.getChildren().addAll(lb1, hb1, hb2,hb3);
+		
 		
 		this.vb = new VBox();
-		this.vb.getChildren().addAll(taUp, taDown);
+		this.vb.getChildren().addAll(vb1, taDown);
 	}
 
 	/**
@@ -111,7 +142,7 @@ public class RenderSystem {
 	 * @return Le Stage 
 	 */
 	public Stage createRender() {
-		this.createRenderInformation();
+		this.createRenderInformation(Vaisseau.getInstance());
 		this.createRenderSystem();
 		
 		this.sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
