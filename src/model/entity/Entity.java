@@ -136,6 +136,10 @@ public abstract class Entity {
 		acceleration.sety(newAcceleration.gety());
 	}
 	
+	public Vecteur getAcceleration() {
+		return acceleration;
+	}
+	
 	public Color getColor() {
 		return color;
 	}

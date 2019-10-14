@@ -45,6 +45,10 @@ public class Vecteur {
 		return new Vecteur(this.x * variable, this.y * variable);
 	}
 	
+	public Vecteur addOtherVecteur(Vecteur other) {
+		return new Vecteur(this.x + other.getx(), this.y + other.gety());
+	}
+	
 	public static double getG() {
 		return G;
 	}
