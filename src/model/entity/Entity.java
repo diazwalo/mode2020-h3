@@ -31,16 +31,6 @@ public abstract class Entity {
 		this.nom=nom;
 		this.c=c;
 	}
-
-
-	public Entity(double masse, Vecteur position, Vecteur vitesse, Image sprite, String nom, Color c) {
-		this.masse=masse;
-		this.position=position;
-		this.vitesse=vitesse;
-		this.sprite=sprite;
-		this.nom=nom;
-		this.c=c;
-	}
 	
 	public Entity(double masse, double rayon, Vecteur position, double vx, double vy, Image sprite, String nom, Color c) {
 		this(masse, rayon, position, new Vecteur(vx,vy), sprite, nom, c);
@@ -73,14 +63,14 @@ public abstract class Entity {
 		setAcceleration(new Vecteur(ax, ay));
 	}
 	
-	public double getForcesOnEntity_Norm(Entity other) {
+	public double getForceNorm(Entity other) {
 		return (Vecteur.getG()*((this.masse*other.getMasse())/Math.pow(this.getMOmega(other).getNorme(), 2)));
 	}
 	
-	public Vecteur getForcesOnEntity(Entity other) {
-//		return new Vecteur(this.getForce(other).getx()*getForcesOnEntity_Norm(other),
-//						   this.getForce(other).gety()*getForcesOnEntity_Norm(other));
-		Vecteur forces = this.getMOmega(other).multiplyWithVariable(getForcesOnEntity_Norm(other));
+	public Vecteur createForceForEachEntity(Entity other) {
+//		return new Vecteur(this.getForce(other).getx()*getForceNorm(other),
+//						   this.getForce(other).gety()*getForceNorm(other));
+		Vecteur forces = this.getMOmega(other).multiplyWithVariable(getForceNorm(other));
 		return forces;
 	}
 	
@@ -88,8 +78,8 @@ public abstract class Entity {
 		double fx = 0;
 		double fy = 0;
 		for(Entity entity : others.getEntities()) {
-			fx += getForcesOnEntity(entity).getx();
-			fy += getForcesOnEntity(entity).gety();
+			fx += createForceForEachEntity(entity).getx();
+			fy += createForceForEachEntity(entity).gety();
 		}
 		setForce(new Vecteur(fx, fy));
 	}
@@ -122,44 +112,23 @@ public abstract class Entity {
 	public Vecteur getPosition() {
 		return position;
 	}
-	public void setPosition(Vecteur position2) {
-		this.position = position2;
-	}
-
-	public double getVitesseX() {
-		//TODO : test
-		//System.out.println(vitesse);
-		return vitesse.getx();
+	public void setPosition(Vecteur newPosition) {
+		position.setx(newPosition.getx());
+		position.sety(newPosition.gety());
 	}
 	
-	public double getVitesseY() {
-		return vitesse.gety();
-	}
-
-	public void setVitesseX(double vitessex) {
-		this.vitesse.setx(vitessex);
+	public void setVitesse(Vecteur newVitesse) {
+		vitesse.setx(newVitesse.getx());
+		vitesse.sety(newVitesse.gety());
 	}
 	
-	public void setVitesseY(double vitessey) {
-		this.vitesse.sety(vitessey);
-	}
-	
-	public void setVitesse(double vitX, double vitY) {
-		this.vitesse.setx(vitX);
-		this.vitesse.sety(vitY);
+	public Vecteur getVitesse() {
+		return vitesse;
 	}
 	
 	public void setAcceleration(Vecteur newAcceleration) {
 		acceleration.setx(newAcceleration.getx());
 		acceleration.sety(newAcceleration.gety());
-	}
-
-	public double getVitessex() {
-		return vitesse.getx();
-	}
-	
-	public double getVitessey() {
-		return vitesse.gety();
 	}
 	
 	public Image getSprite() {
@@ -175,13 +144,5 @@ public abstract class Entity {
 
 	public void setNom(String nom) {
 		this.nom = nom;
-	}
-	
-	public Color getColor() {
-		return this.c;
-	}
-	
-	public void setColoo(Color c) {
-		this.c = c;
 	}
 }
