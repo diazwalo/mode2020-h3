@@ -149,7 +149,6 @@ public class RecupFichierSource {
                  * Objet fixe
                  */
             	double masse=0;
-            	double rayonobjet=2;
             	Vecteur position = new Vecteur(0, 0);
             	Color c = null;
             	double red = -1;
@@ -175,9 +174,6 @@ public class RecupFichierSource {
                         if (tab[i].startsWith("posy")) {
                             position.sety(Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1)));
                         }
-                        if (tab[i].startsWith("rayon")) {
-                            rayonobjet=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
-                        }
 
                         if(tab[i].startsWith("couleurRed")) {
                         	red = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
@@ -194,7 +190,7 @@ public class RecupFichierSource {
                     	c = new Color(red, green, blue, 1.0);
                     }
                     
-                    of= new ObjetFixe(nomf, masse, rayonobjet, position, 0, 0, null, c);
+                    of= new ObjetFixe(nomf, masse,0, position, 0, 0, null, c);
 
 
                     /**
@@ -235,10 +231,6 @@ public class RecupFichierSource {
                                 vy=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
 
-                            if (tab[i].startsWith("rayon")) {
-                               rayonobjet=Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
-                            }
-                            
                             if(tab[i].startsWith("couleurRed")) {
                             	red = Double.parseDouble(tab[i].substring(tab[i].indexOf('=')+1));
                             }
@@ -253,7 +245,7 @@ public class RecupFichierSource {
                         if(red >= 0.0 && red <=1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
                         	c = new Color(red, green, blue, 1.0);
                         }
-                        ObjetSimule os = new ObjetSimule(noms, masse, rayonobjet, position, vx, vy, null, c);
+                        ObjetSimule os = new ObjetSimule(noms, masse,0, position, vx, vy, null, c);
                         listeCorpsCeleste.add(os);
                     }
                     else {
@@ -382,6 +374,19 @@ public class RecupFichierSource {
                     }
                 }
             }
+        }
+        return 0;
+    }
+
+    public double rayonGraceMasse(double masse){
+        if(!listeCorpsCeleste.isEmpty()){
+            Entity entity = listeCorpsCeleste.get(0);
+            for(Entity e : listeCorpsCeleste){
+                if(e.getMasse() > entity.getMasse()){
+                    entity = e;
+                }
+            }
+
         }
         return 0;
     }
