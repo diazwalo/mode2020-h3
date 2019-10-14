@@ -29,6 +29,16 @@ public abstract class Entity {
 		this.nom=nom;
 		this.c=c;
 	}
+
+
+	public Entity(double masse, Vecteur position, Vecteur vitesse, Image sprite, String nom, Color c) {
+		this.masse=masse;
+		this.position=position;
+		this.vitesse=vitesse;
+		this.sprite=sprite;
+		this.nom=nom;
+		this.c=c;
+	}
 	
 	public Entity(double masse, double rayon, Vecteur position, double vx, double vy, Image sprite, String nom, Color c) {
 		this(masse, rayon, position, new Vecteur(vx,vy), sprite, nom, c);
