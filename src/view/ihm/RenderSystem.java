@@ -44,6 +44,8 @@ public class RenderSystem {
 	private Shape background;
 	private Button animer;
 	private Scale scale;
+	private Entity entitytargeted;
+	private Vaisseau vaisseau;
 	private GraphicsEnvironment graphicsEnvironment;
 	
 	private VBox vBoxInfoVaiseau;
@@ -74,7 +76,6 @@ public class RenderSystem {
 		this.corps = corps;
 		this.applicateScailOnSystem();
 		putPlaneteOnSysteme(corps);
-
 	}
 	
 	private void applicateScailOnSystem() {
@@ -99,6 +100,8 @@ public class RenderSystem {
 	 * 		- Les informations relatives a la planète séléctionnée.
 	 */
 	public void createRenderInformation(Vaisseau v, Entity e) {
+		this.vaisseau = v;
+		
 		labelVaisseau=  new Label("Informations vaisseau :");
 		labelVitXVaisseau = new Label("Vitesse en x :");
 		labelVitYVaisseau = new Label("Vitesse en y :");
@@ -146,7 +149,8 @@ public class RenderSystem {
 
 		this.renderInfo = new VBox();
 		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
-		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
+		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
+		//this.renderInfo.setPrefWidth(getWidthWindow() - this.getHeightWindow());
 	}
 
 	/**
@@ -164,9 +168,9 @@ public class RenderSystem {
 		this.animer.setLayoutX(getHeightWindow()/2.0);
 		setAction(corps, etoile);
 		
-		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
 		this.renderSystem.getChildren().add(animer);
+		//this.renderSystem.getChildren().add(background);
 		this.setMouseEventOnSysteme();
 		
 		this.hb = new HBox();
@@ -178,7 +182,12 @@ public class RenderSystem {
 	 * @return Le Stage 
 	 */
 	public Stage createRender() {
-		this.createRenderInformation(Vaisseau.getInstance(), null);
+		if(this.entitytargeted != null) {
+			this.createRenderInformation(Vaisseau.getInstance(), this.entitytargeted);
+		}else {
+			this.createRenderInformation(Vaisseau.getInstance(), null);
+		}
+		
 		this.createRenderSystem();
 		
 		this.sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
@@ -223,7 +232,6 @@ public class RenderSystem {
 		renderSystem.getChildren().add(background);
 		renderSystem.getChildren().addAll(shapes);
 		renderSystem.getChildren().add(animer);
-
 	}
 
 	/**
@@ -284,21 +292,42 @@ public class RenderSystem {
 	 * @param c
 	 */
 	private void setBackground(Color c) {
-		this.background = new Rectangle(0.0, 0.0, this.getHeightWindow(), this.getHeightWindow());
+		this.background = new Rectangle(765, 765);
+		this.background.toBack();
 		this.background.setFill(c);
 	}
 	
 	public Entity getEntityTargeted(double posX, double posY) {
 		// TODO : Retourne l'entité à la position (posX, posY)
-		
+		for (Entity entity : corps) {
+			if(entity != null && entity.getPosition().equals(new Vecteur(posX, posY))) {
+				return entity;
+			}
+		}
 		return null;
 	}
 	
 	public void setMouseEventOnSysteme() {
 		this.renderSystem.setOnMouseClicked(e -> {
 			Shape target = (Shape) e.getTarget();
-			this.getEntityTargeted(target.getLayoutX(), target.getLayoutY());
+			this.entitytargeted = this.getEntityTargeted(target.getLayoutX(), target.getLayoutY());
+			this.majInfo();
 		});
 	}
-}
 
+	private void majInfo() {
+		// TODO Auto-generated method stub
+		System.out.println("Ouai je suis dedans !");
+		System.out.println(entitytargeted);
+		textVitXVaisseau.setText("    - " + this.vaisseau.getVitesse().getx()+" km/h");
+		textVitYVaisseau.setText("    - " + this.vaisseau.getVitesse().gety()+" km/h");
+		textForceSurVaiseau = new TextArea(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
+		
+		if(this.entitytargeted != null) {
+			labelPlanete.setText("Informations " + this.entitytargeted.getNom() + " :");
+			textVitXPlanete.setText("    - " + this.entitytargeted.getVitesse().getx()+"");
+			textVitYPlanete.setText("    - " + this.entitytargeted.getVitesse().gety()+"");
+			textForceSurPlanete.setText(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
+		}
+	}
+}

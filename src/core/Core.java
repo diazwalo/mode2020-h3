@@ -5,9 +5,12 @@ import java.util.List;
 
 import controller.fileprocessor.RecupFichierSource;
 import javafx.application.Application;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.entity.Entity;
+import model.entity.ObjetSimule;
 import model.entity.Vaisseau;
+import model.movement.Vecteur;
 import view.ihm.RenderSystem;
 
 /**
@@ -28,6 +31,7 @@ public class Core extends Application{
 		}
 
 		corps.addAll(rfs.getListeCorpsCeleste());
+		corps.add(new ObjetSimule("Titouan", 2.0, 10.0, new Vecteur(100, 100), 10.0, 10.0, null, Color.DARKRED));
 
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), corps);
 		Stage stageRs = rs.createRender();
