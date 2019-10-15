@@ -30,6 +30,7 @@ public abstract class Entity {
 		this.sprite=sprite;
 		this.nom=nom;
 		this.color=c;
+		this.acceleration = new Vecteur(0, 0);
 	}
 	
 	public Entity(double masse, double rayon, Vecteur position, double vx, double vy, Image sprite, String nom, Color c) {
@@ -134,6 +135,15 @@ public abstract class Entity {
 	public void setAcceleration(Vecteur newAcceleration) {
 		acceleration.setx(newAcceleration.getx());
 		acceleration.sety(newAcceleration.gety());
+	}
+	
+	public void setAcceleration(double x, double y) {
+		acceleration.setx(x);
+		acceleration.sety(y);
+	}
+	
+	public Vecteur getAcceleration() {
+		return acceleration;
 	}
 	
 	public Color getColor() {

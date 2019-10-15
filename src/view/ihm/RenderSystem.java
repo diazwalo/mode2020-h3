@@ -21,6 +21,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import model.entity.Entity;
 import model.entity.ObjetFixe;
+import model.entity.Univers;
 import model.entity.Vaisseau;
 import model.movement.Vecteur;
 
@@ -39,7 +40,8 @@ public class RenderSystem {
 	private Pane renderSystem;
 	private TextArea taUp, taDown;
 	private List<Circle> shapes;
-	private List<Entity> corps;
+	//private List<Entity> corps;
+	private Univers univers;
 	private ObjetFixe etoile;
 	private Shape background;
 	private Button animer;
@@ -47,10 +49,10 @@ public class RenderSystem {
 	private Entity entitytargeted;
 	private Vaisseau vaisseau;
 	private GraphicsEnvironment graphicsEnvironment;
-	
+
 	private VBox vBoxInfoVaiseau;
 	private VBox vBoxInfoPlanete;
-	
+
 	private Label labelVaisseau;
 	private Label labelVitXVaisseau;
 	private Label labelVitYVaisseau;
@@ -58,7 +60,7 @@ public class RenderSystem {
 	private TextArea textVitYVaisseau;
 	private Label labelForceSurVaiseau;
 	private TextArea textForceSurVaiseau;
-	
+
 	private Label labelPlanete;
 	private Label labelVitXPlanete;
 	private Label labelVitYPlanete;
@@ -66,30 +68,31 @@ public class RenderSystem {
 	private TextArea textVitYPlanete;
 	private Label labelForceSurPlanete;
 	private TextArea textForceSurPlanete;
-	
-	
 
-	public RenderSystem(int rayon, List<Entity> corps) {
+
+
+	public RenderSystem(int rayon, Univers univers) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(this.getHeightWindow() , rayon*2);
 		this.setBackground(Color.BLACK);
-		this.corps = corps;
+		this.univers = univers;
 		this.applicateScailOnSystem();
-		putPlaneteOnSysteme(corps);
+		putPlaneteOnSysteme(univers.getEntities());
+
 	}
-	
+
 	private void applicateScailOnSystem() {
 		int x = 0;
-		for (Entity entity : corps) {
+		for (Entity entity : univers.getEntities()) {
 			System.out.println("la "+(x++));
-				Vecteur posTempo = entity.getPosition();
-				posTempo.setx(posTempo.getx() * this.scale.getScale());
-				posTempo.sety(posTempo.gety() * this.scale.getScale());
-				entity.setPosition(posTempo);
-				
-				entity.setVitesse(entity.getVitesse().multiplyWithVariable(this.scale.getScale()));
-//				entity.setVitesseX(entity.getVitesseX() * this.scale.getScale());
-//				entity.setVitesseY(entity.getVitesseY() * this.scale.getScale());
+			Vecteur posTempo = entity.getPosition();
+			posTempo.setx(posTempo.getx() * this.scale.getScale());
+			posTempo.sety(posTempo.gety() * this.scale.getScale());
+			entity.setPosition(posTempo);
+
+			entity.setVitesse(entity.getVitesse().multiplyWithVariable(this.scale.getScale()));
+			//				entity.setVitesseX(entity.getVitesseX() * this.scale.getScale());
+			//				entity.setVitesseY(entity.getVitesseY() * this.scale.getScale());
 		}
 	}
 
@@ -109,7 +112,7 @@ public class RenderSystem {
 		textVitYVaisseau = new TextArea("    - " + v.getVitesse().gety()+" km/h");
 		labelForceSurVaiseau = new Label("Force subi par le vaisseau :");
 		textForceSurVaiseau = new TextArea(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
-		
+
 		if(e != null) {
 			labelPlanete =  new Label("Informations " + e.getNom() + " :");
 			labelVitXPlanete = new Label("Vitesse en x : ");
@@ -127,7 +130,7 @@ public class RenderSystem {
 			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
 			textForceSurPlanete = new TextArea(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
 		}
-		
+
 		labelVaisseau.setStyle("-fx-font-weight: bold;");
 		labelPlanete.setStyle("-fx-font-weight: bold;");
 		textVitXVaisseau.setEditable(false);
@@ -166,17 +169,18 @@ public class RenderSystem {
 
 		this.animer = new Button("Animer");
 		this.animer.setLayoutX(getHeightWindow()/2.0);
-		setAction(corps, etoile);
-		
+		setAction(univers.getEntities(), etoile);
+
+		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
 		this.renderSystem.getChildren().add(animer);
 		//this.renderSystem.getChildren().add(background);
 		this.setMouseEventOnSysteme();
-		
+
 		this.hb = new HBox();
 		this.hb.getChildren().addAll(renderSystem, renderInfo);
 	}
-	
+
 	/**
 	 * Recupère le tableau de bord ainsi que la vue du système et les renvoie dans un Stage.
 	 * @return Le Stage 
@@ -189,13 +193,13 @@ public class RenderSystem {
 		}
 		
 		this.createRenderSystem();
-		
+
 		this.sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
 
 		this.st.setScene(sc);
 		this.st.setTitle("Modélisation Système");
 		this.st.setResizable(false);
-		
+
 		return st;
 	}
 
@@ -208,16 +212,16 @@ public class RenderSystem {
 		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
 			Circle tempo = new Circle(entity.getPosition().getx()*(this.scale.getScale()), 
-									  entity.getPosition().gety()*(this.scale.getScale()), 
-									  entity.getRayon()*(this.scale.getScale()));
-			
+					entity.getPosition().gety()*(this.scale.getScale()), 
+					entity.getRayon()*(this.scale.getScale()));
+
 			if(entity.getColor() == null) {
 				tempo.setFill(c);
 				c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.65)%1, (c.getBlue()+0.70)%1, 1.0);
 			}else {
 				tempo.setFill(entity.getColor());
 			}
-			
+
 			this.shapes.add(tempo);
 		}
 	}
@@ -241,7 +245,7 @@ public class RenderSystem {
 	private double getWidthWindow() {
 		return graphicsEnvironment.getMaximumWindowBounds().width;
 	}
-	
+
 	/**
 	 * Retourne la longueur de l'écran.
 	 * @return largeur de l'écran
@@ -257,32 +261,41 @@ public class RenderSystem {
 	 */
 	private void setAction(List<Entity> corps, ObjetFixe et) {
 		this.animer.setOnAction(e -> {
-			int idx = 0;
-			for(Entity corpsceleste : corps) {
-				//TODO : test
-				System.out.println(corpsceleste.getNom() + ", idx:" + idx++);
-				double dt = 0.025;
+			univers.majVitesse();
+			univers.majPosition();
+			//			int idx = 0;
+			//			for(Entity corpsceleste : corps) {
+			//				//TODO : test
+			//				System.out.println(corpsceleste.getNom() + ", idx:" + idx++);
+			//				double dt = 0.025;
+			//
+			//				double x=corpsceleste.getPosition().getx();
+			//				double y=corpsceleste.getPosition().gety();
+			//				double vitesseX = corpsceleste.getVitesse().getx();
+			//				double vitesseY = corpsceleste.getVitesse().gety();
+			//				
+			//				double xres = (1.0/2.0)*vitesseX*0.25*0.25*+vitesseX*0.25+x;
+			//				double yres = (1.0/2.0)*vitesseY*0.25*0.25*+vitesseY*0.25+y;
+			//
+			//				double g = Vecteur.getG();
+			//				//double attraction p = 
+			//				//double g
+			//				//double xres = (1.0/2.0)*1*dt*dt*+vitesseX*dt+x;
+			//				//double yres = (1.0/2.0)*vitesseX*dt*dt*+vitesseY*dt+y;
+			//				//double xres = g
+			//				
+			//				corpsceleste.setPosition(new Vecteur( (corpsceleste.getPosition().getx()+xres) , (corpsceleste.getPosition().gety()+yres) ));
+			//			}
+			putPlaneteOnSysteme(this.univers.getEntities());
+			majSystem(this.univers.getEntities());
 
-				double x=corpsceleste.getPosition().getx();
-				double y=corpsceleste.getPosition().gety();
-				double vitesseX = corpsceleste.getVitesse().getx();
-				double vitesseY = corpsceleste.getVitesse().gety();
-				
-				double xres = (1.0/2.0)*vitesseX*0.25*0.25*+vitesseX*0.25+x;
-				double yres = (1.0/2.0)*vitesseY*0.25*0.25*+vitesseY*0.25+y;
-
-				double g = Vecteur.getG();
-				//double attraction p = 
-				//double g
-				//double xres = (1.0/2.0)*1*dt*dt*+vitesseX*dt+x;
-				//double yres = (1.0/2.0)*vitesseX*dt*dt*+vitesseY*dt+y;
-				//double xres = g
-				
-				corpsceleste.setPosition(new Vecteur( (corpsceleste.getPosition().getx()+xres) , (corpsceleste.getPosition().gety()+yres) ));
+			for(Entity entity : univers.getEntities()) {
+				System.out.println(entity.getNom()+" : \n");
+				System.out.println(entity.getPosition());
+				System.out.println(entity.getVitesse());
+				System.out.println("\n");
 			}
-			putPlaneteOnSysteme(this.corps);
-			majSystem(this.corps);
-			
+
 		});
 	}
 
@@ -296,22 +309,24 @@ public class RenderSystem {
 		this.background.toBack();
 		this.background.setFill(c);
 	}
-	
+
 	public Entity getEntityTargeted(double posX, double posY) {
 		// TODO : Retourne l'entité à la position (posX, posY)
-		for (Entity entity : corps) {
+		for (Entity entity : this.univers.getEntities()) {
 			if(entity != null && entity.getPosition().equals(new Vecteur(posX, posY))) {
 				return entity;
 			}
 		}
 		return null;
 	}
-	
+
 	public void setMouseEventOnSysteme() {
-		this.renderSystem.setOnMouseClicked(e -> {
-			Shape target = (Shape) e.getTarget();
-			this.entitytargeted = this.getEntityTargeted(target.getLayoutX(), target.getLayoutY());
-			this.majInfo();
+		this.renderSystem.setOnMouseClicked(e -> {	
+			if(e.getTarget() instanceof Shape) {
+				Shape target = (Shape) e.getTarget();
+				this.entitytargeted = this.getEntityTargeted(target.getLayoutX(), target.getLayoutY());
+				this.majInfo();
+			}
 		});
 	}
 

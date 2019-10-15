@@ -8,8 +8,9 @@ import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.entity.Entity;
+import model.entity.ObjetFixe;
 import model.entity.ObjetSimule;
-import model.entity.Vaisseau;
+import model.entity.Univers;
 import model.movement.Vecteur;
 import view.ihm.RenderSystem;
 
@@ -22,18 +23,24 @@ import view.ihm.RenderSystem;
 public class Core extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		List<Entity> corps = new ArrayList<>();
- 
 		RecupFichierSource rfs = new RecupFichierSource();
 		if(rfs.donneeFichier("source.txt") != 0){
 			System.out.println("Impossible de lire le fichier");
 			System.exit(1);
 		}
+		
+		List<Entity> entities = new ArrayList<Entity>();
+		ObjetFixe soleil = new ObjetFixe("Soleil", 40.0, 100.0, new Vecteur(rfs.getRayon()/2, rfs.getRayon()/2), 0.0, 0.0, null, Color.YELLOW);
+		ObjetSimule terre = new ObjetSimule("Terre", 1, 20, new Vecteur(rfs.getRayon()/2 - 100, rfs.getRayon()/2), 12, 12, null, Color.DARKGREEN);
+		entities.add(soleil);
+		entities.add(terre);
+		
+		Univers.createUnivers(entities, rfs);
+		Univers univers  = Univers.getUnivers();
 
-		corps.addAll(rfs.getListeCorpsCeleste());
-		corps.add(new ObjetSimule("Titouan", 2.0, 10.0, new Vecteur(100, 100), 10.0, 10.0, null, Color.DARKRED));
+		
+		RenderSystem rs = new RenderSystem(rfs.getRayon(), univers);
 
-		RenderSystem rs = new RenderSystem(rfs.getRayon(), corps);
 		Stage stageRs = rs.createRender();
 		stageRs.show();
 	}
