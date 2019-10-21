@@ -10,7 +10,7 @@ public class Vecteur {
 
 	private double x;
 	private double y;
-	private static final double G = 6.67*Math.pow(10, -11);
+	private static final double G = 6.67E-11;
 	
 	public Vecteur(double x, double y) {
 		this.x = x;

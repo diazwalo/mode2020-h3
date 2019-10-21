@@ -41,6 +41,11 @@ public class Univers {
 		return entities;
 	}
 	
+	public void majAcceleration() {
+		for(Entity e : entities) {		
+			e.createAcceleration(getUnivers());
+		}
+	}
 	public void majVitesse() {
 		for(Entity entity : entities) {
 			entity.setVitesse(entity.getVitesse().addOtherVecteur((entity.getAcceleration().multiplyWithVariable(source.getDt() * source.getFa()))));

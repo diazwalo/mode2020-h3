@@ -3,17 +3,15 @@ package view.ihm;
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import javafx.geometry.Bounds;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -43,12 +41,10 @@ public class RenderSystem {
 	private HBox hb;
 	private VBox renderInfo;
 	private Pane renderSystem;
-	private TextArea taUp, taDown;
 	private List<Circle> shapes;
 	private Univers univers;
 	private ObjetFixe etoile;
 	private Shape background;
-	private Button animer;
 	private Scale scale;
 	private Entity entitytargeted;
 	private Vaisseau vaisseau;
@@ -75,7 +71,7 @@ public class RenderSystem {
 
 	public RenderSystem(double rayon, Univers univers) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		this.scale = new Scale(/*rayon*/univers , this.getHeightWindow());
+		this.scale = new Scale(univers , this.getHeightWindow());
 		this.createBackground(Color.BLACK);
 		this.univers = univers;
 		this.applicateScailOnSystem();
@@ -111,7 +107,6 @@ public class RenderSystem {
 	}
 
 	private void applicateScailOnSystem() {
-		int x = 0;
 		for (Entity entity : univers.getEntities()) {
 			Vecteur posTempo = entity.getPosition();
 			posTempo.setx(posTempo.getx() * this.scale.getScale());
@@ -123,7 +118,7 @@ public class RenderSystem {
 	}
 
 	/**
-	 * Les corps passés en paramètre sont éévaluées afin de savoir quelle forme, image, couleur leurs donner par la suite.
+	 * Les corps passés en paramètre sont évaluées afin de savoir quelle forme, image, couleur leurs donner par la suite.
 	 * @param corps
 	 */
 	private void putPlaneteOnSysteme(List<Entity> corps) {
@@ -193,7 +188,7 @@ public class RenderSystem {
 			textVitXPlanete = new TextArea("    * " + e.getVitesse().getx()+"");
 			textVitYPlanete = new TextArea("    * " + e.getVitesse().gety()+"");
 			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
-			textForceSurPlanete = new TextArea("    * " + e.getForceNorm(etoile));
+			textForceSurPlanete = new TextArea("    * "/* + e.getForceNorm(etoile)*/);
 		}else {
 			labelPlanete =  new Label("Informations ... :");
 			labelVitXPlanete = new Label("Vitesse en x : ");
@@ -222,6 +217,7 @@ public class RenderSystem {
 		this.renderInfo = new VBox();
 		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
 		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
+		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
 		
 		this.renderInfo.setStyle("-fx-background-color: lightblue;");
 	}
@@ -237,13 +233,12 @@ public class RenderSystem {
 		this.renderSystem = new Pane();
 		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
-		this.animer = new Button("Animer");
-		this.animer.setLayoutX(getHeightWindow()/2.0);
-		setAction(univers.getEntities(), etoile);
+		Timer t = new Timer();
+		
+		t.scheduleAtFixedRate(new Task(),0,1);
 
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
-		this.renderSystem.getChildren().add(animer);
 		this.setMouseEventOnSysteme();
 
 		this.hb = new HBox();
@@ -259,29 +254,24 @@ public class RenderSystem {
 		renderSystem.getChildren().clear();
 		renderSystem.getChildren().add(background);
 		renderSystem.getChildren().addAll(shapes);
-		renderSystem.getChildren().add(animer);
 	}
+	
+	private class Task extends TimerTask{
 
-	/**
-	 * Définie le comportement du boutton "Animer"
-	 * @param corps
-	 * @param et
-	 */
-	private void setAction(List<Entity> corps, ObjetFixe et) {
-		this.animer.setOnAction(e -> {
+		@Override
+		public void run() {
+			univers.majAcceleration();
 			univers.majVitesse();
 			univers.majPosition();
-			putPlaneteOnSysteme(this.univers.getEntities());
-			majSystem(this.univers.getEntities());
-
-			for(Entity entity : univers.getEntities()) {
-				System.out.println(entity.getNom()+" : \n");
-				System.out.println(entity.getPosition());
-				System.out.println(entity.getVitesse());
-				System.out.println("\n");
-			}
-
-		});
+			
+			Platform.runLater(() ->{
+				putPlaneteOnSysteme(univers.getEntities());
+				majSystem(univers.getEntities());
+				//majInfo();
+			});
+			
+		}
+		
 	}
 
 	public Entity getEntityTargeted(MouseEvent e) {
@@ -299,8 +289,9 @@ public class RenderSystem {
 		this.renderSystem.setOnMouseClicked(e -> {	
 			// TODO : faire comme pour le setOnScroll c'est à dire passer e en param puis get sceneX et sceneY
 			if(e.getTarget() instanceof Shape) {
-				Shape target = (Shape) e.getTarget();
-				Bounds b = target.getBoundsInParent();
+				//Shape target = (Shape) e.getTarget();
+				//TODO : peut etre inutile sauf pour tester que c'est pas le vaisseau 
+				//et encore nn enfaire y a juste à faire un instance of sur ce qui est retourner et savoir si c'est vaisseau apres
 				this.entitytargeted = this.getEntityTargeted(e);
 				this.majInfo();
 			}
@@ -321,7 +312,7 @@ public class RenderSystem {
 			labelPlanete.setText("Informations " + this.entitytargeted.getNom() + " :");
 			textVitXPlanete.setText("    * " + this.entitytargeted.getVitesse().getx()+"");
 			textVitYPlanete.setText("    * " + this.entitytargeted.getVitesse().gety()+"");
-			textForceSurPlanete.setText("    * " + this.entitytargeted.getForceNorm(etoile));
+			textForceSurPlanete.setText("    * "/* + this.entitytargeted.getForceNorm(etoile)*/);
 		}
 	}
 }

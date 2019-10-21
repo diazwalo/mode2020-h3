@@ -385,11 +385,13 @@ public class RecupFichierSource {
     public double rayonGraceMasse(double masse, boolean etoile){
     	double p;
     	if(etoile) {
-    		p = 0.10;
+    		p = 1;
     	}else {
-    		p = 0.01;
+    		p = 5;
     	}
-		return Math.pow(((masse/p)/((4*Math.PI)/3)), 1.0/3.0);
+    	double newRayon = Math.pow((masse/p)/((4*Math.PI)/3), 1.0/3.0);
+    	System.out.println(newRayon);
+    	return newRayon;
 
     }
 }
