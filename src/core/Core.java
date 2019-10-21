@@ -29,17 +29,9 @@ public class Core extends Application{
 			System.exit(1);
 		}
 		
-		List<Entity> entities = new ArrayList<Entity>();
-		ObjetFixe soleil = new ObjetFixe("Soleil", 40.0, 100.0, new Vecteur(rfs.getRayon()/2, rfs.getRayon()/2), 0.0, 0.0, null, Color.YELLOW);
-		ObjetSimule terre = new ObjetSimule("Terre", 1, 20, new Vecteur(rfs.getRayon()/2 - 100, rfs.getRayon()/2), 12, 12, null, Color.DARKGREEN);
-		entities.add(soleil);
-		entities.add(terre);
+		Univers.createUnivers(rfs.getListeCorpsCeleste(), rfs);
 		
-		Univers.createUnivers(entities, rfs);
-		Univers univers  = Univers.getUnivers();
-
-		
-		RenderSystem rs = new RenderSystem(rfs.getRayon(), univers);
+		RenderSystem rs = new RenderSystem(rfs.getRayon(), Univers.getUnivers());
 
 		Stage stageRs = rs.createRender();
 		stageRs.show();
