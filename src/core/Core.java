@@ -38,7 +38,9 @@ public class Core extends Application{
 		Univers.createUnivers(entities, rfs);
 		Univers univers  = Univers.getUnivers();
 
+		
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), univers);
+
 		Stage stageRs = rs.createRender();
 		stageRs.show();
 	}

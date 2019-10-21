@@ -53,6 +53,14 @@ public class Vecteur {
 		return G;
 	}
 	
+	public boolean equals(Vecteur other) {
+		return other != null && this.x==other.x && this.y==other.y;
+	}
+	
+	public boolean between(Vecteur vMin, Vecteur vMax) {
+		return this.x >= vMin.getx() && this.x <= vMax.getx() && this.y >= vMin.gety() && this.y <= vMax.gety();
+	}
+	
 	public String toString() {
 		return "{ vX : "+ x +" , vY : "+ y +" }";
 	}

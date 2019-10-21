@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+<<<<<<< HEAD
 import javafx.application.Platform;
+=======
+import javafx.geometry.Bounds;
+>>>>>>> 02b76485d56d610be76824eac8ac0e95043761c5
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -47,6 +52,8 @@ public class RenderSystem {
 	private Shape background;
 	private Button animer;
 	private Scale scale;
+	private Entity entitytargeted;
+	private Vaisseau vaisseau;
 	private GraphicsEnvironment graphicsEnvironment;
 
 	private VBox vBoxInfoVaiseau;
@@ -83,12 +90,10 @@ public class RenderSystem {
 	private void applicateScailOnSystem() {
 		int x = 0;
 		for (Entity entity : univers.getEntities()) {
-			System.out.println("la "+(x++));
 			Vecteur posTempo = entity.getPosition();
 			posTempo.setx(posTempo.getx() * this.scale.getScale());
 			posTempo.sety(posTempo.gety() * this.scale.getScale());
 			entity.setPosition(posTempo);
-
 			entity.setVitesse(entity.getVitesse().multiplyWithVariable(this.scale.getScale()));
 		}
 	}
@@ -100,6 +105,8 @@ public class RenderSystem {
 	 * 		- Les informations relatives a la planète séléctionnée.
 	 */
 	public void createRenderInformation(Vaisseau v, Entity e) {
+		this.vaisseau = v;
+		
 		labelVaisseau=  new Label("Informations vaisseau :");
 		labelVitXVaisseau = new Label("Vitesse en x :");
 		labelVitYVaisseau = new Label("Vitesse en y :");
@@ -129,6 +136,7 @@ public class RenderSystem {
 		labelVaisseau.setStyle("-fx-font-weight: bold;");
 		labelPlanete.setStyle("-fx-font-weight: bold;");
 		textVitXVaisseau.setEditable(false);
+
 		textVitYVaisseau.setEditable(false);
 		textForceSurVaiseau.setEditable(false);
 		textVitXPlanete.setEditable(false);
@@ -142,12 +150,13 @@ public class RenderSystem {
 		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, labelVitXVaisseau, textVitXVaisseau, labelVitYVaisseau, textVitYVaisseau, labelForceSurVaiseau, textForceSurVaiseau);
 		vBoxInfoPlanete.getChildren().addAll(labelPlanete, labelVitXPlanete, textVitXPlanete, labelVitYPlanete, textVitYPlanete, labelForceSurPlanete, textForceSurPlanete);
 
-		labelVaisseau.setAlignment(Pos.CENTER);
-		labelPlanete.setAlignment(Pos.CENTER);
+		//labelVaisseau.setAlignment(Pos.CENTER);
+		//labelPlanete.setAlignment(Pos.CENTER);
 
 		this.renderInfo = new VBox();
 		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
-		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow()-this.getHeightWindow(), this.getHeightWindow()/2.0);
+		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
+		//this.renderInfo.setPrefWidth(getWidthWindow() - this.getHeightWindow());
 	}
 
 	/**
@@ -179,7 +188,12 @@ public class RenderSystem {
 	 * @return Le Stage 
 	 */
 	public Stage createRender() {
-		this.createRenderInformation(Vaisseau.getInstance(), null);
+		if(this.entitytargeted != null) {
+			this.createRenderInformation(Vaisseau.getInstance(), this.entitytargeted);
+		}else {
+			this.createRenderInformation(Vaisseau.getInstance(), null);
+		}
+		
 		this.createRenderSystem();
 
 		this.sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
@@ -203,7 +217,9 @@ public class RenderSystem {
 					entity.getPosition().gety()*(this.scale.getScale()), 
 					entity.getRayon()*(this.scale.getScale()));
 
-			if(entity.getColor() == null) {
+			if(entity.getSprite() != null) {
+				tempo.setFill(new ImagePattern(new Image("https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjnnbCGo6PlAhXb8uAKHeYwDYUQjRx6BAgBEAQ&url=https%3A%2F%2Fwamiz.com%2Frongeurs%2Flapin-3&psig=AOvVaw1OPsq3w2XVqwfDOHS_lQ2I&ust=1571401002058229")));
+			}else if(entity.getColor() == null) {
 				tempo.setFill(c);
 				c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.65)%1, (c.getBlue()+0.70)%1, 1.0);
 			}else {
@@ -224,7 +240,6 @@ public class RenderSystem {
 		renderSystem.getChildren().add(background);
 		renderSystem.getChildren().addAll(shapes);
 		renderSystem.getChildren().add(animer);
-
 	}
 
 	/**
@@ -316,23 +331,43 @@ public class RenderSystem {
 	 * @param c
 	 */
 	private void setBackground(Color c) {
-		this.background = new Rectangle(0.0, 0.0, this.getHeightWindow(), this.getHeightWindow());
+		this.background = new Rectangle(765, 765);
+		this.background.toBack();
 		this.background.setFill(c);
 	}
 
-	public Entity getEntityTargeted(double posX, double posY) {
-		// TODO : Retourne l'entité à la position (posX, posY)
-
+	public Entity getEntityTargeted(double posMinX, double posMinY, double posMaxX, double posMaxY) {
+		// TODO : Les position sont bizard (ca marche pour le soleil mais pas la Terre
+		for (Entity entity : this.univers.getEntities()) {
+			System.out.println(entity.getNom() + ", "+ entity.getPosition().getx()+ ", " + entity.getPosition().gety() + " between " + posMinX + ", " + posMinY + " & " + posMinX + ", " + posMaxY + " ? : " + entity.getPosition().between(new Vecteur(posMinX, posMinY), new Vecteur(posMaxX, posMaxY)));
+			if(entity != null && entity.getPosition().between(new Vecteur(posMinX, posMinY), new Vecteur(posMaxX, posMaxY))) {
+				return entity;
+			}
+		}
 		return null;
 	}
 
 	public void setMouseEventOnSysteme() {
-		this.renderSystem.setOnMouseClicked(e -> {
+		this.renderSystem.setOnMouseClicked(e -> {	
 			if(e.getTarget() instanceof Shape) {
 				Shape target = (Shape) e.getTarget();
-				this.getEntityTargeted(target.getLayoutX(), target.getLayoutY());
+				Bounds b = target.getBoundsInParent();
+				this.entitytargeted = this.getEntityTargeted(b.getMinX(), b.getMinY(), b.getMaxX(), b.getMaxY());
+				this.majInfo();
 			}
 		});
 	}
-}
 
+	private void majInfo() {
+		textVitXVaisseau.setText("    - " + this.vaisseau.getVitesse().getx()+" km/h");
+		textVitYVaisseau.setText("    - " + this.vaisseau.getVitesse().gety()+" km/h");
+		textForceSurVaiseau = new TextArea(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
+		
+		if(this.entitytargeted != null) {
+			labelPlanete.setText("Informations " + this.entitytargeted.getNom() + " :");
+			textVitXPlanete.setText("    - " + this.entitytargeted.getVitesse().getx()+"");
+			textVitYPlanete.setText("    - " + this.entitytargeted.getVitesse().gety()+"");
+			textForceSurPlanete.setText(/*v.getForcesOnEntity(etoile)*/"    - wow trop fort");
+		}
+	}
+}
