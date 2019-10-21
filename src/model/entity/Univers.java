@@ -41,15 +41,22 @@ public class Univers {
 		return entities;
 	}
 	
+	public void majAcceleration() {
+		for(Entity e : entities) {		
+			e.createAcceleration(getUnivers());
+		}
+	}
 	public void majVitesse() {
 		for(Entity entity : entities) {
-			entity.setVitesse(entity.getVitesse().addOtherVecteur((entity.getAcceleration().multiplyWithVariable(source.getDt() * source.getFa()))));
+		//	entity.setVitesse(entity.getVitesse().addOtherVecteur((entity.getAcceleration().multiplyWithVariable(source.getDt() * source.getFa()))));
+			entity.setVitesse(entity.getVitesse().addOtherVecteur((entity.getAcceleration().multiplyWithVariable(0.001*10))));
 		}
 	}
 	
 	public void majPosition() {
 		for(Entity entity : entities) {
-			entity.setPosition(entity.getPosition().addOtherVecteur((entity.getVitesse().multiplyWithVariable(source.getDt() * source.getFa()))));
+		//	entity.setPosition(entity.getPosition().addOtherVecteur((entity.getVitesse().multiplyWithVariable(source.getDt() * source.getFa()))));
+			entity.setPosition(entity.getPosition().addOtherVecteur((entity.getVitesse().multiplyWithVariable(0.001*10))));
 		}
 	}
 	
