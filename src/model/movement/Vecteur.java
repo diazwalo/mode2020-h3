@@ -57,8 +57,11 @@ public class Vecteur {
 		return other != null && this.x==other.x && this.y==other.y;
 	}
 	
-	public boolean between(Vecteur vMin, Vecteur vMax) {
-		return this.x >= vMin.getx() && this.x <= vMax.getx() && this.y >= vMin.gety() && this.y <= vMax.gety();
+	public boolean between(double posXMouseOnScreen, double posYMouseOnScreen, double rayon) {
+		return posXMouseOnScreen < this.x + rayon && 
+				posXMouseOnScreen > this.x - rayon &&
+				posYMouseOnScreen < this.y + rayon && 
+				posYMouseOnScreen > this.y - rayon;
 	}
 	
 	public String toString() {

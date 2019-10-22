@@ -102,8 +102,6 @@ public class RecupFichierSource {
 
     public int affectationDonnee(String fichier) {
         if (!fichier.startsWith("#") && !fichier.startsWith(" ") && !fichier.isEmpty()) {
-            //String[] tab = new String[fichier.split(" ").length];
-            //tab= fichier.split(" ");
             String[] tab =  fichier.split(" ");
             
             /**
@@ -149,6 +147,7 @@ public class RecupFichierSource {
                  * Objet fixe
                  */
             	double masse=0;
+            	double rayon=0.0;
             	Vecteur position = new Vecteur(0, 0);
             	Color c = null;
             	double red = -1;
@@ -190,7 +189,9 @@ public class RecupFichierSource {
                     	c = new Color(red, green, blue, 1.0);
                     }
                     
-                    of= new ObjetFixe(nomf, masse,0, position, 0, 0, null, c);
+                    rayon = this.rayonGraceMasse(masse, true);
+                    
+                    of= new ObjetFixe(nomf, masse, rayon, position, 0, 0, null, c);
 
 
                     /**
@@ -245,7 +246,10 @@ public class RecupFichierSource {
                         if(red >= 0.0 && red <=1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
                         	c = new Color(red, green, blue, 1.0);
                         }
-                        ObjetSimule os = new ObjetSimule(noms, masse,0, position, vx, vy, null, c);
+                        
+                        rayon = this.rayonGraceMasse(masse, true);
+                        
+                        ObjetSimule os = new ObjetSimule(noms, masse, rayon, position, vx, vy, null, c);
                         listeCorpsCeleste.add(os);
                     }
                     else {
@@ -307,7 +311,7 @@ public class RecupFichierSource {
                                 }
                                 
                             }
-                            if(red >= 0.0 && red <=1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
+                            if(red >= 0.0 && red <= 1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
                             	c = new Color(red, green, blue, 1.0);
                             }
                             listeCorpsCeleste.add(oe);
@@ -378,16 +382,16 @@ public class RecupFichierSource {
         return 0;
     }
 
-    public double rayonGraceMasse(double masse){
-        if(!listeCorpsCeleste.isEmpty()){
-            Entity entity = listeCorpsCeleste.get(0);
-            for(Entity e : listeCorpsCeleste){
-                if(e.getMasse() > entity.getMasse()){
-                    entity = e;
-                }
-            }
+    public double rayonGraceMasse(double masse, boolean etoile){
+    	double p;
+    	if(etoile) {
+    		p = 1;
+    	}else {
+    		p = 5;
+    	}
+    	double newRayon = Math.pow((masse/p)/((4*Math.PI)/3), 1.0/3.0);
+    	System.out.println(newRayon);
+    	return newRayon;
 
-        }
-        return 0;
     }
 }

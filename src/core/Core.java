@@ -28,24 +28,13 @@ public class Core extends Application{
 			System.out.println("Impossible de lire le fichier");
 			System.exit(1);
 		}
-		
-		List<Entity> entities = new ArrayList<Entity>();
-		ObjetFixe soleil = new ObjetFixe("Soleil", 1E13, 100.0, new Vecteur(rfs.getRayon()/2, rfs.getRayon()/2), 0.0, 0.0, null, Color.YELLOW);
-		ObjetSimule terre = new ObjetSimule("Terre", 1, 20, new Vecteur(rfs.getRayon()/2 - 100, rfs.getRayon()/2), 0, 2, null, Color.DARKGREEN);
-		entities.add(soleil);
-		entities.add(terre);
-		
-		Univers.createUnivers(entities, rfs);
-		Univers univers  = Univers.getUnivers();
+		Univers.createUnivers(rfs.getListeCorpsCeleste(), rfs);
 
-		
-		RenderSystem rs = new RenderSystem(rfs.getRayon(), univers);
+		RenderSystem rs = new RenderSystem(rfs.getRayon(), Univers.getUnivers());
 
 		Stage stageRs = rs.createRender();
 		stageRs.show();
 	}
-	
-	
 	
 	public static void main(String[] args) {
 		Application.launch(args);
