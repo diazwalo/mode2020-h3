@@ -108,11 +108,15 @@ public class RenderSystem {
 	private void applicateScailOnSystem() {
 		for (Entity entity : univers.getEntities()) {
 			Vecteur posTempo = entity.getPosition();
-			posTempo.setx(posTempo.getx() * this.scale.getScale());
-			posTempo.sety(posTempo.gety() * this.scale.getScale());
+			//posTempo.setx(posTempo.getx() * this.scale.getScale());
+			//posTempo.sety(posTempo.gety() * this.scale.getScale());
+			System.out.println(posTempo);
+			posTempo.setx(posTempo.getx() + this.getHeightWindow()/2);
+			posTempo.sety(posTempo.gety() + this.getHeightWindow()/2);
 			entity.setPosition(posTempo);
 			entity.setVitesse(entity.getVitesse().multiplyWithVariable(this.scale.getScale()));
 			entity.setRayon(entity.getRayon()* this.scale.getScale());
+			System.out.println(posTempo);
 		}
 	}
 
