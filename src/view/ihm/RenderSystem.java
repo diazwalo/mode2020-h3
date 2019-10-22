@@ -290,14 +290,8 @@ public class RenderSystem {
 
 	public void setMouseEventOnSysteme() {
 		this.renderSystem.setOnMouseClicked(e -> {	
-			// TODO : faire comme pour le setOnScroll c'est à dire passer e en param puis get sceneX et sceneY
-			if(e.getTarget() instanceof Shape) {
-				//Shape target = (Shape) e.getTarget();
-				//TODO : peut etre inutile sauf pour tester que c'est pas le vaisseau 
-				//et encore nn enfaire y a juste à faire un instance of sur ce qui est retourner et savoir si c'est vaisseau apres
 				this.entitytargeted = this.getEntityTargeted(e);
 				this.majInfo();
-			}
 		});
 		this.renderSystem.setOnScroll(e -> {
 			System.out.println("X : "+e.getSceneX() + ", Y : "+ e.getSceneY());
