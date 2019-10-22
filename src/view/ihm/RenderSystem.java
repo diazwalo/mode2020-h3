@@ -174,8 +174,8 @@ public class RenderSystem {
 	 */
 	public void createRenderInformation(Vaisseau v, Entity e) {
 
-		List<Node> listlabelVaisseau =infoVaisseau(v);
-		List<Node> listlabelPlanete =infoPlanete(e);
+		List<Label> listlabelVaisseau =infoVaisseau(v);
+		List<Label> listlabelPlanete =infoPlanete(e);
 		creerStyle(listlabelVaisseau, listlabelPlanete);
 		
 		labelVaisseau.setStyle("-fx-font-weight: bold;");
@@ -186,28 +186,43 @@ public class RenderSystem {
 		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
 		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
 		this.renderInfo.setStyle("-fx-background-color: #00004C;");
+		setInsetsAuto(vBoxInfoVaiseau, listlabelVaisseau);
+		//VBox.setMargin(labelVaisseau, new Insets(5));
+		//VBox.setMargin(labelForceSurVaiseau, new Insets(20));
+		//VBox.setMargin(labelVaisseau, new Insets(10));
+
+
 	}
 	
 	
-	public void creerStyle(List<Node> listlabelVaisseau, List<Node> listlabelPlanete) {
+	public static void setInsetsAuto(VBox vb, List<Label> list) {
+		for(Label objet : list) {
+			VBox.setMargin(objet, new Insets(5,5,5,5));
+		}
+	}
+	
+	
+	public void creerStyle(List<Label> listlabelVaisseau, List<Label> listlabelPlanete) {
 		labelVaisseau.setTextFill(Color.web("#0076a3"));
 		labelVaisseau.setMinSize(50, 50);
 		labelVaisseau.setFont(new Font("Arial", 30));
 		//vBoxInfoVaiseau.getChildren(labelVaisseau.setOpaqueInsets(new Insets(5));
-		applyStyle("-fx-background-color: white;", listlabelVaisseau);
+		applyStyle("#0076a3", listlabelVaisseau, false);
 		
+
 	}
 
 
-	public static void applyStyle(String style, List<Node> list) {
-		for(Node objet : list) {
-			objet.setStyle(style);
+	public static void applyStyle(String style, List<Label> list, boolean instance) {
+		for(Label objet : list) {
+			if(instance) objet.setStyle(style);
+			else objet.setTextFill(Color.web(style));
 		}
 	}
 
 
 
-	public List<Node> infoVaisseau(Vaisseau v) {
+	public List<Label> infoVaisseau(Vaisseau v) {
 		
 		this.vaisseau = v;
 		labelVaisseau=  new Label("Informations vaisseau :");
@@ -219,8 +234,8 @@ public class RenderSystem {
 		labelForceSurVaiseauval = new Label("    * "/* + v.getForceNorm(etoile)*/);
 		vBoxInfoVaiseau = new VBox();
 		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, labelVitXVaisseau, labelVitXVaisseauval, labelVitYVaisseau, labelVitYVaisseauval, labelForceSurVaiseau, labelForceSurVaiseauval);
-		vBoxInfoVaiseau.setMargin(labelVaisseau, new Insets(5,5,5,5));
-		List<Node> labelvaisseau = new ArrayList<>();
+		
+		List<Label> labelvaisseau = new ArrayList<>();
 		labelvaisseau.add(labelForceSurVaiseau);
 		labelvaisseau.add(labelForceSurVaiseauval);
 		labelvaisseau.add(labelVaisseau);
@@ -231,8 +246,9 @@ public class RenderSystem {
 
 		return labelvaisseau;
 	}
+
 	
-	public List<Node> infoPlanete(Entity e){
+	public List<Label> infoPlanete(Entity e){
 		if(e != null) {
 			labelPlanete =  new Label("Informations " + e.getNom() + " :");
 			labelVitXPlanete = new Label("Vitesse en x : ");
@@ -253,7 +269,7 @@ public class RenderSystem {
 		vBoxInfoPlanete= new VBox();
 		vBoxInfoPlanete.getChildren().addAll(labelPlanete, labelVitXPlanete, labelVitXPlaneteval, labelVitYPlanete, labelVitYPlaneteval, labelForceSurPlanete, labelForceSurPlaneteval);
 
-		List<Node> labelPlanete = new ArrayList<>();
+		List<Label> labelPlanete = new ArrayList<>();
 		labelPlanete.add(labelForceSurPlanete);
 		labelPlanete.add(labelForceSurPlaneteval);
 		labelPlanete.add(labelVitXPlanete);
@@ -267,11 +283,6 @@ public class RenderSystem {
 		
 		
 	}
-
-
-
-
-
 
 	/**
 	 * Crée la partie droite du programme : la vue du Système.
