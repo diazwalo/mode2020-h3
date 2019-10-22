@@ -5,20 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.application.Platform;
-<<<<<<< HEAD
-import javafx.geometry.Bounds;
-=======
->>>>>>> refs/remotes/origin/master
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-<<<<<<< HEAD
-=======
 import javafx.scene.input.MouseEvent;
->>>>>>> refs/remotes/origin/master
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
