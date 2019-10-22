@@ -24,7 +24,7 @@ public class Core extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		RecupFichierSource rfs = new RecupFichierSource();
-		if(rfs.donneeFichier("source1.astro") != 0){
+		if(rfs.donneeFichier("source2.astro") != 0){
 			System.out.println("Impossible de lire le fichier");
 			System.exit(1);
 		}
