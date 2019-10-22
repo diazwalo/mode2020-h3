@@ -6,16 +6,13 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-<<<<<<< HEAD
 import javafx.application.Platform;
-=======
 import javafx.geometry.Bounds;
->>>>>>> 02b76485d56d610be76824eac8ac0e95043761c5
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -88,7 +85,6 @@ public class RenderSystem {
 	}
 
 	private void applicateScailOnSystem() {
-		int x = 0;
 		for (Entity entity : univers.getEntities()) {
 			Vecteur posTempo = entity.getPosition();
 			posTempo.setx(posTempo.getx() * this.scale.getScale());
