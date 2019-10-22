@@ -1,5 +1,7 @@
 package model.entity;
 
+import java.util.Observable;
+
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.movement.Vecteur;
@@ -11,7 +13,7 @@ import model.movement.Vecteur;
  *	notamment les étoiles, les planètes et le vaisseau.
  */
 
-public abstract class Entity {
+public abstract class Entity extends Observable {
 	protected double masse;
 	protected double rayon;
 	protected Vecteur position;
@@ -82,30 +84,40 @@ public abstract class Entity {
 	public void setPosition(Vecteur newPosition) {
 		position.setx(newPosition.getx());
 		position.sety(newPosition.gety());
+		setChanged();
+		notifyObservers();
 	}
 
 	public void setVitesse(Vecteur newVitesse) {
 		vitesse.setx(newVitesse.getx());
 		vitesse.sety(newVitesse.gety());
+		setChanged();
+		notifyObservers();
 	}
 
 	public Vecteur getVitesse() {
 		return vitesse;
 	}
 
-	public void setVitesse(double vitX, double vitY) {
-		this.vitesse.setx(vitX);
-		this.vitesse.sety(vitY);
+	public void setVitesse(double x, double y) {
+		this.vitesse.setx(x);
+		this.vitesse.sety(y);
+		setChanged();
+		notifyObservers();
 	}
 
 	public void setAcceleration(Vecteur newAcceleration) {
 		acceleration.setx(newAcceleration.getx());
 		acceleration.sety(newAcceleration.gety());
+		setChanged();
+		notifyObservers();
 	}
 
 	public void setAcceleration(double x, double y) {
 		acceleration.setx(x);
 		acceleration.sety(y);
+		setChanged();
+		notifyObservers();
 	}
 
 	public Vecteur getAcceleration() {

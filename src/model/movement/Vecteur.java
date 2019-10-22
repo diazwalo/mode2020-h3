@@ -1,5 +1,7 @@
 package model.movement;
 
+import javafx.beans.property.SimpleDoubleProperty;
+
 /**
  * 
  * @author cleme
@@ -8,13 +10,13 @@ package model.movement;
  */
 public class Vecteur {
 
-	private double x;
-	private double y;
+	private SimpleDoubleProperty x;
+	private SimpleDoubleProperty y;
 	private static final double G = 6.67E-11;
 	
 	public Vecteur(double x, double y) {
-		this.x = x;
-		this.y = y;
+		this.x = new SimpleDoubleProperty(x);
+		this.y = new SimpleDoubleProperty(y);
 	}
 	
 	public Vecteur() {
@@ -22,31 +24,31 @@ public class Vecteur {
 	}
 
 	public double getx() {
-		return x;
+		return x.doubleValue();
 	}
 
 	public void setx(double x) {
-		this.x = x;
+		this.x.setValue(x);
 	}
 
 	public double gety() {
-		return y;
+		return y.doubleValue();
 	}
 
 	public void sety(double y) {
-		this.y = y;
+		this.y.setValue(y);
 	}
 	
 	public double getNorme() {
-		return Math.sqrt(this.x*this.x+this.y*this.y);
+		return Math.sqrt(this.x.doubleValue()*this.x.doubleValue()+this.y.doubleValue()*this.y.doubleValue());
 	}
 	
 	public Vecteur multiplyWithVariable(double variable){
-		return new Vecteur(this.x * variable, this.y * variable);
+		return new Vecteur(this.x.doubleValue() * variable, this.y.doubleValue() * variable);
 	}
 	
 	public Vecteur addOtherVecteur(Vecteur other) {
-		return new Vecteur(this.x + other.getx(), this.y + other.gety());
+		return new Vecteur(this.x.doubleValue() + other.getx(), this.y.doubleValue() + other.gety());
 	}
 	
 	public static double getG() {
@@ -58,13 +60,21 @@ public class Vecteur {
 	}
 	
 	public boolean between(double posXMouseOnScreen, double posYMouseOnScreen, double rayon) {
-		return posXMouseOnScreen < this.x + rayon && 
-				posXMouseOnScreen > this.x - rayon &&
-				posYMouseOnScreen < this.y + rayon && 
-				posYMouseOnScreen > this.y - rayon;
+		return posXMouseOnScreen < this.x.doubleValue() + rayon && 
+				posXMouseOnScreen > this.x.doubleValue() - rayon &&
+				posYMouseOnScreen < this.y.doubleValue() + rayon && 
+				posYMouseOnScreen > this.y.doubleValue() - rayon;
+	}
+	
+	public SimpleDoubleProperty getXProperty() {
+		return x;
+	}
+	
+	public SimpleDoubleProperty getYProperty() {
+		return y;
 	}
 	
 	public String toString() {
-		return "{ vX : "+ x +" , vY : "+ y +" }";
+		return "{ vX : "+ x.doubleValue() +" , vY : "+ y.doubleValue() +" }";
 	}
 }

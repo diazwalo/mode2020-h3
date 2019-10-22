@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -179,6 +181,22 @@ public class RenderSystem {
 		textVitYVaisseau = new TextArea("    * " + v.getVitesse().gety()+" km/h");
 		labelForceSurVaiseau = new Label("Force subi par le vaisseau :");
 		textForceSurVaiseau = new TextArea("    * "/* + v.getForceNorm(etoile)*/);
+		
+		v.getVitesse().getXProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				textVitXVaisseau.setText("    * " + newValue +" km/h");
+			}
+		});
+		
+		v.getVitesse().getYProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				textVitYVaisseau.setText("    * " + newValue +" km/h");
+			}
+		});
 
 		if(e != null) {
 			labelPlanete =  new Label("Informations " + e.getNom() + " :");
@@ -188,6 +206,25 @@ public class RenderSystem {
 			textVitYPlanete = new TextArea("    * " + e.getVitesse().gety()+"");
 			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
 			textForceSurPlanete = new TextArea("    * "/* + e.getForceNorm(etoile)*/);
+			
+			e.getVitesse().getXProperty().addListener(new ChangeListener<Number>() {
+
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					//textVitXPlanete.setText("    * " + newValue +" km/h");
+					System.out.println("wouaw update du x de la planete !");
+				}
+			});
+			
+			e.getVitesse().getYProperty().addListener(new ChangeListener<Number>() {
+
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					//textVitYPlanete.setText("    * " + newValue +" km/h");
+					System.out.println("oua update du y cette fois ci de la planete !");
+				}
+			});
+			
 		}else {
 			labelPlanete =  new Label("Informations ... :");
 			labelVitXPlanete = new Label("Vitesse en x : ");
@@ -217,6 +254,8 @@ public class RenderSystem {
 		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
 		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
 		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
+		
+		
 		
 		this.renderInfo.setStyle("-fx-background-color: lightblue;");
 	}
@@ -286,14 +325,9 @@ public class RenderSystem {
 
 	public void setMouseEventOnSysteme() {
 		this.renderSystem.setOnMouseClicked(e -> {	
-			// TODO : faire comme pour le setOnScroll c'est à dire passer e en param puis get sceneX et sceneY
-			if(e.getTarget() instanceof Shape) {
-				//Shape target = (Shape) e.getTarget();
-				//TODO : peut etre inutile sauf pour tester que c'est pas le vaisseau 
-				//et encore nn enfaire y a juste à faire un instance of sur ce qui est retourner et savoir si c'est vaisseau apres
 				this.entitytargeted = this.getEntityTargeted(e);
-				this.majInfo();
-			}
+				majInfo();
+				//	createRenderInformation(vaisseau, entitytargeted);
 		});
 		this.renderSystem.setOnScroll(e -> {
 			System.out.println("X : "+e.getSceneX() + ", Y : "+ e.getSceneY());
