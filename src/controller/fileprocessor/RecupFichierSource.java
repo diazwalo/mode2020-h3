@@ -197,7 +197,7 @@ public class RecupFichierSource {
                     /**
                      * Mauvaise declaration d'un objet fixe dans le fichier source
                      */
-                    if(masse == 0 || rayon == 0 || position.getx() == 0 || position.gety() == 0 || nomf == null){
+                    if(masse == 0 || rayon == 0 || nomf == null){
                         System.out.println("Problème de déclaration d'un objet fixe");
                         return 1;
                     }
@@ -390,7 +390,6 @@ public class RecupFichierSource {
     		p = 5;
     	}
     	double newRayon = Math.pow((masse/p)/((4*Math.PI)/3), 1.0/3.0);
-    	System.out.println(newRayon);
     	return newRayon;
 
     }

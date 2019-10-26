@@ -14,8 +14,9 @@ public class Scale {
 			}
 		}
 		//Si l'on veut 30 pixel pour la taille de la plus petite planete
-		this.newScale = 10 / (minRayon*2);
+		//this.newScale = 10 / (minRayon*2);
 		//this.newScale = windowSize / rayon;
+		this.newScale = 0.03 * windowSize;
 	}
 	
 	public double getScale() {

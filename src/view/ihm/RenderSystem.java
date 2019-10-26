@@ -3,6 +3,8 @@ package view.ihm;
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
@@ -36,7 +38,7 @@ import model.movement.Vecteur;
  */
 
 
-public class RenderSystem {
+public class RenderSystem implements Observer {
 	private Stage st;
 	private Scene sc;
 	private HBox hb;
@@ -110,11 +112,15 @@ public class RenderSystem {
 	private void applicateScailOnSystem() {
 		for (Entity entity : univers.getEntities()) {
 			Vecteur posTempo = entity.getPosition();
-			posTempo.setx(posTempo.getx() * this.scale.getScale());
-			posTempo.sety(posTempo.gety() * this.scale.getScale());
+			//posTempo.setx(posTempo.getx() * this.scale.getScale());
+			//posTempo.sety(posTempo.gety() * this.scale.getScale());
+			System.out.println(posTempo);
+			posTempo.setx(posTempo.getx() + this.getHeightWindow()/2);
+			posTempo.sety(posTempo.gety() + this.getHeightWindow()/2);
 			entity.setPosition(posTempo);
 			entity.setVitesse(entity.getVitesse().multiplyWithVariable(this.scale.getScale()));
 			entity.setRayon(entity.getRayon()* this.scale.getScale());
+			System.out.println(posTempo);
 		}
 	}
 
@@ -326,8 +332,7 @@ public class RenderSystem {
 	public void setMouseEventOnSysteme() {
 		this.renderSystem.setOnMouseClicked(e -> {	
 				this.entitytargeted = this.getEntityTargeted(e);
-				majInfo();
-				//	createRenderInformation(vaisseau, entitytargeted);
+				this.majInfo();
 		});
 		this.renderSystem.setOnScroll(e -> {
 			System.out.println("X : "+e.getSceneX() + ", Y : "+ e.getSceneY());
@@ -347,5 +352,10 @@ public class RenderSystem {
 			textVitYPlanete.setText("    * " + this.entitytargeted.getVitesse().gety()+"");
 			textForceSurPlanete.setText("    * "/* + this.entitytargeted.getForceNorm(etoile)*/);
 		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		
 	}
 }
