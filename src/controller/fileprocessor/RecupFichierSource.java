@@ -190,7 +190,7 @@ public class RecupFichierSource {
                     }
                     
                     rayon = this.rayonGraceMasse(masse, true);
-                    
+
                     of= new ObjetFixe(nomf, masse, rayon, position, 0, 0, null, c);
 
 
@@ -246,9 +246,9 @@ public class RecupFichierSource {
                         if(red >= 0.0 && red <=1.0 && green >= 0.0 && green <=1.0 && blue >= 0.0 && blue <=1.0) {
                         	c = new Color(red, green, blue, 1.0);
                         }
-                        
+
                         rayon = this.rayonGraceMasse(masse, true);
-                        
+
                         ObjetSimule os = new ObjetSimule(noms, masse, rayon, position, vx, vy, null, c);
                         listeCorpsCeleste.add(os);
                     }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -18,15 +19,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import model.entity.Entity;
-import model.entity.ObjetFixe;
-import model.entity.Univers;
-import model.entity.Vaisseau;
+import model.entity.*;
 import model.movement.Vecteur;
 
 /**
@@ -44,6 +43,7 @@ public class RenderSystem {
 	private VBox renderInfo;
 	private Pane renderSystem;
 	private List<Circle> shapes;
+	private List<Circle> suiviPoints;
 	private Univers univers;
 	private ObjetFixe etoile;
 	private Shape background;
@@ -171,7 +171,7 @@ public class RenderSystem {
 	}
 
 	/**
-	 * Crée la partie gauche du programme : le tableau de bord.
+	 * Crée la partie droite du programme : le tableau de bord.
 	 * Ce tableau de bord contient :
 	 * 		- Les informations relatives au vaisseau.
 	 * 		- Les informations relatives a la planète séléctionnée.
@@ -289,7 +289,7 @@ public class RenderSystem {
 	}
 
 	/**
-	 * Crée la partie droite du programme : la vue du Système.
+	 * Crée la partie gauche du programme : la vue du Système.
 	 * Cette vue contient :
 	 * 		- Les planètes ainsi que le vaiseau.
 	 * 		- un boutton "Animer" qui permet de lancer la simulation.
@@ -322,6 +322,17 @@ public class RenderSystem {
 		renderSystem.getChildren().addAll(shapes);
 	}
 
+	private void placerPoint(List<Entity> corps){
+		for(Entity e : corps){
+			if(e.getClass().equals(ObjetSimule.class)){
+				Vecteur v = e.getPosition();
+				Circle c = new Circle(v.getx(), v.gety(), 5);
+				c.setFill(Paint.valueOf("#FFFF00"));
+				suiviPoints.add(c);
+			}
+		}
+	}
+
 	private class Task extends TimerTask{
 
 		@Override
@@ -333,6 +344,8 @@ public class RenderSystem {
 			Platform.runLater(() ->{
 				putPlaneteOnSysteme(univers.getEntities());
 				majSystem(univers.getEntities());
+				placerPoint(univers.getEntities());
+				renderSystem.getChildren().addAll(suiviPoints);
 				//majInfo();
 			});
 
