@@ -21,7 +21,6 @@ public class Core extends Application{
 			System.exit(1);
 		}
 		Univers.createUnivers(rfs.getListeCorpsCeleste(), rfs);
-		
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), Univers.getUnivers());
 		Univers.getUnivers().addObserver(rs);
 		

@@ -156,7 +156,7 @@ public class RecupFichierSource {
             	double vx=0;
             	double vy=0;
 
-                Image sptrite;
+                Image sprite;
                 if (tab[1].equals("Fixe")) {
                     ObjetFixe of;
                     String nomf=tab[0].substring(0, tab[0].length() - 1);

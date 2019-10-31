@@ -387,8 +387,11 @@ public class RenderSystem implements Observer {
 			univers.majPosition();
 
 			Platform.runLater(() ->{
-				placerPoint(univers.getEntities());
-				renderSystem.getChildren().addAll(suiviPoints);
+				putPlaneteOnSysteme(univers.getEntities());
+				majSystem(univers.getEntities());
+//				placerPoint(univers.getEntities());
+//				renderSystem.getChildren().addAll(suiviPoints);
+
 				//update();
 			});
 
