@@ -5,6 +5,7 @@ import java.util.List;
 
 import controller.fileprocessor.RecupFichierSource;
 import model.movement.Vecteur;
+import view.ihm.RenderSystem;
 
 public class Univers {
 	private List<Entity> entities;
@@ -55,6 +56,12 @@ public class Univers {
 	public void majPosition() {
 		for(Entity entity : entities) {
 			entity.setPosition(entity.getPosition().addOtherVecteur((entity.getVitesse().multiplyWithVariable(source.getDt() * source.getFa()))));
+		}
+	}
+	
+	public void addObserver(RenderSystem rs) {
+		for(Entity entity : entities) {
+			entity.addObserver(rs);
 		}
 	}
 	

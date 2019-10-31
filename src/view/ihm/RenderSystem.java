@@ -10,6 +10,8 @@ import java.util.TimerTask;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -23,6 +25,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.entity.Entity;
 import model.entity.ObjetFixe;
@@ -59,18 +62,18 @@ public class RenderSystem implements Observer {
 	private Label labelVaisseau;
 	private Label labelVitXVaisseau;
 	private Label labelVitYVaisseau;
-	private TextArea textVitXVaisseau;
-	private TextArea textVitYVaisseau;
+	private Label labelVitXVaisseauval;
+	private Label labelVitYVaisseauval;
 	private Label labelForceSurVaiseau;
-	private TextArea textForceSurVaiseau;
+	private Label labelForceSurVaiseauval;
 
 	private Label labelPlanete;
 	private Label labelVitXPlanete;
 	private Label labelVitYPlanete;
-	private TextArea textVitXPlanete;
-	private TextArea textVitYPlanete;
+	private Label labelVitXPlaneteval;
+	private Label labelVitYPlaneteval;
 	private Label labelForceSurPlanete;
-	private TextArea textForceSurPlanete;
+	private Label labelForceSurPlaneteval;
 
 	public RenderSystem(double rayon, Univers univers) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -159,7 +162,7 @@ public class RenderSystem implements Observer {
 		}else {
 			this.createRenderInformation(Vaisseau.getInstance(), null);
 		}
-		
+
 		this.createRenderSystem();
 
 		this.sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
@@ -167,7 +170,7 @@ public class RenderSystem implements Observer {
 		this.st.setScene(sc);
 		this.st.setTitle("Modélisation Système");
 		this.st.setResizable(false);
-		
+
 		return st;
 	}
 
@@ -178,92 +181,156 @@ public class RenderSystem implements Observer {
 	 * 		- Les informations relatives a la planète séléctionnée.
 	 */
 	public void createRenderInformation(Vaisseau v, Entity e) {
-		this.vaisseau = v;
+
+		List<Label> listlabelVaisseau =infoVaisseau(v);
+		List<Label> listlabelPlanete =infoPlanete(e);
+		creerStyle(listlabelVaisseau, listlabelPlanete);
 		
-		labelVaisseau=  new Label("Informations vaisseau :");
-		labelVitXVaisseau = new Label("Vitesse en x :");
-		labelVitYVaisseau = new Label("Vitesse en y :");
-		textVitXVaisseau = new TextArea("    * " + v.getVitesse().getx()+" km/h");
-		textVitYVaisseau = new TextArea("    * " + v.getVitesse().gety()+" km/h");
-		labelForceSurVaiseau = new Label("Force subi par le vaisseau :");
-		textForceSurVaiseau = new TextArea("    * "/* + v.getForceNorm(etoile)*/);
-		
-		v.getVitesse().getXProperty().addListener(new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				textVitXVaisseau.setText("    * " + newValue +" km/h");
-			}
-		});
-		
-		v.getVitesse().getYProperty().addListener(new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				textVitYVaisseau.setText("    * " + newValue +" km/h");
-			}
-		});
-
-		if(e != null) {
-			labelPlanete =  new Label("Informations " + e.getNom() + " :");
-			labelVitXPlanete = new Label("Vitesse en x : ");
-			labelVitYPlanete = new Label("Vitesse en y : ");
-			textVitXPlanete = new TextArea("    * " + e.getVitesse().getx()+"");
-			textVitYPlanete = new TextArea("    * " + e.getVitesse().gety()+"");
-			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
-			textForceSurPlanete = new TextArea("    * "/* + e.getForceNorm(etoile)*/);
-			
-			e.getVitesse().getXProperty().addListener(new ChangeListener<Number>() {
-
-				@Override
-				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-					//textVitXPlanete.setText("    * " + newValue +" km/h");
-					System.out.println("wouaw update du x de la planete !");
-				}
-			});
-			
-			e.getVitesse().getYProperty().addListener(new ChangeListener<Number>() {
-
-				@Override
-				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-					//textVitYPlanete.setText("    * " + newValue +" km/h");
-					System.out.println("oua update du y cette fois ci de la planete !");
-				}
-			});
-			
-		}else {
-			labelPlanete =  new Label("Informations ... :");
-			labelVitXPlanete = new Label("Vitesse en x : ");
-			labelVitYPlanete = new Label("Vitesse en y : ");
-			textVitXPlanete = new TextArea("    * 0.0 km/h");
-			textVitYPlanete = new TextArea("    * 0.0 km/h");
-			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
-			textForceSurPlanete = new TextArea("    * ");
-		}
-
 		labelVaisseau.setStyle("-fx-font-weight: bold;");
 		labelPlanete.setStyle("-fx-font-weight: bold;");
-		textVitXVaisseau.setEditable(false);
-
-		textVitYVaisseau.setEditable(false);
-		textForceSurVaiseau.setEditable(false);
-		textVitXPlanete.setEditable(false);
-		textVitYPlanete.setEditable(false);
-		textForceSurPlanete.setEditable(false);
-
-		vBoxInfoVaiseau = new VBox();
-		vBoxInfoPlanete= new VBox();
-		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, labelVitXVaisseau, textVitXVaisseau, labelVitYVaisseau, textVitYVaisseau, labelForceSurVaiseau, textForceSurVaiseau);
-		vBoxInfoPlanete.getChildren().addAll(labelPlanete, labelVitXPlanete, textVitXPlanete, labelVitYPlanete, textVitYPlanete, labelForceSurPlanete, textForceSurPlanete);
 
 		this.renderInfo = new VBox();
 		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
 		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
 		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
+		this.renderInfo.setStyle("-fx-background-color: #00004C;");
+		setInsetsAuto(vBoxInfoVaiseau, listlabelVaisseau);
+		//VBox.setMargin(labelVaisseau, new Insets(5));
+		//VBox.setMargin(labelForceSurVaiseau, new Insets(20));
+		//VBox.setMargin(labelVaisseau, new Insets(10));
+
+
+	}
+	
+	
+	public static void setInsetsAuto(VBox vb, List<Label> list) {
+		for(Label objet : list) {
+			VBox.setMargin(objet, new Insets(5,5,5,5));
+		}
+	}
+	
+	
+	public void creerStyle(List<Label> listlabelVaisseau, List<Label> listlabelPlanete) {
+		labelVaisseau.setTextFill(Color.web("#0076a3"));
+		labelVaisseau.setMinSize(50, 50);
+		labelVaisseau.setFont(new Font("Arial", 30));
+		//vBoxInfoVaiseau.getChildren(labelVaisseau.setOpaqueInsets(new Insets(5));
+		applyStyle("#0076a3", listlabelVaisseau, false);
 		
+
+	}
+
+
+	public static void applyStyle(String style, List<Label> list, boolean instance) {
+		for(Label objet : list) {
+			if(instance) objet.setStyle(style);
+			else objet.setTextFill(Color.web(style));
+		}
+	}
+
+
+
+	public List<Label> infoVaisseau(Vaisseau v) {
 		
+		this.vaisseau = v;
+		labelVaisseau=  new Label("Informations vaisseau :");
+		labelVitXVaisseau = new Label("Vitesse en x :");
+		labelVitYVaisseau = new Label("Vitesse en y :");
+		labelVitXVaisseauval = new Label("    * " + v.getVitesse().getx()+" km/h");
+		labelVitYVaisseauval = new Label("    * " + v.getVitesse().gety()+" km/h");
+		labelForceSurVaiseau = new Label("Force subi par le vaisseau :");
+//<<<<<<< HEAD
+//		textForceSurVaiseau = new TextArea("    * "/* + v.getForceNorm(etoile)*/);
+//		
+//		v.getVitesse().getXProperty().addListener(new ChangeListener<Number>() {
+//
+//			@Override
+//			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//				textVitXVaisseau.setText("    * " + newValue +" km/h");
+//			}
+//		});
+//		
+//		v.getVitesse().getYProperty().addListener(new ChangeListener<Number>() {
+//
+//			@Override
+//			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//				textVitYVaisseau.setText("    * " + newValue +" km/h");
+//			}
+//		});
+//=======
+		labelForceSurVaiseauval = new Label("    * "/* + v.getForceNorm(etoile)*/);
+		vBoxInfoVaiseau = new VBox();
+		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, labelVitXVaisseau, labelVitXVaisseauval, labelVitYVaisseau, labelVitYVaisseauval, labelForceSurVaiseau, labelForceSurVaiseauval);
 		
-		this.renderInfo.setStyle("-fx-background-color: lightblue;");
+		List<Label> labelvaisseau = new ArrayList<>();
+		labelvaisseau.add(labelForceSurVaiseau);
+		labelvaisseau.add(labelForceSurVaiseauval);
+		labelvaisseau.add(labelVaisseau);
+		labelvaisseau.add(labelVitXVaisseau);
+		labelvaisseau.add(labelVitXVaisseauval);
+		labelvaisseau.add(labelVitYVaisseau);
+		labelvaisseau.add(labelVitYVaisseauval);
+
+		return labelvaisseau;
+	}
+//>>>>>>> 6a6239daebcf2c6eba4a700a372639d8c2fa063e
+
+	
+	public List<Label> infoPlanete(Entity e){
+		if(e != null) {
+			labelPlanete =  new Label("Informations " + e.getNom() + " :");
+			labelVitXPlanete = new Label("Vitesse en x : ");
+			labelVitYPlanete = new Label("Vitesse en y : ");
+			labelVitXPlaneteval = new Label("    * " + e.getVitesse().getx()+"");
+			labelVitYPlaneteval = new Label("    * " + e.getVitesse().gety()+"");
+			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
+//<<<<<<< HEAD
+//			textForceSurPlanete = new TextArea("    * "/* + e.getForceNorm(etoile)*/);
+//			
+//			e.getVitesse().getXProperty().addListener(new ChangeListener<Number>() {
+//
+//				@Override
+//				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//					//textVitXPlanete.setText("    * " + newValue +" km/h");
+//					System.out.println("wouaw update du x de la planete !");
+//				}
+//			});
+//			
+//			e.getVitesse().getYProperty().addListener(new ChangeListener<Number>() {
+//
+//				@Override
+//				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//					//textVitYPlanete.setText("    * " + newValue +" km/h");
+//					System.out.println("oua update du y cette fois ci de la planete !");
+//				}
+//			});
+//			
+//=======
+			labelForceSurPlaneteval = new Label("    * "/* + e.getForceNorm(etoile)*/);
+//>>>>>>> 6a6239daebcf2c6eba4a700a372639d8c2fa063e
+		}else {
+			labelPlanete =  new Label("Informations ... :");
+			labelVitXPlanete = new Label("Vitesse en x : ");
+			labelVitYPlanete = new Label("Vitesse en y : ");
+			labelVitXPlaneteval = new Label("    * 0.0 km/h");
+			labelVitYPlaneteval = new Label("    * 0.0 km/h");
+			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
+			labelForceSurPlaneteval = new Label("    * ");
+		}
+		vBoxInfoPlanete= new VBox();
+		vBoxInfoPlanete.getChildren().addAll(labelPlanete, labelVitXPlanete, labelVitXPlaneteval, labelVitYPlanete, labelVitYPlaneteval, labelForceSurPlanete, labelForceSurPlaneteval);
+
+		List<Label> labelPlanete = new ArrayList<>();
+		labelPlanete.add(labelForceSurPlanete);
+		labelPlanete.add(labelForceSurPlaneteval);
+		labelPlanete.add(labelVitXPlanete);
+		labelPlanete.add(labelVitXPlaneteval);
+		labelPlanete.add(labelVitYPlanete);
+		labelPlanete.add(labelVitYPlaneteval);
+		labelPlanete.add(labelForceSurPlanete);
+		labelPlanete.add(labelForceSurPlaneteval);
+		
+		return labelPlanete;
 	}
 
 	/**
@@ -278,7 +345,7 @@ public class RenderSystem implements Observer {
 		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
 		Timer t = new Timer();
-		
+
 		t.scheduleAtFixedRate(new Task(),0,1);
 
 		this.renderSystem.getChildren().add(background);
@@ -299,7 +366,7 @@ public class RenderSystem implements Observer {
 		renderSystem.getChildren().add(background);
 		renderSystem.getChildren().addAll(shapes);
 	}
-	
+
 	private class Task extends TimerTask{
 
 		@Override
@@ -307,15 +374,15 @@ public class RenderSystem implements Observer {
 			univers.majAcceleration();
 			univers.majVitesse();
 			univers.majPosition();
-			
+
 			Platform.runLater(() ->{
 				putPlaneteOnSysteme(univers.getEntities());
 				majSystem(univers.getEntities());
-				//majInfo();
+				//update();
 			});
-			
+
 		}
-		
+
 	}
 
 	public Entity getEntityTargeted(MouseEvent e) {
@@ -332,25 +399,21 @@ public class RenderSystem implements Observer {
 	public void setMouseEventOnSysteme() {
 		this.renderSystem.setOnMouseClicked(e -> {	
 				this.entitytargeted = this.getEntityTargeted(e);
-				this.majInfo();
+				this.update();
 		});
 		this.renderSystem.setOnScroll(e -> {
 			System.out.println("X : "+e.getSceneX() + ", Y : "+ e.getSceneY());
 		});
 	}
 
-	private void majInfo() {
-		textVitXVaisseau.setText("    * " + this.vaisseau.getVitesse().getx()+" km/h");
-		textVitYVaisseau.setText("    * " + this.vaisseau.getVitesse().gety()+" km/h");
-		textForceSurVaiseau = new TextArea(/*v.getForcesOnEntity(etoile)*/"    * wow trop fort");
-		
+	public void update() {
+		labelVitXVaisseauval.setText("    * " + this.vaisseau.getVitesse().getx()+" km/h");
+		labelVitYVaisseauval.setText("    * " + this.vaisseau.getVitesse().gety()+" km/h");
+
 		if(this.entitytargeted != null) {
-			//System.out.println("Force : " + this.entitytargeted.getForceNorm(this.etoile));
-			// TODO : trouver pk c'est null
 			labelPlanete.setText("Informations " + this.entitytargeted.getNom() + " :");
-			textVitXPlanete.setText("    * " + this.entitytargeted.getVitesse().getx()+"");
-			textVitYPlanete.setText("    * " + this.entitytargeted.getVitesse().gety()+"");
-			textForceSurPlanete.setText("    * "/* + this.entitytargeted.getForceNorm(etoile)*/);
+			labelVitXPlaneteval.setText("    * " + this.entitytargeted.getVitesse().getx()+"");
+			labelVitYPlaneteval.setText("    * " + this.entitytargeted.getVitesse().gety()+"");
 		}
 	}
 
