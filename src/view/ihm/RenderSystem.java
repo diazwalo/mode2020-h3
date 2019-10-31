@@ -7,18 +7,11 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javafx.application.Platform;
-<<<<<<< HEAD
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-=======
-import javafx.beans.property.ObjectProperty;
->>>>>>> 3a972b224f5849f91ecf1cc3d217cf166837526f
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -32,7 +25,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import model.entity.*;
+import model.entity.Entity;
+import model.entity.ObjetFixe;
+import model.entity.ObjetSimule;
+import model.entity.Univers;
+import model.entity.Vaisseau;
 import model.movement.Vecteur;
 
 /**
@@ -390,15 +387,9 @@ public class RenderSystem implements Observer {
 			univers.majPosition();
 
 			Platform.runLater(() ->{
-				putPlaneteOnSysteme(univers.getEntities());
-				majSystem(univers.getEntities());
-<<<<<<< HEAD
-				//update();
-=======
 				placerPoint(univers.getEntities());
 				renderSystem.getChildren().addAll(suiviPoints);
-				//majInfo();
->>>>>>> 3a972b224f5849f91ecf1cc3d217cf166837526f
+				//update();
 			});
 
 		}
