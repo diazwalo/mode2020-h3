@@ -9,28 +9,40 @@ public class Vaisseau extends Entity {
 	private double pprincipal;
 	private double pretro;
 	private double angle;
-	
+	private boolean pprincipalIsOn;
+	private boolean pretroIsOn;
+
 	private Vaisseau(double masse, double rayon, Vecteur position, Vecteur vitesse, Image sprite, String nom, Color c){
 		super(masse, rayon, position, vitesse, sprite, nom,c);
-		angle = Math.atan(vitesse.getx()/vitesse.gety());
+		angle = 0;
+		pprincipalIsOn = false;
+		pretroIsOn = false;
 	}
 
-	private static Vaisseau INSTANCE = new Vaisseau(10, 2, new Vecteur(2, 2), new Vecteur(1, 1), null, "toto", null);
+	private static Vaisseau INSTANCE = new Vaisseau(10,0.2, new Vecteur(2, 2), new Vecteur(1, 1), null, "toto", null);
 
 	public static Vaisseau getInstance(){
 		return INSTANCE;
 	}
-	
+
 	public void avancer() {
-		this.setAcceleration(new Vecteur (this.getAcceleration().getx()+(pprincipal*Math.cos(angle)),
-										  this.getAcceleration().gety()+(pprincipal*Math.sin(angle))));
+		this.setAcceleration(new Vecteur (this.getAcceleration().getx()+(pprincipal*Math.cos(Math.toRadians(angle))),
+				this.getAcceleration().gety()+(pprincipal*Math.sin(Math.toRadians(angle)))));
 	}
 
 	public void reculer() {
-		this.setAcceleration(new Vecteur (this.getAcceleration().getx()+(pretro*Math.cos(angle-180)),
-										  this.getAcceleration().gety()+(pretro*Math.sin(angle-180))));
+		this.setAcceleration(new Vecteur (this.getAcceleration().getx()+(pretro*Math.cos(Math.toRadians(angle-180))),
+				this.getAcceleration().gety()+(pretro*Math.sin(Math.toRadians(angle-180)))));
 	}
 	
+	public void gauche() {
+		setAngle(angle-1);
+	}
+	
+	public void droite() {
+		setAngle(angle+1);
+	}
+
 	public double getPretro() {
 		return pretro;
 	}
@@ -46,4 +58,37 @@ public class Vaisseau extends Entity {
 	public void setPprincipal(double pprincipal) {
 		this.pprincipal = pprincipal;
 	}
+
+	public void setPprincipalIsOn(boolean state) {
+		pprincipalIsOn = state;
+	}
+
+	public void setPretroIsOn(boolean state) {
+		pretroIsOn = state;
+	}
+
+	public double getAngle() {
+		return angle;
+	}
+
+	public void setAngle(double newAngle) {
+		if(newAngle > 360)
+			angle = newAngle % 360;
+		else
+			angle = newAngle;
+	}
+
+	public void update() {
+		if(pprincipalIsOn)
+			avancer();
+		if(pretroIsOn)
+			reculer();
+	}
+
+	@Override
+	public void createAcceleration(Univers others) {
+		super.createAcceleration(others);
+		update();
+	}
+
 }

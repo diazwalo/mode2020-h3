@@ -43,7 +43,8 @@ public class Univers {
 	}
 	
 	public void majAcceleration() {
-		for(Entity e : entities) {		
+		for(Entity e : entities) {
+			
 			e.createAcceleration(getUnivers());
 		}
 	}
