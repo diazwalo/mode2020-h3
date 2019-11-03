@@ -12,6 +12,10 @@ DESSINGUÉ Clément :
 - (futur) Implémentation des tests
 
 FORESTAL Virgil :
+- Implémentation de l'IHM.
+- Implémentation de l'Echelle.
+- Implementation de certain évenements.
+- Implémentation des infos sur les planetes / le vaisseau.
 
 GAMBIER Louis 
 - Affichage des informations sur l'interface
