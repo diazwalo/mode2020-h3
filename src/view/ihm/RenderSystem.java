@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -65,6 +66,13 @@ public class RenderSystem implements Observer {
 
 	private VBox vBoxInfoVaiseau;
 	private VBox vBoxInfoPlanete;
+	
+	private HBox hBoxVitXVaisseau;
+	private HBox hBoxVitYVaisseau;
+	private HBox hBoxForceVaisseau;
+	private HBox hBoxVitXPlanete;
+	private HBox hBoxVitYPlanete;
+	private HBox hBoxForcePlanete;
 
 	private Label labelVaisseau;
 	private Label labelVitXVaisseau;
@@ -200,20 +208,14 @@ public class RenderSystem implements Observer {
 	public void createRenderInformation() {
 		List<Label> listlabelVaisseau = infoVaisseau();
 		List<Label> listlabelPlanete = infoPlanete();
-		creerStyle(listlabelVaisseau, listlabelPlanete);
-
-		labelVaisseau.setStyle("-fx-font-weight: bold;");
-		labelPlanete.setStyle("-fx-font-weight: bold;");
 
 		this.renderInfo = new VBox();
 		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
 		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
 		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
-		this.renderInfo.setStyle("-fx-background-color: #00004C;");
 		setInsetsAuto(vBoxInfoVaiseau, listlabelVaisseau);
-		//VBox.setMargin(labelVaisseau, new Insets(5));
-		//VBox.setMargin(labelForceSurVaiseau, new Insets(20));
-		//VBox.setMargin(labelVaisseau, new Insets(10));
+		creerStyle();
+
 
 
 	}
@@ -226,53 +228,79 @@ public class RenderSystem implements Observer {
 	}
 
 
-	public void creerStyle(List<Label> listlabelVaisseau, List<Label> listlabelPlanete) {
-		labelVaisseau.setTextFill(Color.web("#0076a3"));
-		labelVaisseau.setMinSize(50, 50);
-		labelVaisseau.setFont(new Font("Arial", 30));
-		//vBoxInfoVaiseau.getChildren(labelVaisseau.setOpaqueInsets(new Insets(5));
-		applyStyle("#0076a3", listlabelVaisseau, false);
+	public void creerStyle() {
+		List<Node> hbox = new ArrayList<>();
+		hbox.add(hBoxForcePlanete);
+		hbox.add(hBoxForceVaisseau);
+		hbox.add(hBoxVitXPlanete);
+		hbox.add(hBoxVitXVaisseau);
+		hbox.add(hBoxVitYPlanete);
+		hbox.add(hBoxVitYVaisseau);
+		renderInfo.setStyle("-fx-font-weight: bold;"
+				+ "-fx-font-size : 15px;"
+				+ "-fx-padding: 15px;"
+				+ "-fx-background-color: #00134d;");
+		applyStyle("-fx-padding :20px;", hbox);
+		labelVaisseau.setMinWidth(vBoxInfoVaiseau.getMaxWidth());
+		labelVaisseau.setStyle("-fx-font-family: \"arial\";"
+				+ "-fx-font-size: 20px;"
+				+ "-fx-color: white;"
+				+ "-fx-display: inline;"
+				+ "-fx-text-align: center;"
+				+ "-fx-border-width: 3px;"
+				+ "-fx-border-style: solid;"
+				+ "-fx-border-color: #002080;"
+				+ "-fx-border-radius:15px;"
+				+ "-fx-padding: 10px;"
+				+ "");
+		labelPlanete.setStyle(labelVaisseau.getStyle());
 
 
 	}
 
 
-	public static void applyStyle(String style, List<Label> list, boolean instance) {
-		for(Label objet : list) {
-			if(instance) objet.setStyle(style);
-			else objet.setTextFill(Color.web(style));
+	public static void applyStyle(String style, List<Node> list) {
+		for(Node objet : list) {
+			objet.setStyle(style);
 		}
 	}
-
-
+	
+	public static void applyStyleOnLabel(Color style, List<Label> list) {
+		for(Label objet : list) {
+			objet.setTextFill(style);
+		}
+	}
 
 	public List<Label> infoVaisseau() {
 		this.vaisseau = Vaisseau.getInstance();
 		labelVaisseau=  new Label("Informations vaisseau :");
 		labelVitXVaisseau = new Label("Vitesse en x :");
 		labelVitYVaisseau = new Label("Vitesse en y :");
-		labelVitXVaisseauval = new Label("    * " + vaisseau.getVitesse().getx()+" km/h");
-		labelVitYVaisseauval = new Label("    * " + vaisseau.getVitesse().gety()+" km/h");
+		labelVitXVaisseauval = new Label("     " + vaisseau.getVitesse().getx()+" km/h");
+		labelVitYVaisseauval = new Label("     " + vaisseau.getVitesse().gety()+" km/h");
 		labelForceSurVaiseau = new Label("Force subi par le vaisseau :");
-		//		<<<<<<< HEAD
-		labelForceSurVaiseau = new Label("    * "/* + v.getForceNorm(etoile)*/);
+		labelForceSurVaiseauval = new Label("     "/* + v.getForceNorm(etoile)*/);
 
 		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
 			Platform.runLater(() -> {
-				labelVitXVaisseauval.setText("    * " + nnew +" km/h");
+				labelVitXVaisseauval.setText("     " + nnew +" km/h");
 			});
 		});
 
 		vaisseau.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
 			Platform.runLater(() -> {
-				labelVitYVaisseauval.setText("    * " + nnew +" km/h");
+				labelVitYVaisseauval.setText("     " + nnew +" km/h");
 			});
 		});
 		//		=======
-		labelForceSurVaiseauval = new Label("    * "/* + v.getForceNorm(etoile)*/);
+		labelForceSurVaiseauval = new Label("     "/* + v.getForceNorm(etoile)*/);
+		hBoxVitXVaisseau=new HBox(labelVitXVaisseau, labelVitXVaisseauval);
+		hBoxVitYVaisseau= new HBox(labelVitYVaisseau, labelVitYVaisseauval);
+		hBoxForceVaisseau=new HBox(labelForceSurVaiseau,labelForceSurVaiseauval);
+		
 		vBoxInfoVaiseau = new VBox();
-		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, labelVitXVaisseau, labelVitXVaisseauval, labelVitYVaisseau, labelVitYVaisseauval, labelForceSurVaiseau, labelForceSurVaiseauval);
-
+		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau);
+		
 		List<Label> labelvaisseau = new ArrayList<>();
 		labelvaisseau.add(labelForceSurVaiseau);
 		labelvaisseau.add(labelForceSurVaiseauval);
@@ -281,6 +309,7 @@ public class RenderSystem implements Observer {
 		labelvaisseau.add(labelVitXVaisseauval);
 		labelvaisseau.add(labelVitYVaisseau);
 		labelvaisseau.add(labelVitYVaisseauval);
+		applyStyleOnLabel(Color.WHITE, labelvaisseau);
 
 		return labelvaisseau;
 	}
@@ -292,37 +321,37 @@ public class RenderSystem implements Observer {
 			labelPlanete =  new Label("Informations " + entitytargeted.getNom() + " :");
 			labelVitXPlanete = new Label("Vitesse en x : ");
 			labelVitYPlanete = new Label("Vitesse en y : ");
-			labelVitXPlaneteval = new Label("    * " + entitytargeted.getVitesse().getx()+"");
-			labelVitYPlaneteval = new Label("    * " + entitytargeted.getVitesse().gety()+"");
-			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
-			//<<<<<<< HEAD
-
-			//=======
-			labelForceSurPlaneteval = new Label("    * "/* + e.getForceNorm(etoile)*/);
-			//>>>>>>> 6a6239daebcf2c6eba4a700a372639d8c2fa063e
+			labelVitXPlaneteval = new Label("     " + entitytargeted.getVitesse().getx()+"");
+			labelVitYPlaneteval = new Label("     " + entitytargeted.getVitesse().gety()+"");
+			labelForceSurPlanete = new Label("Attraction de la planète :");
+			labelForceSurPlaneteval = new Label("     "/* + e.getForceNorm(etoile)*/);
 		}else {
 			labelPlanete =  new Label("Informations ... :");
 			labelVitXPlanete = new Label("Vitesse en x : ");
 			labelVitYPlanete = new Label("Vitesse en y : ");
-			labelVitXPlaneteval = new Label("    * 0.0 km/h");
-			labelVitYPlaneteval = new Label("    * 0.0 km/h");
-			labelForceSurPlanete = new Label("Force subi par le vaisseau :");
-			labelForceSurPlaneteval = new Label("    * ");
+			labelVitXPlaneteval = new Label("     0.0 km/h");
+			labelVitYPlaneteval = new Label("     0.0 km/h");
+			labelForceSurPlanete = new Label("Attraction de la planète :");
+			labelForceSurPlaneteval = new Label("     ");
 		}
+		hBoxVitXPlanete=new HBox(labelVitXPlanete, labelVitXPlaneteval);
+		hBoxVitYPlanete= new HBox(labelVitYPlanete, labelVitYPlaneteval);
+		hBoxForcePlanete=new HBox(labelForceSurPlanete,labelForceSurPlaneteval);
 		vBoxInfoPlanete= new VBox();
-		vBoxInfoPlanete.getChildren().addAll(labelPlanete, labelVitXPlanete, labelVitXPlaneteval, labelVitYPlanete, labelVitYPlaneteval, labelForceSurPlanete, labelForceSurPlaneteval);
+		vBoxInfoPlanete.getChildren().addAll(labelPlanete, hBoxVitXPlanete, hBoxVitYPlanete, hBoxForcePlanete);
+		List<Label> labelplanete = new ArrayList<>();
+		labelplanete.add(labelPlanete);
+		labelplanete.add(labelForceSurPlanete);
+		labelplanete.add(labelForceSurPlaneteval);
+		labelplanete.add(labelVitXPlanete);
+		labelplanete.add(labelVitXPlaneteval);
+		labelplanete.add(labelVitYPlanete);
+		labelplanete.add(labelVitYPlaneteval);
+		labelplanete.add(labelForceSurPlanete);
+		labelplanete.add(labelForceSurPlaneteval);
+		applyStyleOnLabel(Color.WHITE, labelplanete);
 
-		List<Label> labelPlanete = new ArrayList<>();
-		labelPlanete.add(labelForceSurPlanete);
-		labelPlanete.add(labelForceSurPlaneteval);
-		labelPlanete.add(labelVitXPlanete);
-		labelPlanete.add(labelVitXPlaneteval);
-		labelPlanete.add(labelVitYPlanete);
-		labelPlanete.add(labelVitYPlaneteval);
-		labelPlanete.add(labelForceSurPlanete);
-		labelPlanete.add(labelForceSurPlaneteval);
-
-		return labelPlanete;
+		return labelplanete;
 	}
 
 	/**
@@ -350,6 +379,7 @@ public class RenderSystem implements Observer {
 		renderSystem.setFocusTraversable(true);
 		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
 			KeyCode key = e.getCode();
+			//System.out.println(key+"");
 			if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
 				boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
 				switch(key) {
