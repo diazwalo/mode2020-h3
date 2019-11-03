@@ -13,7 +13,12 @@ DESSINGUÉ Clément :
 
 FORESTAL Virgil :
 
-GAMBIER Louis :
+GAMBIER Louis 
+- Affichage des informations sur l'interface
+- Application de styles sur l'interface
+- Factorisation du code
+- (futur) affichage dynamique des information des objet du systeme
+
 
 RANSON Florian :
 
