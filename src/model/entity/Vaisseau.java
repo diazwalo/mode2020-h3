@@ -36,11 +36,11 @@ public class Vaisseau extends Entity {
 	}
 	
 	public void gauche() {
-		setAngle(angle-1);
+		setAngle(angle-2);
 	}
 	
 	public void droite() {
-		setAngle(angle+1);
+		setAngle(angle+2);
 	}
 
 	public double getPretro() {
