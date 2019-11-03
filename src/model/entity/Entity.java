@@ -45,6 +45,20 @@ public abstract class Entity extends Observable {
 	public Vecteur getMOmega(Entity other) {
 		return new Vecteur(other.getPosition().getx()-this.position.getx(), other.position.gety()-this.position.gety());
 	}
+
+	public double forceForEachEntity(Entity other) {
+		return (Vecteur.getG()*this.getMasse()*other.getMasse()) / (Math.pow(getMOmega(other).getNorme(), 2));
+	}
+
+	public double getForce(Univers others) {
+		double normForce = 0;
+		for(Entity other : others.getEntities()) {
+			if(! this.equals(other))
+				normForce += forceForEachEntity(other);
+		}
+		return normForce;
+	}
+
 	public Vecteur createAccelerationForEachEntity(Entity other) {
 		return new Vecteur((Vecteur.getG()*this.getMasse()*other.getMasse()/(Math.pow(getMOmega(other).getNorme(), 3))*getMOmega(other).getx())/this.getMasse(),
 				(Vecteur.getG()*this.getMasse()*other.getMasse()/(Math.pow(getMOmega(other).getNorme(), 3))*getMOmega(other).gety())/this.getMasse());

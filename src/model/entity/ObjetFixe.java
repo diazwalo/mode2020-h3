@@ -1,8 +1,7 @@
 package model.entity;
 
-import javafx.scene.paint.Color;
-
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import model.movement.Vecteur;
 
 public class ObjetFixe extends Entity {
