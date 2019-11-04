@@ -104,7 +104,7 @@ public class RenderSystem implements Observer {
 	private Button quitter;
 	private boolean etat;
 	private Timer t;
-	
+
 	public RenderSystem(double rayon, Univers univers) {
 		etat=false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -266,7 +266,7 @@ public class RenderSystem implements Observer {
 		listlabelvaisseauval.add(labelForceSurVaiseauval);
 		listlabelvaisseauval.add(labelForceSurVaiseauval);
 		listlabelvaisseauval.add(labelMasseVaisseauval);
-		
+
 		listlabelplaneteval.add(labelForceSurPlaneteval);
 		listlabelplaneteval.add(labelMassePlaneteval);
 		listlabelplaneteval.add(labelVitYPlaneteval);
@@ -323,7 +323,8 @@ public class RenderSystem implements Observer {
 		String styleForVal = "-fx-font-weight: normal;";
 		setStyleOnLabel(styleForVal, listlabelvaisseauval);
 		setStyleOnLabel(styleForVal, listlabelplaneteval);
-		pause.setStyle("-fx-background-color : #002080;");
+		pause.setStyle("-fx-background-color : #002080;"
+				+ "-fx-border: solid;");
 		pause.setTextFill(Color.WHITE);
 		quitter.setStyle(pause.getStyle());
 		quitter.setTextFill(Color.WHITE);
@@ -341,7 +342,7 @@ public class RenderSystem implements Observer {
 			objet.setTextFill(style);
 		}
 	}
-	
+
 	public static void setStyleOnLabel(String style, List<Label> list) {
 		for(Label objet : list) {
 			objet.setStyle(style);
@@ -463,7 +464,7 @@ public class RenderSystem implements Observer {
 
 		return labelplanete;
 	}
-	
+
 	/**
 	 * Renvoie les listes des boutons, c'est a dire des differentes fonctionnalitées
 	 * @return
@@ -471,31 +472,31 @@ public class RenderSystem implements Observer {
 	public List<Button> fonctionnalite(){
 		Label labelfonction =  new Label("Utilitaires :");
 		List<Button> res = new ArrayList<>();
-		
+
 		Button zoom = zoom();
-		
+
 		vboxFonctionnalite = new VBox();
 		vboxFonctionnalite.getChildren().add(labelfonction);
 		vboxFonctionnalite.getChildren().add(zoom);
 
-		
+
 		res.add(zoom());
-		
+
 		return res;
 	}
-	
+
 	/**
 	 * Renvoie le bouton permettant le zoom
 	 * @return
 	 */
 	public Button zoom() {
 		Button button = new Button("Zoom");
-		
+
 		button.setOnMouseClicked(event ->{
 			this.scale = new Scale(univers , this.getHeightWindow() + 500);
 		});
-		
-		
+
+
 		return button;
 	}
 
@@ -512,25 +513,27 @@ public class RenderSystem implements Observer {
 
 		t = new Timer();
 		etat = false;
-		pause.setOnMouseClicked(e ->{
-				if(!etat) {
-					t.cancel();
-					pause.setText("Resume");
-					etat=true;
-				}else {
-					t = new Timer();
-					t.scheduleAtFixedRate(new Task(),0,1);
-					pause.setText("Pause");
-					etat=false;
+		t.scheduleAtFixedRate(new Task(),0,1);
 
-				}
+		pause.setOnMouseClicked(e ->{
+			if(!etat) {
+				t.cancel();
+				pause.setText("Resume");
+				etat=true;
+			}else {
+				t.purge();
+				t = new Timer();
+				t.scheduleAtFixedRate(new Task(),0,1);
+				pause.setText("Pause");
+				etat=false;
+
+			}
 		});
 		quitter.setOnMouseClicked(e ->{
 			System.exit(1);
 		});
 
-		t.scheduleAtFixedRate(new Task(),0,1);
-		
+
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
 		this.setMouseEventOnSysteme();
@@ -543,7 +546,7 @@ public class RenderSystem implements Observer {
 			KeyCode key = e.getCode();
 			String osName = System.getProperty("os.name");
 			System.out.println(osName);
-			/*if(osName.contentEquals("Mac OS X")) {
+			if(osName.contentEquals("Mac OS X")) {
 				if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
 					System.out.println(key);
 					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
@@ -565,41 +568,41 @@ public class RenderSystem implements Observer {
 					}
 
 				}
-			}else {*/
-			if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
-				boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-				
-				switch(key) {
-				case Z :
-					vaisseau.setPprincipalIsOn(state);
-					vaisseauAvance = true;
-					break;
-				case S :
-					vaisseau.setPretroIsOn(state);
-					vaisseauRecule = true;
-					break;
-				case Q :
-					vaisseau.gauche();
-					break;
-				case D :
-					vaisseau.droite();
-					break;
-				default:
-					break;
-				}
-				
-				if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+			}else {
+				if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
+					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
+
 					switch(key) {
 					case Z :
-						vaisseauAvance = false;
+						vaisseau.setPprincipalIsOn(state);
+						vaisseauAvance = true;
 						break;
 					case S :
-						vaisseauRecule = false;
+						vaisseau.setPretroIsOn(state);
+						vaisseauRecule = true;
 						break;
+					case Q :
+						vaisseau.gauche();
+						break;
+					case D :
+						vaisseau.droite();
+						break;
+					default:
+						break;
+					}
+
+					if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+						switch(key) {
+						case Z :
+							vaisseauAvance = false;
+							break;
+						case S :
+							vaisseauRecule = false;
+							break;
+						}
 					}
 				}
 			}
-			//}
 		});
 	}
 
@@ -634,7 +637,7 @@ public class RenderSystem implements Observer {
 			univers.majPosition();
 			univers.majForce();
 			suiviPoints = new ArrayList<Circle>();
-			
+
 			Platform.runLater(() ->{
 				putPlaneteOnSysteme(univers.getEntities());
 				animate(vaisseauAvance, vaisseauRecule);
