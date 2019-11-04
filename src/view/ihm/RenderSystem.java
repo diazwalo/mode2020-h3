@@ -32,7 +32,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import model.entity.Entity;
-import model.entity.ObjetFixe;
 import model.entity.ObjetSimule;
 import model.entity.Univers;
 import model.entity.Vaisseau;
@@ -55,7 +54,6 @@ public class RenderSystem implements Observer {
 	private List<Shape> shapes;
 	private List<Circle> suiviPoints;
 	private Univers univers;
-	private ObjetFixe etoile;
 	private Shape background;
 	private Scale scale;
 	private Entity entitytargeted;
@@ -65,7 +63,7 @@ public class RenderSystem implements Observer {
 	private boolean vaisseauAvance;
 	private boolean vaisseauRecule;
 
-	private VBox vBoxInfoVaiseau;
+	private VBox vBoxInfoVaisseau;
 	private VBox vBoxInfoPlanete;
 	private VBox vboxFonctionnalite;
 	private HBox hBoxVitXVaisseau;
@@ -83,8 +81,8 @@ public class RenderSystem implements Observer {
 	private Label labelVitYVaisseau;
 	private Label labelVitXVaisseauval;
 	private Label labelVitYVaisseauval;
-	private Label labelForceSurVaiseau;
-	private Label labelForceSurVaiseauval;
+	private Label labelForceSurVaisseau;
+	private Label labelForceSurVaisseauval;
 	private Label labelMasseVaisseau;
 	private Label labelMasseVaisseauval;
 
@@ -203,28 +201,30 @@ public class RenderSystem implements Observer {
 	private void animate(boolean vaisseauAvance, boolean vaisseauRecule) {
 		Shape avance;
 		Shape recule;
+		Circle clignoGauche;
+		Circle clignoDroit;
 		if(vaisseauAvance) {
 			avance = new Polygon(new double[] {
-					-0.5,1,
-					0.5,0,
-					-0.5,-1
+					-0.5,0.75,
+					-1,0,
+					-0.5,-0.75
 			});
 
-			avance.getTransforms().add(new Translate(vaisseau.getPosition().getx()-0.5,vaisseau.getPosition().gety()));
+			avance.getTransforms().add(new Translate(vaisseau.getPosition().getx()-1.5,vaisseau.getPosition().gety()));
 			avance.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
-			avance.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
+			avance.getTransforms().add(new Rotate(vaisseau.getAngle()));
 			avance.setFill(Color.YELLOW);
 			this.shapes.add(avance);
 		} if(vaisseauRecule) {
 			recule = new Polygon(new double[] {
-					-0.5,1,
-					1,0,
-					-0.5,-1
+					-0.5,0.75,
+					-1,0,
+					-0.5,-0.75
 			});
 
-			recule.getTransforms().add(new Translate(vaisseau.getPosition().getx(),vaisseau.getPosition().gety()));
+			recule.getTransforms().add(new Translate(vaisseau.getPosition().getx()-1.5,vaisseau.getPosition().gety()));
 			recule.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
-			recule.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
+			recule.getTransforms().add(new Rotate(vaisseau.getAngle()));
 			recule.setFill(Color.RED);
 			this.shapes.add(recule);
 		}
@@ -263,8 +263,8 @@ public class RenderSystem implements Observer {
 
 		listlabelvaisseauval.add(labelVitXVaisseauval);
 		listlabelvaisseauval.add(labelVitYVaisseauval);
-		listlabelvaisseauval.add(labelForceSurVaiseauval);
-		listlabelvaisseauval.add(labelForceSurVaiseauval);
+		listlabelvaisseauval.add(labelForceSurVaisseauval);
+		listlabelvaisseauval.add(labelForceSurVaisseauval);
 		listlabelvaisseauval.add(labelMasseVaisseauval);
 		
 		listlabelplaneteval.add(labelForceSurPlaneteval);
@@ -275,11 +275,11 @@ public class RenderSystem implements Observer {
 		List<Button> listFonction = fonctionnalite();
 
 		this.renderInfo = new VBox();
-		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete, vboxFonctionnalite);
-		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vboxFonctionnalite);
+		this.vBoxInfoVaisseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 		this.vboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
-		setInsetsAuto(vBoxInfoVaiseau, listlabelVaisseau);
+		setInsetsAuto(vBoxInfoVaisseau, listlabelVaisseau);
 		creerStyle();
 
 
@@ -307,7 +307,7 @@ public class RenderSystem implements Observer {
 				+ "-fx-padding: 15px;"
 				+ "-fx-background-color: #00134d;");
 		applyStyle("-fx-padding :20px;", hbox);
-		labelVaisseau.setMinWidth(vBoxInfoVaiseau.getMaxWidth());
+		labelVaisseau.setMinWidth(vBoxInfoVaisseau.getMaxWidth());
 		labelVaisseau.setStyle("-fx-font-family: \"arial\";"
 				+ "-fx-font-size: 20px;"
 				+ "-fx-color: white;"
@@ -358,8 +358,8 @@ public class RenderSystem implements Observer {
 		labelVitYVaisseau = new Label("Vitesse en y :");
 		labelVitXVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().getx()) + " m/s");
 		labelVitYVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().gety()) + " m/s");
-		labelForceSurVaiseau = new Label("Force subie par le vaisseau :");
-		labelForceSurVaiseauval = new Label("     " + vaisseau.getForce() );
+		labelForceSurVaisseau = new Label("Force subie par le vaisseau :");
+		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce() );
 		labelMasseVaisseau = new Label("Masse du vaisseau :");
 		labelMasseVaisseauval = new Label("     " + format.format(vaisseau.getMasse()) + " kg");
 
@@ -377,16 +377,16 @@ public class RenderSystem implements Observer {
 
 		hBoxVitXVaisseau = new HBox(labelVitXVaisseau, labelVitXVaisseauval);
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
-		hBoxForceVaisseau = new HBox(labelForceSurVaiseau, labelForceSurVaiseauval);
+		hBoxForceVaisseau = new HBox(labelForceSurVaisseau, labelForceSurVaisseauval);
 		hBoxMasseVaisseau = new HBox(labelMasseVaisseau, labelMasseVaisseauval);
 		hBoxBoutton = new HBox(pause, quitter);
 
-		vBoxInfoVaiseau = new VBox();
-		vBoxInfoVaiseau.getChildren().addAll(hBoxBoutton, labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau);
+		vBoxInfoVaisseau = new VBox();
+		vBoxInfoVaisseau.getChildren().addAll(hBoxBoutton, labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau);
 
 		List<Label> listlabelvaisseau = new ArrayList<>();
-		listlabelvaisseau.add(labelForceSurVaiseau);
-		listlabelvaisseau.add(labelForceSurVaiseauval);
+		listlabelvaisseau.add(labelForceSurVaisseau);
+		listlabelvaisseau.add(labelForceSurVaisseauval);
 		listlabelvaisseau.add(labelVaisseau);
 		listlabelvaisseau.add(labelVitXVaisseau);
 		listlabelvaisseau.add(labelVitXVaisseauval);
@@ -426,7 +426,7 @@ public class RenderSystem implements Observer {
 
 			entitytargeted.getForceProperty().addListener((obj,old,nnew) -> {
 				Platform.runLater(() -> {
-					labelForceSurVaiseauval.setText("    * " + format.format(nnew));
+					labelForceSurVaisseauval.setText("    * " + format.format(nnew));
 				});
 			});
 
@@ -596,6 +596,8 @@ public class RenderSystem implements Observer {
 					case S :
 						vaisseauRecule = false;
 						break;
+					default:
+						break;
 					}
 				}
 			}
@@ -679,7 +681,7 @@ public class RenderSystem implements Observer {
 
 				entitytargeted.getForceProperty().addListener((obj,old,nnew) -> {
 					Platform.runLater(() -> {
-						labelForceSurVaiseauval.setText("    * " + format.format(nnew));
+						labelForceSurVaisseauval.setText("    * " + format.format(nnew));
 					});
 				});
 			}
@@ -692,7 +694,7 @@ public class RenderSystem implements Observer {
 	public void update() {
 		labelVitXVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().getx()) +" m/s");
 		labelVitYVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().gety()) +" m/s");
-		labelForceSurVaiseauval.setText("    * " + format.format(this.vaisseau.getForce()));
+		labelForceSurVaisseauval.setText("    * " + format.format(this.vaisseau.getForce()));
 
 		if(this.entitytargeted != null) {
 			labelPlanete.setText("Informations " + this.entitytargeted.getNom() + " :");
