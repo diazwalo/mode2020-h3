@@ -2,6 +2,7 @@ package model.entity;
 
 import java.util.Observable;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.movement.Vecteur;
@@ -16,6 +17,7 @@ import model.movement.Vecteur;
 public abstract class Entity extends Observable {
 	protected double masse;
 	protected double rayon;
+	protected SimpleDoubleProperty force;
 	protected Vecteur position;
 	protected Vecteur vitesse;
 	protected Vecteur acceleration;
@@ -32,6 +34,7 @@ public abstract class Entity extends Observable {
 		this.nom=nom;
 		this.color=c;
 		this.acceleration = new Vecteur(0, 0);
+		force = new SimpleDoubleProperty(0);
 	}
 
 	public Entity(double masse, double rayon, Vecteur position, double vx, double vy, Image sprite, String nom, Color c) {
@@ -50,13 +53,25 @@ public abstract class Entity extends Observable {
 		return (Vecteur.getG()*this.getMasse()*other.getMasse()) / (Math.pow(getMOmega(other).getNorme(), 2));
 	}
 
-	public double getForce(Univers others) {
-		double normForce = 0;
+	public double createForce(Univers others) {
+		double force = 0;
 		for(Entity other : others.getEntities()) {
 			if(! this.equals(other))
-				normForce += forceForEachEntity(other);
+				force += forceForEachEntity(other);
 		}
-		return normForce;
+		return force;
+	}
+	
+	public void setForce(double value) {
+		force.set(value);
+	}
+	
+	public double getForce() {
+		return force.doubleValue();
+	}
+	
+	public SimpleDoubleProperty getForceProperty() {
+		return force;
 	}
 
 	public Vecteur createAccelerationForEachEntity(Entity other) {

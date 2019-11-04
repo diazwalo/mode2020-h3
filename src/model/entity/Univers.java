@@ -60,6 +60,12 @@ public class Univers {
 		}
 	}
 	
+	public void majForce() {
+		for(Entity entity : entities) {
+			entity.setForce(entity.createForce(this));
+		}
+	}
+	
 	public void addObserver(RenderSystem rs) {
 		for(Entity entity : entities) {
 			entity.addObserver(rs);
