@@ -10,7 +10,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Platform;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -67,7 +69,8 @@ public class RenderSystem implements Observer {
 
 	private VBox vBoxInfoVaiseau;
 	private VBox vBoxInfoPlanete;
-	private VBox vboxFonctionnalite;
+	private VBox vBoxFonctionnalite;
+	private HBox hboxFonctionnalite;
 	private HBox hBoxVitXVaisseau;
 	private HBox hBoxVitYVaisseau;
 	private HBox hBoxForceVaisseau;
@@ -78,6 +81,7 @@ public class RenderSystem implements Observer {
 	private HBox hBoxMassePlanete;
 	private HBox hBoxBoutton;
 
+	private Label labelfonction;
 	private Label labelVaisseau;
 	private Label labelVitXVaisseau;
 	private Label labelVitYVaisseau;
@@ -100,8 +104,10 @@ public class RenderSystem implements Observer {
 
 	private List<Label> listlabelvaisseauval;
 	private List<Label> listlabelplaneteval;
+	private List<Node> listButton;
 	private Button pause;
 	private Button quitter;
+	private Button zoom;
 	private boolean etat;
 	private Timer t;
 
@@ -273,13 +279,14 @@ public class RenderSystem implements Observer {
 		listlabelplaneteval.add(labelVitXPlaneteval);
 
 		List<Button> listFonction = fonctionnalite();
-
+		vBoxFonctionnalite = new VBox(); 
+		vBoxFonctionnalite.getChildren().addAll(labelfonction, hboxFonctionnalite);
 		this.renderInfo = new VBox();
-		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete, vboxFonctionnalite);
+		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete, vBoxFonctionnalite);
 		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
-		this.vboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
-		setInsetsAuto(vBoxInfoVaiseau, listlabelVaisseau);
+		this.hboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+
 		creerStyle();
 
 
@@ -320,15 +327,24 @@ public class RenderSystem implements Observer {
 				+ "-fx-padding: 10px;"
 				+ "");
 		labelPlanete.setStyle(labelVaisseau.getStyle());
+		labelfonction.setStyle(labelVaisseau.getStyle());
+		labelfonction.setTextFill(Color.WHITE);
 		String styleForVal = "-fx-font-weight: normal;";
 		setStyleOnLabel(styleForVal, listlabelvaisseauval);
 		setStyleOnLabel(styleForVal, listlabelplaneteval);
 		pause.setStyle("-fx-background-color : #002080;"
 				+ "-fx-border: solid;");
 		pause.setTextFill(Color.WHITE);
-		quitter.setStyle(pause.getStyle());
 		quitter.setTextFill(Color.WHITE);
+		zoom.setTextFill(Color.WHITE);
+		quitter.setStyle(pause.getStyle());
+		zoom.setStyle(pause.getStyle());
 		hBoxBoutton.setStyle("-fx-padding-left : 10px;");
+		vBoxInfoVaiseau.setAlignment(Pos.CENTER);
+		vBoxInfoPlanete.setAlignment(vBoxInfoVaiseau.getAlignment());
+		vBoxFonctionnalite.setAlignment(vBoxInfoVaiseau.getAlignment());
+		hboxFonctionnalite.setAlignment(Pos.CENTER);
+		hboxFonctionnalite.setStyle("-fx-padding: 5px;");
 	}
 
 	public static void applyStyle(String style, List<Node> list) {
@@ -350,8 +366,6 @@ public class RenderSystem implements Observer {
 	}
 
 	public List<Label> infoVaisseau() {
-		pause = new Button("Pause");
-		quitter = new Button("Quitter");
 		this.vaisseau = Vaisseau.getInstance();
 		vaisseau.setForce(vaisseau.createForce(univers));
 		labelVaisseau=  new Label("Informations vaisseau :");
@@ -380,10 +394,9 @@ public class RenderSystem implements Observer {
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
 		hBoxForceVaisseau = new HBox(labelForceSurVaiseau, labelForceSurVaiseauval);
 		hBoxMasseVaisseau = new HBox(labelMasseVaisseau, labelMasseVaisseauval);
-		hBoxBoutton = new HBox(pause, quitter);
 
 		vBoxInfoVaiseau = new VBox();
-		vBoxInfoVaiseau.getChildren().addAll(hBoxBoutton, labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau);
+		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau);
 
 		List<Label> listlabelvaisseau = new ArrayList<>();
 		listlabelvaisseau.add(labelForceSurVaiseau);
@@ -470,14 +483,20 @@ public class RenderSystem implements Observer {
 	 * @return
 	 */
 	public List<Button> fonctionnalite(){
-		Label labelfonction =  new Label("Utilitaires :");
+		labelfonction =  new Label("Utilitaires :");
 		List<Button> res = new ArrayList<>();
 
-		Button zoom = zoom();
+		zoom = zoom();
+		pause = new Button("Pause");
+		quitter = new Button("Quitter");
+		hBoxBoutton = new HBox(zoom, pause, quitter);
 
-		vboxFonctionnalite = new VBox();
-		vboxFonctionnalite.getChildren().add(labelfonction);
-		vboxFonctionnalite.getChildren().add(zoom);
+		hboxFonctionnalite = new HBox();
+		hboxFonctionnalite.getChildren().add(labelfonction);
+		hboxFonctionnalite.getChildren().add(zoom);
+		hboxFonctionnalite.getChildren().add(pause);
+		hboxFonctionnalite.getChildren().add(quitter);
+
 
 
 		res.add(zoom());
