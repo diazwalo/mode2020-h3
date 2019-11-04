@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -72,6 +73,7 @@ public class RenderSystem implements Observer {
 	private HBox hBoxVitYPlanete;
 	private HBox hBoxForcePlanete;
 	private HBox hBoxMassePlanete;
+	private HBox hBoxBoutton;
 
 	private Label labelVaisseau;
 	private Label labelVitXVaisseau;
@@ -92,8 +94,18 @@ public class RenderSystem implements Observer {
 	private Label labelForceSurPlaneteval;
 	private Label labelMassePlanete;
 	private Label labelMassePlaneteval;
-
+	
+	private List<Label> listlabelvaisseauval;
+	private List<Label> listlabelplaneteval;
+	private Button pause;
+	private Button quitter;
+	private boolean etat;
+	private Timer t;
+	
+	
+	
 	public RenderSystem(double rayon, Univers univers) {
+		etat=false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
 		this.createBackground(Color.BLACK);
@@ -211,6 +223,20 @@ public class RenderSystem implements Observer {
 	public void createRenderInformation() {
 		List<Label> listlabelVaisseau = infoVaisseau();
 		List<Label> listlabelPlanete = infoPlanete();
+		listlabelvaisseauval = new ArrayList<>();
+		listlabelplaneteval = new ArrayList<>();
+
+		listlabelvaisseauval.add(labelVitXVaisseauval);
+		listlabelvaisseauval.add(labelVitYVaisseauval);
+		listlabelvaisseauval.add(labelForceSurVaiseauval);
+		listlabelvaisseauval.add(labelForceSurVaiseauval);
+		listlabelvaisseauval.add(labelMasseVaisseauval);
+		
+		listlabelplaneteval.add(labelForceSurPlaneteval);
+		listlabelplaneteval.add(labelMassePlaneteval);
+		listlabelplaneteval.add(labelVitYPlaneteval);
+		listlabelplaneteval.add(labelVitXPlaneteval);
+
 
 		this.renderInfo = new VBox();
 		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
@@ -239,6 +265,8 @@ public class RenderSystem implements Observer {
 		hbox.add(hBoxVitXVaisseau);
 		hbox.add(hBoxVitYPlanete);
 		hbox.add(hBoxVitYVaisseau);
+		hbox.add(hBoxMasseVaisseau);
+		hbox.add(hBoxMassePlanete);
 		renderInfo.setStyle("-fx-font-weight: bold;"
 				+ "-fx-font-size : 15px;"
 				+ "-fx-padding: 15px;"
@@ -257,6 +285,16 @@ public class RenderSystem implements Observer {
 				+ "-fx-padding: 10px;"
 				+ "");
 		labelPlanete.setStyle(labelVaisseau.getStyle());
+		String styleForVal = "-fx-font-weight: normal;";
+		setStyleOnLabel(styleForVal, listlabelvaisseauval);
+		setStyleOnLabel(styleForVal, listlabelplaneteval);
+		pause.setStyle("-fx-background-color : #002080;"
+				+ "");
+		pause.setTextFill(Color.WHITE);
+		quitter.setStyle(pause.getStyle());
+		quitter.setTextFill(Color.WHITE);
+		hBoxBoutton.setStyle("-fx-padding-left : 10px;");
+
 
 
 	}
@@ -273,8 +311,16 @@ public class RenderSystem implements Observer {
 			objet.setTextFill(style);
 		}
 	}
+	
+	public static void setStyleOnLabel(String style, List<Label> list) {
+		for(Label objet : list) {
+			objet.setStyle(style);
+		}
+	}
 
 	public List<Label> infoVaisseau() {
+		pause = new Button("Pause");
+		quitter = new Button("Quitter");
 		this.vaisseau = Vaisseau.getInstance();
 		labelVaisseau=  new Label("Informations vaisseau :");
 		labelVitXVaisseau = new Label("Vitesse en x :");
@@ -303,23 +349,24 @@ public class RenderSystem implements Observer {
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
 		hBoxForceVaisseau = new HBox(labelForceSurVaiseau, labelForceSurVaiseauval);
 		hBoxMasseVaisseau = new HBox(labelMasseVaisseau, labelMasseVaisseauval);
+		hBoxBoutton = new HBox(pause, quitter);
 
 		vBoxInfoVaiseau = new VBox();
-		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau);
+		vBoxInfoVaiseau.getChildren().addAll(hBoxBoutton, labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau);
 
-		List<Label> labelvaisseau = new ArrayList<>();
-		labelvaisseau.add(labelForceSurVaiseau);
-		labelvaisseau.add(labelForceSurVaiseauval);
-		labelvaisseau.add(labelVaisseau);
-		labelvaisseau.add(labelVitXVaisseau);
-		labelvaisseau.add(labelVitXVaisseauval);
-		labelvaisseau.add(labelVitYVaisseau);
-		labelvaisseau.add(labelVitYVaisseauval);
-		labelvaisseau.add(labelMasseVaisseau);
-		labelvaisseau.add(labelMasseVaisseauval);
-		applyStyleOnLabel(Color.WHITE, labelvaisseau);
+		List<Label> listlabelvaisseau = new ArrayList<>();
+		listlabelvaisseau.add(labelForceSurVaiseau);
+		listlabelvaisseau.add(labelForceSurVaiseauval);
+		listlabelvaisseau.add(labelVaisseau);
+		listlabelvaisseau.add(labelVitXVaisseau);
+		listlabelvaisseau.add(labelVitXVaisseauval);
+		listlabelvaisseau.add(labelVitYVaisseau);
+		listlabelvaisseau.add(labelVitYVaisseauval);
+		listlabelvaisseau.add(labelMasseVaisseau);
+		listlabelvaisseau.add(labelMasseVaisseauval);
+		applyStyleOnLabel(Color.WHITE, listlabelvaisseau);
 
-		return labelvaisseau;
+		return listlabelvaisseau;
 	}
 	//>>>>>>> 6a6239daebcf2c6eba4a700a372639d8c2fa063e
 
@@ -380,10 +427,27 @@ public class RenderSystem implements Observer {
 		this.renderSystem = new Pane();
 		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
-		Timer t = new Timer();
+		t = new Timer();
+		etat = false;
+		pause.setOnMouseClicked(e ->{
+				if(!etat) {
+					t.cancel();
+					pause.setText("Resume");
+					etat=true;
+				}else {
+					t = new Timer();
+					t.scheduleAtFixedRate(new Task(),0,1);
+					pause.setText("Pause");
+					etat=false;
+
+				}
+		});
+		quitter.setOnMouseClicked(e ->{
+			System.exit(1);
+		});
 
 		t.scheduleAtFixedRate(new Task(),0,1);
-
+		
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
 		this.setMouseEventOnSysteme();
@@ -419,26 +483,26 @@ public class RenderSystem implements Observer {
 
 				}
 			}else {*/
-				if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
+			if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
 
-					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-					switch(key) {
-					case Z :
-						vaisseau.setPprincipalIsOn(state);
-						break;
-					case S :
-						vaisseau.setPretroIsOn(state);
-						break;
-					case Q :
-						vaisseau.gauche();
-						break;
-					case D :
-						vaisseau.droite();
-						break;
-					default:
-						break;
-					}
+				boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
+				switch(key) {
+				case Z :
+					vaisseau.setPprincipalIsOn(state);
+					break;
+				case S :
+					vaisseau.setPretroIsOn(state);
+					break;
+				case Q :
+					vaisseau.gauche();
+					break;
+				case D :
+					vaisseau.droite();
+					break;
+				default:
+					break;
 				}
+			}
 			//}
 		});
 	}
