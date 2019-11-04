@@ -15,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -68,7 +67,7 @@ public class RenderSystem implements Observer {
 
 	private VBox vBoxInfoVaiseau;
 	private VBox vBoxInfoPlanete;
-
+	private VBox vboxFonctionnalite;
 	private HBox hBoxVitXVaisseau;
 	private HBox hBoxVitYVaisseau;
 	private HBox hBoxForceVaisseau;
@@ -273,11 +272,13 @@ public class RenderSystem implements Observer {
 		listlabelplaneteval.add(labelVitYPlaneteval);
 		listlabelplaneteval.add(labelVitXPlaneteval);
 
+		List<Button> listFonction = fonctionnalite();
 
 		this.renderInfo = new VBox();
-		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete);
-		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
-		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/2.0);
+		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete, vboxFonctionnalite);
+		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		this.vboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 		setInsetsAuto(vBoxInfoVaiseau, listlabelVaisseau);
 		creerStyle();
 
@@ -462,6 +463,41 @@ public class RenderSystem implements Observer {
 
 		return labelplanete;
 	}
+	
+	/**
+	 * Renvoie les listes des boutons, c'est a dire des differentes fonctionnalitées
+	 * @return
+	 */
+	public List<Button> fonctionnalite(){
+		Label labelfonction =  new Label("Utilitaires :");
+		List<Button> res = new ArrayList<>();
+		
+		Button zoom = zoom();
+		
+		vboxFonctionnalite = new VBox();
+		vboxFonctionnalite.getChildren().add(labelfonction);
+		vboxFonctionnalite.getChildren().add(zoom);
+
+		
+		res.add(zoom());
+		
+		return res;
+	}
+	
+	/**
+	 * Renvoie le bouton permettant le zoom
+	 * @return
+	 */
+	public Button zoom() {
+		Button button = new Button("Zoom");
+		
+		button.setOnMouseClicked(event ->{
+			this.scale = new Scale(univers , this.getHeightWindow() + 500);
+		});
+		
+		
+		return button;
+	}
 
 	/**
 	 * Crée la partie gauche du programme : la vue du Système.
@@ -597,14 +633,14 @@ public class RenderSystem implements Observer {
 			univers.majVitesse();
 			univers.majPosition();
 			univers.majForce();
-
+			suiviPoints = new ArrayList<Circle>();
+			
 			Platform.runLater(() ->{
 				putPlaneteOnSysteme(univers.getEntities());
 				animate(vaisseauAvance, vaisseauRecule);
+				placerPoint(univers.getEntities());
+				renderSystem.getChildren().addAll(suiviPoints);
 				majSystem();
-				//				placerPoint(univers.getEntities());
-				//				renderSystem.getChildren().addAll(suiviPoints);
-
 				//update();
 			});
 
