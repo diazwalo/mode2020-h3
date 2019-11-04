@@ -46,11 +46,11 @@ public abstract class Entity extends Observable {
 	}
 
 	public Vecteur getMOmega(Entity other) {
-		return new Vecteur(other.getPosition().getx()-this.position.getx(), other.position.gety()-this.position.gety());
+		return new Vecteur(this.getPosition().getx()-other.position.getx(), this.position.gety()-other.position.gety());
 	}
 
 	public double forceForEachEntity(Entity other) {
-		return (Vecteur.getG()*this.getMasse()*other.getMasse()) / (Math.pow(getMOmega(other).getNorme(), 2));
+		return (Univers.getUnivers().getRFS().getG()*this.getMasse()*other.getMasse()) / (Math.pow(getMOmega(other).getNorme(), 2));
 	}
 
 	public double createForce(Univers others) {
@@ -75,8 +75,10 @@ public abstract class Entity extends Observable {
 	}
 
 	public Vecteur createAccelerationForEachEntity(Entity other) {
-		return new Vecteur((Vecteur.getG()*this.getMasse()*other.getMasse()/(Math.pow(getMOmega(other).getNorme(), 3))*getMOmega(other).getx())/this.getMasse(),
-				(Vecteur.getG()*this.getMasse()*other.getMasse()/(Math.pow(getMOmega(other).getNorme(), 3))*getMOmega(other).gety())/this.getMasse());
+		double Gmm = Univers.getUnivers().getRFS().getG()*this.getMasse()*other.getMasse();
+		double MOCube = Math.pow(getMOmega(other).getNorme(), 3);
+		return new Vecteur(((Gmm/MOCube)*getMOmega(other).getx())/this.masse,
+							((Gmm/MOCube)*getMOmega(other).gety())/this.masse);
 	}
 
 	public void createAcceleration(Univers others) {
@@ -92,7 +94,7 @@ public abstract class Entity extends Observable {
 	}
 
 	public double getK() {
-		return Vecteur.getG() * getMasse();
+		return Univers.getUnivers().getRFS().getG() * getMasse();
 	}
 
 	public double getMasse() {

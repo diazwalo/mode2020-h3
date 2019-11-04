@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -101,9 +102,8 @@ public class RecupFichierSource {
     }
 
     public int affectationDonnee(String fichier) {
-        if (!fichier.startsWith("#") && !fichier.startsWith(" ") && !fichier.isEmpty()) {
+        if(fichier.charAt(0) != '#' && fichier.charAt(0) != ' ' && !fichier.isEmpty() && fichier.charAt(0) != 65279) {
             String[] tab =  fichier.split(" ");
-            
             /**
              * Ligne de parametres
              */
@@ -111,13 +111,13 @@ public class RecupFichierSource {
             /**
              * Si la premiere ligne (ormis les commentaires) n'est pas les ligne de PARAMS
              */
-            if(premierPassage){
-                if(!tab[0].equals("PARAMS")){
+            if(premierPassage) {
+                if(!tab[0].equals("PARAMS")) {
                     System.out.println("La première ligne n'est pas PARAMS");
                     return 1;
                 }
             }
-            if (tab[0].equals("PARAMS")) {
+            if(tab[0].equals("PARAMS")) {
                 for (int i = 1; i <= tab.length - 1; i++) {
                     if (tab[i].startsWith("G")) {
                         this.G = Double.parseDouble(tab[i].substring(2));
@@ -137,7 +137,7 @@ public class RecupFichierSource {
                  * Mauvaise declaration des parametre dans le fichier source
                  */
                 if(G == -1 || dt == -1 || fa == -1 || rayon == -1){
-                    System.out.println("Problème dans les paramtètre");
+                    System.out.println("Problème dans les paramtètres");
                     return 1;
                 }
                 premierPassage = false;

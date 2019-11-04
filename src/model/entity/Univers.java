@@ -10,7 +10,7 @@ import view.ihm.RenderSystem;
 public class Univers {
 	private List<Entity> entities;
 	private static Univers univers = null;
-	RecupFichierSource source;
+	private RecupFichierSource source;
 
 	
 	private Univers(List<Entity> entities, RecupFichierSource source) {
@@ -40,6 +40,10 @@ public class Univers {
 	
 	public List<Entity> getEntities() {
 		return entities;
+	}
+	
+	public RecupFichierSource getRFS() {
+		return source;
 	}
 	
 	public void majAcceleration() {

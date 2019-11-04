@@ -62,6 +62,8 @@ public class RenderSystem implements Observer {
 	private Vaisseau vaisseau;
 	private GraphicsEnvironment graphicsEnvironment;
 	private NumberFormat format;
+	private boolean vaisseauAvance;
+	private boolean vaisseauRecule;
 
 	private VBox vBoxInfoVaiseau;
 	private VBox vBoxInfoPlanete;
@@ -104,6 +106,8 @@ public class RenderSystem implements Observer {
 		this.putPlaneteOnSysteme(univers.getEntities());
 		this.format = NumberFormat.getInstance();
 		format.setMaximumIntegerDigits(2);
+		vaisseauAvance = false;
+		vaisseauRecule = false;
 	}
 
 	/**
@@ -167,6 +171,7 @@ public class RenderSystem implements Observer {
 				tempo.getTransforms().add(new Translate(entity.getPosition().getx(),entity.getPosition().gety()));
 				tempo.getTransforms().add(new javafx.scene.transform.Scale(entity.getRayon(),entity.getRayon()));
 				tempo.getTransforms().add(new Rotate(((Vaisseau) entity).getAngle()));
+				animate(false, false);
 			} else {
 				tempo = new Circle(entity.getPosition().getx(), 
 						entity.getPosition().gety(), 
@@ -174,7 +179,7 @@ public class RenderSystem implements Observer {
 			}
 
 			if(entity.getSprite() != null) {
-				tempo.setFill(new ImagePattern(new Image("https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjnnbCGo6PlAhXb8uAKHeYwDYUQjRx6BAgBEAQ&url=https%3A%2F%2Fwamiz.com%2Frongeurs%2Flapin-3&psig=AOvVaw1OPsq3w2XVqwfDOHS_lQ2I&ust=1571401002058229")));
+				tempo.setFill(new ImagePattern(entity.getSprite()));
 			}else if(entity.getColor() == null) {
 				tempo.setFill(c);
 				c = new Color((c.getRed()+0.6)%1, (c.getGreen()+0.65)%1, (c.getBlue()+0.70)%1, 1.0);
@@ -186,33 +191,34 @@ public class RenderSystem implements Observer {
 		}
 	}
 
-	private void animate(boolean avancer) {
-		Shape tempo;
-		if(avancer) {
-			tempo = new Polygon(new double[] {
+	private void animate(boolean vaisseauAvance, boolean vaisseauRecule) {
+		Shape avance;
+		Shape recule;
+		if(vaisseauAvance) {
+			avance = new Polygon(new double[] {
 					-0.5,1,
 					0.5,0,
 					-0.5,-1
 			});
 
-			tempo.getTransforms().add(new Translate(vaisseau.getPosition().getx(),vaisseau.getPosition().gety()));
-			tempo.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
-			tempo.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
-			tempo.setFill(Color.YELLOW);
-		} else {
-			tempo = new Polygon(new double[] {
+			avance.getTransforms().add(new Translate(vaisseau.getPosition().getx()-0.5,vaisseau.getPosition().gety()));
+			avance.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
+			avance.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
+			avance.setFill(Color.YELLOW);
+			this.shapes.add(avance);
+		} if(vaisseauRecule) {
+			recule = new Polygon(new double[] {
 					-0.5,1,
-					0.5,0,
+					1,0,
 					-0.5,-1
 			});
 
-			tempo.getTransforms().add(new Translate(vaisseau.getPosition().getx(),vaisseau.getPosition().gety()));
-			tempo.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
-			tempo.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
-			tempo.setFill(Color.RED);
+			recule.getTransforms().add(new Translate(vaisseau.getPosition().getx(),vaisseau.getPosition().gety()));
+			recule.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
+			recule.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
+			recule.setFill(Color.RED);
+			this.shapes.add(recule);
 		}
-		
-		this.shapes.add(tempo);
 	}
 
 	/**
@@ -307,12 +313,12 @@ public class RenderSystem implements Observer {
 		labelVaisseau=  new Label("Informations vaisseau :");
 		labelVitXVaisseau = new Label("Vitesse en x :");
 		labelVitYVaisseau = new Label("Vitesse en y :");
-		labelVitXVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().getx()) +" m/s");
-		labelVitYVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().gety()) +" m/s");
+		labelVitXVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().getx()) + " m/s");
+		labelVitYVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().gety()) + " m/s");
 		labelForceSurVaiseau = new Label("Force subie par le vaisseau :");
-		labelForceSurVaiseauval = new Label("     " + format.format(vaisseau.getForce()) );
+		labelForceSurVaiseauval = new Label("     " + vaisseau.getForce() );
 		labelMasseVaisseau = new Label("Masse du vaisseau :");
-		labelMasseVaisseauval = new Label("     " + format.format(vaisseau.getMasse()) );
+		labelMasseVaisseauval = new Label("     " + format.format(vaisseau.getMasse()) + " kg");
 
 		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
 			Platform.runLater(() -> {
@@ -360,7 +366,7 @@ public class RenderSystem implements Observer {
 			labelForceSurPlanete = new Label("Attraction de la planète :");
 			labelForceSurPlaneteval = new Label("     " + format.format(entitytargeted.getForce()) );
 			labelMassePlanete = new Label("Masse de la planète :");
-			labelMassePlaneteval = new Label("     " + format.format(entitytargeted.getMasse()) );
+			labelMassePlaneteval = new Label("     " + format.format(entitytargeted.getMasse()) + " kg");
 
 			entitytargeted.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
 				Platform.runLater(() -> {
@@ -440,17 +446,17 @@ public class RenderSystem implements Observer {
 		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
 			KeyCode key = e.getCode();
 			if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
+				
 				boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
+				
 				switch(key) {
 				case Z :
 					vaisseau.setPprincipalIsOn(state);
-					animate(true);
-					majSystem();
+					vaisseauAvance = true;
 					break;
 				case S :
 					vaisseau.setPretroIsOn(state);
-					animate(false);
-					majSystem();
+					vaisseauRecule = true;
 					break;
 				case Q :
 					vaisseau.gauche();
@@ -460,6 +466,17 @@ public class RenderSystem implements Observer {
 					break;
 				default:
 					break;
+				}
+				
+				if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+					switch(key) {
+					case Z :
+						vaisseauAvance = false;
+						break;
+					case S :
+						vaisseauRecule = false;
+						break;
+					}
 				}
 			}
 		});
@@ -498,6 +515,7 @@ public class RenderSystem implements Observer {
 
 			Platform.runLater(() ->{
 				putPlaneteOnSysteme(univers.getEntities());
+				animate(vaisseauAvance, vaisseauRecule);
 				majSystem();
 				//				placerPoint(univers.getEntities());
 				//				renderSystem.getChildren().addAll(suiviPoints);
