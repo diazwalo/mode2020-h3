@@ -63,7 +63,7 @@ public class RenderSystem implements Observer {
 
 	private VBox vBoxInfoVaiseau;
 	private VBox vBoxInfoPlanete;
-	
+
 	private HBox hBoxVitXVaisseau;
 	private HBox hBoxVitYVaisseau;
 	private HBox hBoxForceVaisseau;
@@ -92,7 +92,7 @@ public class RenderSystem implements Observer {
 	private Label labelForceSurPlaneteval;
 	private Label labelMassePlanete;
 	private Label labelMassePlaneteval;
-	
+
 	public RenderSystem(double rayon, Univers univers) {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
@@ -267,7 +267,7 @@ public class RenderSystem implements Observer {
 			objet.setStyle(style);
 		}
 	}
-	
+
 	public static void applyStyleOnLabel(Color style, List<Label> list) {
 		for(Label objet : list) {
 			objet.setTextFill(style);
@@ -303,10 +303,10 @@ public class RenderSystem implements Observer {
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
 		hBoxForceVaisseau = new HBox(labelForceSurVaiseau, labelForceSurVaiseauval);
 		hBoxMasseVaisseau = new HBox(labelMasseVaisseau, labelMasseVaisseauval);
-		
+
 		vBoxInfoVaiseau = new VBox();
 		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau);
-		
+
 		List<Label> labelvaisseau = new ArrayList<>();
 		labelvaisseau.add(labelForceSurVaiseau);
 		labelvaisseau.add(labelForceSurVaiseauval);
@@ -394,25 +394,52 @@ public class RenderSystem implements Observer {
 		renderSystem.setFocusTraversable(true);
 		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
 			KeyCode key = e.getCode();
-			if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
-				boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-				switch(key) {
-				case Z :
-					vaisseau.setPprincipalIsOn(state);
-					break;
-				case S :
-					vaisseau.setPretroIsOn(state);
-					break;
-				case Q :
-					vaisseau.gauche();
-					break;
-				case D :
-					vaisseau.droite();
-					break;
-				default:
-					break;
+			String osName = System.getProperty("os.name");
+			System.out.println(osName);
+			/*if(osName.contentEquals("Mac OS X")) {
+				if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
+					System.out.println(key);
+					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
+					switch(key) {
+					case W :
+						vaisseau.setPprincipalIsOn(state);
+						break;
+					case S :
+						vaisseau.setPretroIsOn(state);
+						break;
+					case A :
+						vaisseau.gauche();
+						break;
+					case D :
+						vaisseau.droite();
+						break;
+					default:
+						break;
+					}
+
 				}
-			}
+			}else {*/
+				if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
+
+					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
+					switch(key) {
+					case Z :
+						vaisseau.setPprincipalIsOn(state);
+						break;
+					case S :
+						vaisseau.setPretroIsOn(state);
+						break;
+					case Q :
+						vaisseau.gauche();
+						break;
+					case D :
+						vaisseau.droite();
+						break;
+					default:
+						break;
+					}
+				}
+			//}
 		});
 	}
 
