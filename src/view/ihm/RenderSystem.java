@@ -427,7 +427,7 @@ public class RenderSystem implements Observer {
 	}
 
 	private void majFuel() {
-		fuel.setProgress(vaisseau.getFuel()/vaisseau.FUELMAX);
+		fuel.setProgress(vaisseau.getFuel()/Vaisseau.FUELMAX);
 	}
 
 	public List<Label> infoPlanete(){

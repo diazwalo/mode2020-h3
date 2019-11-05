@@ -31,6 +31,8 @@ public class Vaisseau extends Entity {
 	public void useFuel() {
 		if(fuel > 0)
 			fuel -= 0.01;
+		else if(fuel == 0 || fuel < 0)
+			fuel = 0;
 	}
 
 	public double getFuel() {
