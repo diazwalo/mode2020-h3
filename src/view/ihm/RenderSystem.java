@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -66,7 +67,8 @@ public class RenderSystem implements Observer {
 
 	private VBox vBoxInfoVaisseau;
 	private VBox vBoxInfoPlanete;
-	private VBox vboxFonctionnalite;
+	private VBox vBoxFonctionnalite;
+	private HBox hboxFonctionnalite;
 	private HBox hBoxVitXVaisseau;
 	private HBox hBoxVitYVaisseau;
 	private HBox hBoxForceVaisseau;
@@ -77,6 +79,7 @@ public class RenderSystem implements Observer {
 	private HBox hBoxMassePlanete;
 	private HBox hBoxBoutton;
 
+	private Label labelfonction;
 	private Label labelVaisseau;
 	private Label labelVitXVaisseau;
 	private Label labelVitYVaisseau;
@@ -100,8 +103,10 @@ public class RenderSystem implements Observer {
 
 	private List<Label> listlabelvaisseauval;
 	private List<Label> listlabelplaneteval;
+	private List<Node> listButton;
 	private Button pause;
 	private Button quitter;
+	private Button zoom;
 	private boolean etat;
 	private Timer t;
 
@@ -279,13 +284,21 @@ public class RenderSystem implements Observer {
 		listlabelplaneteval.add(labelVitXPlaneteval);
 
 		List<Button> listFonction = fonctionnalite();
-
+		vBoxFonctionnalite = new VBox(); 
+		vBoxFonctionnalite.getChildren().addAll(labelfonction, hboxFonctionnalite);
 		this.renderInfo = new VBox();
-		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vboxFonctionnalite);
+
+//		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vboxFonctionnalite);
+//		this.vBoxInfoVaisseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+//		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+//		this.vboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+//		setInsetsAuto(vBoxInfoVaisseau, listlabelVaisseau);
+
+		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vBoxFonctionnalite);
 		this.vBoxInfoVaisseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
-		this.vboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
-		setInsetsAuto(vBoxInfoVaisseau, listlabelVaisseau);
+		this.hboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+
 		creerStyle();
 
 
@@ -326,14 +339,24 @@ public class RenderSystem implements Observer {
 				+ "-fx-padding: 10px;"
 				+ "");
 		labelPlanete.setStyle(labelVaisseau.getStyle());
+		labelfonction.setStyle(labelVaisseau.getStyle());
+		labelfonction.setTextFill(Color.WHITE);
 		String styleForVal = "-fx-font-weight: normal;";
 		setStyleOnLabel(styleForVal, listlabelvaisseauval);
 		setStyleOnLabel(styleForVal, listlabelplaneteval);
-		pause.setStyle("-fx-background-color : #002080;");
+		pause.setStyle("-fx-background-color : #002080;"
+				+ "-fx-border: solid;");
 		pause.setTextFill(Color.WHITE);
-		quitter.setStyle(pause.getStyle());
 		quitter.setTextFill(Color.WHITE);
+		zoom.setTextFill(Color.WHITE);
+		quitter.setStyle(pause.getStyle());
+		zoom.setStyle(pause.getStyle());
 		hBoxBoutton.setStyle("-fx-padding-left : 10px;");
+		vBoxInfoVaisseau.setAlignment(Pos.CENTER);
+		vBoxInfoPlanete.setAlignment(vBoxInfoVaisseau.getAlignment());
+		vBoxFonctionnalite.setAlignment(vBoxInfoVaisseau.getAlignment());
+		hboxFonctionnalite.setAlignment(Pos.CENTER);
+		hboxFonctionnalite.setStyle("-fx-padding: 5px;");
 	}
 
 	public static void applyStyle(String style, List<Node> list) {
@@ -355,8 +378,6 @@ public class RenderSystem implements Observer {
 	}
 
 	public List<Label> infoVaisseau() {
-		pause = new Button("Pause");
-		quitter = new Button("Quitter");
 		this.vaisseau = Vaisseau.getInstance();
 		vaisseau.setForce(vaisseau.createForce(univers));
 		labelVaisseau=  new Label("Informations vaisseau :");
@@ -386,10 +407,9 @@ public class RenderSystem implements Observer {
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
 		hBoxForceVaisseau = new HBox(labelForceSurVaisseau, labelForceSurVaisseauval);
 		hBoxMasseVaisseau = new HBox(labelMasseVaisseau, labelMasseVaisseauval);
-		hBoxBoutton = new HBox(pause, quitter);
 
 		vBoxInfoVaisseau = new VBox();
-		vBoxInfoVaisseau.getChildren().addAll(hBoxBoutton, labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau, fuel);
+		vBoxInfoVaisseau.getChildren().addAll(labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau, fuel);
 
 		List<Label> listlabelvaisseau = new ArrayList<>();
 		listlabelvaisseau.add(labelForceSurVaisseau);
@@ -480,15 +500,19 @@ public class RenderSystem implements Observer {
 	 * @return
 	 */
 	public List<Button> fonctionnalite(){
-		Label labelfonction =  new Label("Utilitaires :");
+		labelfonction =  new Label("Utilitaires :");
 		List<Button> res = new ArrayList<>();
 
-		Button zoom = zoom();
+		zoom = zoom();
+		pause = new Button("Pause");
+		quitter = new Button("Quitter");
+		hBoxBoutton = new HBox(zoom, pause, quitter);
 
-		vboxFonctionnalite = new VBox();
-		vboxFonctionnalite.getChildren().add(labelfonction);
-		vboxFonctionnalite.getChildren().add(zoom);
-
+		hboxFonctionnalite = new HBox();
+		hboxFonctionnalite.getChildren().add(labelfonction);
+		hboxFonctionnalite.getChildren().add(zoom);
+		hboxFonctionnalite.getChildren().add(pause);
+		hboxFonctionnalite.getChildren().add(quitter);
 
 		res.add(zoom());
 
@@ -523,12 +547,15 @@ public class RenderSystem implements Observer {
 
 		t = new Timer();
 		etat = false;
+		t.scheduleAtFixedRate(new Task(),0,1);
+
 		pause.setOnMouseClicked(e ->{
 			if(!etat) {
 				t.cancel();
 				pause.setText("Resume");
 				etat=true;
 			}else {
+				t.purge();
 				t = new Timer();
 				t.scheduleAtFixedRate(new Task(),0,1);
 				pause.setText("Pause");
@@ -539,8 +566,6 @@ public class RenderSystem implements Observer {
 		quitter.setOnMouseClicked(e ->{
 			System.exit(1);
 		});
-
-		t.scheduleAtFixedRate(new Task(),0,1);
 
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
@@ -553,7 +578,6 @@ public class RenderSystem implements Observer {
 		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
 			KeyCode key = e.getCode();
 			String osName = System.getProperty("os.name");
-			System.out.println(osName);
 			if(vaisseau.getFuel() > 0) {
 				/*if(osName.contentEquals("Mac OS X")) {
 				if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
@@ -562,9 +586,11 @@ public class RenderSystem implements Observer {
 					switch(key) {
 					case W :
 						vaisseau.setPprincipalIsOn(state);
+						vaisseauAvance = true;
 						break;
 					case S :
 						vaisseau.setPretroIsOn(state);
+						vaisseauRecule = true;
 						break;
 					case A :
 						vaisseau.gauche();
@@ -575,7 +601,17 @@ public class RenderSystem implements Observer {
 					default:
 						break;
 					}
-
+					
+					if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+						switch(key) {
+						case Z :
+							vaisseauAvance = false;
+							break;
+						case S :
+							vaisseauRecule = false;
+							break;
+						}
+					}
 				}
 			}else {*/
 				if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
@@ -619,7 +655,6 @@ public class RenderSystem implements Observer {
 				vaisseauAvance = false;
 				vaisseauRecule = false;
 			}
-			//}
 		});
 	}
 
