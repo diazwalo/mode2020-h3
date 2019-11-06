@@ -30,7 +30,7 @@ public class Vaisseau extends Entity {
 
 	public void useFuel() {
 		if(fuel > 0)
-			fuel -= 0.01;
+			fuel -= 0.00001;
 		else if(fuel == 0 || fuel < 0)
 			fuel = 0;
 	}
@@ -41,12 +41,12 @@ public class Vaisseau extends Entity {
 
 	public void avancer() {
 		this.setAcceleration(new Vecteur (this.getAcceleration().getx()+(pprincipal*Math.cos(Math.toRadians(angle))),
-				this.getAcceleration().gety()+(pprincipal*Math.sin(Math.toRadians(angle)))));
+				this.getAcceleration().gety()-(pprincipal*Math.sin(Math.toRadians(angle)))));
 	}
 
 	public void reculer() {
 		this.setAcceleration(new Vecteur (this.getAcceleration().getx()+(pretro*Math.cos(Math.toRadians(angle-180))),
-				this.getAcceleration().gety()+(pretro*Math.sin(Math.toRadians(angle-180)))));
+				this.getAcceleration().gety()-(pretro*Math.sin(Math.toRadians(angle-180)))));
 	}
 
 	public void gauche() {

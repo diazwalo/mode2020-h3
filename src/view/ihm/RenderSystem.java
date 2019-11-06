@@ -153,19 +153,24 @@ public class RenderSystem implements Observer {
 
 	private void applicateScailOnSystem() {
 		for (Entity entity : univers.getEntities()) {
-			Vecteur posTempo = entity.getPosition();
+			/*Vecteur posTempo = entity.getPosition();
 			//posTempo.setx(posTempo.getx() * this.scale.getScale());
 			//posTempo.sety(posTempo.gety() * this.scale.getScale());
 			System.out.println(posTempo);
 			posTempo.setx(posTempo.getx() + this.getHeightWindow()/2);
-			posTempo.sety(posTempo.gety() + this.getHeightWindow()/2);
+			posTempo.sety(this.getHeightWindow()/2 - posTempo.gety());
 			entity.setPosition(posTempo);
-			entity.setVitesse(entity.getVitesse().multiplyWithVariable(this.scale.getScale()));
 			entity.setRayon(entity.getRayon()* this.scale.getScale());
-			System.out.println(posTempo);
+			System.out.println(posTempo);*/
 		}
 	}
 
+	private Vecteur getDrawPosition(Entity entity) {
+		Vecteur pos = entity.getPosition();
+		return new Vecteur(	pos.getx() + this.getHeightWindow()/2,
+							this.getHeightWindow()/2 - pos.gety());
+	}
+	
 	/**
 	 * Les corps passés en paramètre sont évaluées afin de savoir quelle forme, image, couleur leurs donner par la suite.
 	 * @param corps
@@ -174,6 +179,7 @@ public class RenderSystem implements Observer {
 		this.shapes = new ArrayList<Shape>();
 		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
+			Vecteur drawPos = getDrawPosition(entity); 
 			Shape tempo;
 			if(entity instanceof Vaisseau) {
 				tempo = new Polygon(new double[] {
@@ -182,14 +188,14 @@ public class RenderSystem implements Observer {
 						-0.5,-1
 				});
 
-				tempo.getTransforms().add(new Translate(entity.getPosition().getx(),entity.getPosition().gety()));
-				tempo.getTransforms().add(new javafx.scene.transform.Scale(entity.getRayon(),entity.getRayon()));
+				tempo.getTransforms().add(new Translate(drawPos.getx(),drawPos.gety()));
+				tempo.getTransforms().add(new javafx.scene.transform.Scale(entity.getRayon()*this.scale.getScale(),entity.getRayon()*this.scale.getScale()));
 				tempo.getTransforms().add(new Rotate(((Vaisseau) entity).getAngle()));
 				animate(false, false);
 			} else {
-				tempo = new Circle(entity.getPosition().getx(), 
-						entity.getPosition().gety(), 
-						entity.getRayon());
+				tempo = new Circle(	drawPos.getx(),
+									drawPos.gety(),
+									entity.getRayon()*this.scale.getScale());
 			}
 
 			if(entity.getSprite() != null) {
