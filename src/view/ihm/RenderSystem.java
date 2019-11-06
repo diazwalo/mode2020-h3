@@ -168,9 +168,9 @@ public class RenderSystem implements Observer {
 	private Vecteur getDrawPosition(Entity entity) {
 		Vecteur pos = entity.getPosition();
 		return new Vecteur(	pos.getx() + this.getHeightWindow()/2,
-							this.getHeightWindow()/2 - pos.gety());
+				this.getHeightWindow()/2 - pos.gety());
 	}
-	
+
 	/**
 	 * Les corps passés en paramètre sont évaluées afin de savoir quelle forme, image, couleur leurs donner par la suite.
 	 * @param corps
@@ -194,8 +194,8 @@ public class RenderSystem implements Observer {
 				animate(false, false);
 			} else {
 				tempo = new Circle(	drawPos.getx(),
-									drawPos.gety(),
-									entity.getRayon()*this.scale.getScale());
+						drawPos.gety(),
+						entity.getRayon()*this.scale.getScale());
 			}
 
 			if(entity.getSprite() != null) {
@@ -294,11 +294,11 @@ public class RenderSystem implements Observer {
 		vBoxFonctionnalite.getChildren().addAll(labelfonction, hboxFonctionnalite);
 		this.renderInfo = new VBox();
 
-//		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vboxFonctionnalite);
-//		this.vBoxInfoVaisseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
-//		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
-//		this.vboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
-//		setInsetsAuto(vBoxInfoVaisseau, listlabelVaisseau);
+		//		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vboxFonctionnalite);
+		//		this.vBoxInfoVaisseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		//		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		//		this.vboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		//		setInsetsAuto(vBoxInfoVaisseau, listlabelVaisseau);
 
 		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vBoxFonctionnalite);
 		this.vBoxInfoVaisseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
@@ -585,73 +585,74 @@ public class RenderSystem implements Observer {
 			KeyCode key = e.getCode();
 			String osName = System.getProperty("os.name");
 			if(vaisseau.getFuel() > 0) {
-				/*if(osName.contentEquals("Mac OS X")) {
-				if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
-					System.out.println(key);
-					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-					switch(key) {
-					case W :
-						vaisseau.setPprincipalIsOn(state);
-						vaisseauAvance = true;
-						break;
-					case S :
-						vaisseau.setPretroIsOn(state);
-						vaisseauRecule = true;
-						break;
-					case A :
-						vaisseau.gauche();
-						break;
-					case D :
-						vaisseau.droite();
-						break;
-					default:
-						break;
-					}
-					
-					if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+				if(osName.contentEquals("Mac OS X")) {
+					if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
+						System.out.println(key);
+						boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
 						switch(key) {
-						case Z :
-							vaisseauAvance = false;
+						case W :
+							vaisseau.setPprincipalIsOn(state);
+							vaisseauAvance = true;
 							break;
 						case S :
-							vaisseauRecule = false;
+							vaisseau.setPretroIsOn(state);
+							vaisseauRecule = true;
 							break;
-						}
-					}
-				}
-			}else {*/
-				if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
-					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-
-					switch(key) {
-					case Z :
-						vaisseau.setPprincipalIsOn(state);
-						vaisseauAvance = true;
-						break;
-					case S :
-						vaisseau.setPretroIsOn(state);
-						vaisseauRecule = true;
-						break;
-					case Q :
-						vaisseau.gauche();
-						break;
-					case D :
-						vaisseau.droite();
-						break;
-					default:
-						break;
-					}
-
-					if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
-						switch(key) {
-						case Z :
-							vaisseauAvance = false;
+						case A :
+							vaisseau.gauche();
 							break;
-						case S :
-							vaisseauRecule = false;
+						case D :
+							vaisseau.droite();
 							break;
 						default:
 							break;
+						}
+
+						if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+							switch(key) {
+							case W:
+								vaisseauAvance = false;
+								break;
+							case S :
+								vaisseauRecule = false;
+								break;
+							}
+						}
+					}
+				}else {
+					if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
+						boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
+
+						switch(key) {
+						case Z :
+							vaisseau.setPprincipalIsOn(state);
+							vaisseauAvance = true;
+							break;
+						case S :
+							vaisseau.setPretroIsOn(state);
+							vaisseauRecule = true;
+							break;
+						case Q :
+							vaisseau.gauche();
+							break;
+						case D :
+							vaisseau.droite();
+							break;
+						default:
+							break;
+						}
+
+						if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+							switch(key) {
+							case Z :
+								vaisseauAvance = false;
+								break;
+							case S :
+								vaisseauRecule = false;
+								break;
+							default:
+								break;
+							}
 						}
 					}
 				}
@@ -661,6 +662,7 @@ public class RenderSystem implements Observer {
 				vaisseauAvance = false;
 				vaisseauRecule = false;
 			}
+
 		});
 	}
 
