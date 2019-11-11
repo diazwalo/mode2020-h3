@@ -214,8 +214,6 @@ public class RenderSystem implements Observer {
 	private void animate(boolean vaisseauAvance, boolean vaisseauRecule) {
 		Shape avance;
 		Shape recule;
-		Circle clignoGauche;
-		Circle clignoDroit;
 		if(vaisseauAvance) {
 			vaisseau.useFuel();
 
@@ -397,18 +395,6 @@ public class RenderSystem implements Observer {
 		labelMasseVaisseauval = new Label("     " + format.format(vaisseau.getMasse()) + " kg");
 		fuel = new ProgressBar(vaisseau.getFuel());
 
-		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitXVaisseauval.setText("     " + format.format(nnew) +" m/s");
-			});
-		});
-
-		vaisseau.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitYVaisseauval.setText("     " + format.format(nnew) +" m/s");
-			});
-		});
-
 		hBoxVitXVaisseau = new HBox(labelVitXVaisseau, labelVitXVaisseauval);
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
 		hBoxForceVaisseau = new HBox(labelForceSurVaisseau, labelForceSurVaisseauval);
@@ -448,24 +434,6 @@ public class RenderSystem implements Observer {
 			labelForceSurPlaneteval = new Label("     " + format.format(entitytargeted.getForce()) );
 			labelMassePlanete = new Label("Masse de la planète :");
 			labelMassePlaneteval = new Label("     " + format.format(entitytargeted.getMasse()) + " kg");
-
-			entitytargeted.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelVitXPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-				});
-			});
-
-			entitytargeted.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelVitYPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-				});
-			});
-
-			entitytargeted.getForceProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelForceSurVaisseauval.setText("    * " + format.format(nnew));
-				});
-			});
 
 		}else {
 			labelPlanete =  new Label("Informations ... :");
@@ -696,6 +664,7 @@ public class RenderSystem implements Observer {
 			univers.majVitesse();
 			univers.majPosition();
 			univers.majForce();
+			update(entitytargeted, new Object());
 			suiviPoints = new ArrayList<Circle>();
 
 			Platform.runLater(() ->{
@@ -728,23 +697,7 @@ public class RenderSystem implements Observer {
 			this.update();
 
 			if(this.entitytargeted != null) {
-				entitytargeted.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelVitXPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-					});
-				});
-
-				entitytargeted.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelVitYPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-					});
-				});
-
-				entitytargeted.getForceProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelForceSurVaisseauval.setText("    * " + format.format(nnew));
-					});
-				});
+				update(entitytargeted, e);
 			}
 		});
 		this.renderSystem.setOnScroll(e -> {
@@ -767,7 +720,17 @@ public class RenderSystem implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		labelVitXVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().getx()) +" m/s");
+		labelVitYVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().gety()) +" m/s");
+		labelForceSurVaisseauval.setText("    * " + format.format(this.vaisseau.getForce()));
 
+		if(o != null) {
+			Entity updated = (Entity) o;
+
+			labelPlanete.setText("Informations " + updated.getNom() + " :");
+			labelVitXPlaneteval.setText("    * " + format.format(updated.getVitesse().getx()) +"");
+			labelVitYPlaneteval.setText("    * " + format.format(updated.getVitesse().gety()) +"");
+			labelForceSurPlaneteval.setText("    * " + format.format(updated.getForce()));
+		}
 	}
 }
