@@ -59,7 +59,7 @@ public class Univers {
 	
 	public void majPosition() {
 		for(Entity entity : entities) {
-			System.out.println(entity.getNom() + " " + entity.getPosition());
+			//System.out.println(entity.getNom() + " " + entity.getPosition());
 			entity.setPosition(entity.getPosition().addOtherVecteur((entity.getVitesse().multiplyWithVariable(source.getDt() * source.getFa()))));
 		}
 	}
