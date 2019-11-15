@@ -536,7 +536,6 @@ public class RenderSystem implements Observer {
 			this.scale = new Scale(univers , this.getHeightWindow() + 500);
 		});
 
-
 		return button;
 	}
 
@@ -555,23 +554,8 @@ public class RenderSystem implements Observer {
 		etat = false;
 		t.scheduleAtFixedRate(new Task(),0,1);
 
-		pause.setOnMouseClicked(e ->{
-			if(!etat) {
-				t.cancel();
-				pause.setText("Resume");
-				etat=true;
-			}else {
-				t.purge();
-				t = new Timer();
-				t.scheduleAtFixedRate(new Task(),0,1);
-				pause.setText("Pause");
-				etat=false;
-
-			}
-		});
-		quitter.setOnMouseClicked(e ->{
-			System.exit(1);
-		});
+		setActionOnPause();
+		setActionOnQuit();
 
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
@@ -666,6 +650,31 @@ public class RenderSystem implements Observer {
 		});
 	}
 
+	private void setActionOnQuit() {
+		// TODO Auto-generated method stub
+		quitter.setOnMouseClicked(e ->{
+			System.exit(1);
+		});
+	}
+
+	private void setActionOnPause() {
+		// TODO Auto-generated method stub
+		pause.setOnMouseClicked(e ->{
+			if(!etat) {
+				t.cancel();
+				pause.setText("Resume");
+				etat=true;
+			}else {
+				t.purge();
+				t = new Timer();
+				t.scheduleAtFixedRate(new Task(),0,1);
+				pause.setText("Pause");
+				etat=false;
+
+			}
+		});
+	}
+
 	/**
 	 * La nouvelle liste de corps est mise en place dans la vue.
 	 * Les paramètre du tableau de bord sont modifiéessi nécessaire.
@@ -725,7 +734,7 @@ public class RenderSystem implements Observer {
 	public void setMouseEventOnSysteme() {
 		this.renderSystem.setOnMouseClicked(e -> {
 			this.entitytargeted = this.getEntityTargeted(e);
-			this.update();
+			this.updateInfo();
 
 			if(this.entitytargeted != null) {
 				entitytargeted.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
@@ -752,7 +761,7 @@ public class RenderSystem implements Observer {
 		});
 	}
 
-	public void update() {
+	public void updateInfo() {
 		labelVitXVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().getx()) +" m/s");
 		labelVitYVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().gety()) +" m/s");
 		labelForceSurVaisseauval.setText("    * " + format.format(this.vaisseau.getForce()));
