@@ -660,13 +660,15 @@ public class RenderSystem implements Observer {
 		pause.setOnMouseClicked(e ->{
 			if(!onPause) {
 				t.cancel();
+				t.purge();
+
 				pause.setText("Resume");
 				onPause=true;
 			}else {
-				t.purge();
 				t = new Timer();
 				t.scheduleAtFixedRate(new Task(),0,1);
 				pause.setText("Pause");
+				
 				onPause=false;
 
 			}
