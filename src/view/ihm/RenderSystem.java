@@ -675,8 +675,7 @@ public class RenderSystem implements Observer {
 
 	/**
 	 * La nouvelle liste de corps est mise en place dans la vue.
-	 * Les paramètre du tableau de bord sont modifiéessi nécessaire.
-	 * @param corps
+	 * Les paramètre du tableau de bord sont modifiéessi nécessaire
 	 */
 	private void majSystem() {
 		renderSystem.getChildren().clear();
