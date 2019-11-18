@@ -189,10 +189,9 @@ public class RenderSystem implements Observer {
 						-0.5,-1
 				});
 
-				tempo.getTransforms().add(new Translate(drawPos.getx() * this.scale.getScale(),drawPos.gety() * this.scale.getScale()));
+				tempo.getTransforms().add(new Translate(drawPos.getx(),drawPos.gety()));
 				tempo.getTransforms().add(new javafx.scene.transform.Scale(entity.getRayon()*this.scale.getScale(),entity.getRayon()*this.scale.getScale()));
 				tempo.getTransforms().add(new Rotate(((Vaisseau) entity).getAngle()));
-				animate(false, false);
 			} else {
 				tempo = new Circle(	drawPos.getx(),
 						drawPos.gety(),
@@ -219,7 +218,6 @@ public class RenderSystem implements Observer {
 		Circle clignoDroit;
 		if(vaisseauAvance) {
 			vaisseau.useFuel();
-
 			avance = new Polygon(new double[] {
 					-0.5,0.75,
 					-1,0,
@@ -228,8 +226,9 @@ public class RenderSystem implements Observer {
 
 			avance.getTransforms().add(new Translate(vaisseau.getPosition().getx()-1.5,vaisseau.getPosition().gety()));
 			avance.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
-			avance.getTransforms().add(new Rotate(vaisseau.getAngle()));
+			avance.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
 			avance.setFill(Color.YELLOW);
+//			System.out.println("LE POLYGONE QUI AVANCE X : "+ (vaisseau.getPosition().getx()-1.5) + "  | Y : " + vaisseau.getPosition().gety());
 			this.shapes.add(avance);
 		} if(vaisseauRecule) {
 			vaisseau.useFuel();
@@ -242,7 +241,7 @@ public class RenderSystem implements Observer {
 
 			recule.getTransforms().add(new Translate(vaisseau.getPosition().getx()-1.5,vaisseau.getPosition().gety()));
 			recule.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
-			recule.getTransforms().add(new Rotate(vaisseau.getAngle()));
+			recule.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
 			recule.setFill(Color.RED);
 			this.shapes.add(recule);
 		}
@@ -601,7 +600,6 @@ public class RenderSystem implements Observer {
 						case Z :
 							vaisseau.setPprincipalIsOn(state);
 							vaisseauAvance = true;
-							//System.out.println("AAA !!!");
 							break;
 						case S :
 							vaisseau.setPretroIsOn(state);
