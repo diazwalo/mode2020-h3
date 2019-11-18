@@ -117,7 +117,7 @@ public class RenderSystem implements Observer {
 		this.scale = new Scale(univers , this.getHeightWindow());
 		this.createBackground(Color.BLACK);
 		this.univers = univers;
-		this.applicateScailOnSystem();
+		//this.applicateScailOnSystem();
 		this.putPlaneteOnSysteme(univers.getEntities());
 		this.format = NumberFormat.getInstance();
 		format.setMaximumIntegerDigits(2);
@@ -189,7 +189,7 @@ public class RenderSystem implements Observer {
 						-0.5,-1
 				});
 
-				tempo.getTransforms().add(new Translate(drawPos.getx(),drawPos.gety()));
+				tempo.getTransforms().add(new Translate(drawPos.getx() * this.scale.getScale(),drawPos.gety() * this.scale.getScale()));
 				tempo.getTransforms().add(new javafx.scene.transform.Scale(entity.getRayon()*this.scale.getScale(),entity.getRayon()*this.scale.getScale()));
 				tempo.getTransforms().add(new Rotate(((Vaisseau) entity).getAngle()));
 				animate(false, false);
@@ -668,7 +668,6 @@ public class RenderSystem implements Observer {
 				t.scheduleAtFixedRate(new Task(),0,1);
 				pause.setText("Pause");
 				onPause=false;
-
 			}
 		});
 	}
@@ -704,7 +703,7 @@ public class RenderSystem implements Observer {
 			univers.majPosition();
 			univers.majForce();
 			suiviPoints = new ArrayList<Circle>();
-
+			
 			Platform.runLater(() ->{
 				putPlaneteOnSysteme(univers.getEntities());
 				animate(vaisseauAvance, vaisseauRecule);
