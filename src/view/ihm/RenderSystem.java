@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -91,6 +92,7 @@ public class RenderSystem implements Observer {
 	private Label labelForceSurVaiseauval;
 	private Label labelMasseVaisseau;
 	private Label labelMasseVaisseauval;
+	private Slider sliderZoom;
 
 	private Label labelPlanete;
 	private Label labelVitXPlanete;
@@ -280,7 +282,7 @@ public class RenderSystem implements Observer {
 
 		List<Button> listFonction = fonctionnalite();
 		vBoxFonctionnalite = new VBox(); 
-		vBoxFonctionnalite.getChildren().addAll(labelfonction, hboxFonctionnalite);
+		vBoxFonctionnalite.getChildren().addAll(labelfonction, hboxFonctionnalite, sliderZoom);
 		this.renderInfo = new VBox();
 		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete, vBoxFonctionnalite);
 		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
@@ -489,8 +491,9 @@ public class RenderSystem implements Observer {
 		zoom = zoom();
 		pause = new Button("Pause");
 		quitter = new Button("Quitter");
+		sliderZoom = new Slider(0, 100, 20);
 		hBoxBoutton = new HBox(zoom, pause, quitter);
-
+		
 		hboxFonctionnalite = new HBox();
 		hboxFonctionnalite.getChildren().add(labelfonction);
 		hboxFonctionnalite.getChildren().add(zoom);
