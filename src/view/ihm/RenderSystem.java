@@ -257,8 +257,6 @@ public class RenderSystem implements Observer {
 				+ "-fx-padding: 10px;"
 				+ "");
 		labelPlanete.setStyle(labelVaisseau.getStyle());
-
-
 	}
 
 
@@ -276,29 +274,8 @@ public class RenderSystem implements Observer {
 
 	public List<Label> infoVaisseau() {
 		this.vaisseau = Vaisseau.getInstance();
-		labelVaisseau=  new Label("Informations vaisseau :");
-		labelVitXVaisseau = new Label("Vitesse en x :");
-		labelVitYVaisseau = new Label("Vitesse en y :");
-		labelVitXVaisseauval = new Label("     " + vaisseau.getVitesse().getx()+" km/h");
-		labelVitYVaisseauval = new Label("     " + vaisseau.getVitesse().gety()+" km/h");
-		labelForceSurVaiseau = new Label("Force subie par le vaisseau :");
-		labelForceSurVaiseauval = new Label("     " + vaisseau.getForce(univers));
-		labelMasseVaisseau = new Label("Masse du vaisseau :");
-		labelMasseVaisseauval = new Label("     " + vaisseau.getMasse());
-
-		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitXVaisseauval.setText("     " + nnew +" km/h");
-			});
-		});
-
-		vaisseau.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitYVaisseauval.setText("     " + nnew +" km/h");
-			});
-		});
-		//		=======
-		labelForceSurVaiseauval = new Label("     " + vaisseau.getForce(univers));
+		
+		this.iniLabelVaisseau();		
 		hBoxVitXVaisseau = new HBox(labelVitXVaisseau, labelVitXVaisseauval);
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
 		hBoxForceVaisseau = new HBox(labelForceSurVaiseau, labelForceSurVaiseauval);
@@ -321,10 +298,65 @@ public class RenderSystem implements Observer {
 
 		return labelvaisseau;
 	}
-	//>>>>>>> 6a6239daebcf2c6eba4a700a372639d8c2fa063e
 
+	private void iniLabelVaisseau() {
+		// TODO Auto-generated method stub
+		labelVaisseau=  new Label("Informations vaisseau :");
+		labelVitXVaisseau = new Label("Vitesse en x :");
+		labelVitYVaisseau = new Label("Vitesse en y :");
+		labelVitXVaisseauval = new Label("     " + vaisseau.getVitesse().getx()+" km/h");
+		labelVitYVaisseauval = new Label("     " + vaisseau.getVitesse().gety()+" km/h");
+		labelForceSurVaiseau = new Label("Force subie par le vaisseau :");
+		labelForceSurVaiseauval = new Label("     " + vaisseau.getForce(univers));
+		labelMasseVaisseau = new Label("Masse du vaisseau :");
+		labelMasseVaisseauval = new Label("     " + vaisseau.getMasse());
+
+		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
+			Platform.runLater(() -> {
+				labelVitXVaisseauval.setText("     " + nnew +" km/h");
+			});
+		});
+
+		vaisseau.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
+			Platform.runLater(() -> {
+				labelVitYVaisseauval.setText("     " + nnew +" km/h");
+			});
+		});
+
+		labelForceSurVaiseauval = new Label("     " + vaisseau.getForce(univers));
+	}
 
 	public List<Label> infoPlanete(){
+		this.initLabelPlanete(entitytargeted);
+		
+		hBoxVitXPlanete=new HBox(labelVitXPlanete, labelVitXPlaneteval);
+		hBoxVitYPlanete= new HBox(labelVitYPlanete, labelVitYPlaneteval);
+		hBoxForcePlanete=new HBox(labelForceSurPlanete,labelForceSurPlaneteval);
+		hBoxMassePlanete=new HBox(labelMassePlanete,labelMassePlaneteval);
+		vBoxInfoPlanete= new VBox();
+		vBoxInfoPlanete.getChildren().addAll(labelPlanete, hBoxVitXPlanete, hBoxVitYPlanete, hBoxForcePlanete, hBoxMassePlanete);
+		List<Label> labelplanete = new ArrayList<>();
+
+		labelplanete.add(labelPlanete);
+		labelplanete.add(labelForceSurPlanete);
+		labelplanete.add(labelForceSurPlaneteval);
+		labelplanete.add(labelVitXPlanete);
+		labelplanete.add(labelVitXPlaneteval);
+		labelplanete.add(labelVitYPlanete);
+		labelplanete.add(labelVitYPlaneteval);
+		labelplanete.add(labelForceSurPlanete);
+		labelplanete.add(labelForceSurPlaneteval);
+		labelplanete.add(labelMassePlanete);
+		labelplanete.add(labelMassePlaneteval);
+		applyStyleOnLabel(Color.WHITE, labelplanete);
+
+		return labelplanete;
+	}
+	
+	
+
+	private void initLabelPlanete(Entity entitytargeted) {
+		// TODO Auto-generated method stub
 		if(entitytargeted != null) {
 			labelPlanete =  new Label("Informations " + entitytargeted.getNom() + " :");
 			labelVitXPlanete = new Label("Vitesse en x : ");
@@ -346,27 +378,6 @@ public class RenderSystem implements Observer {
 			labelMassePlanete = new Label("Masse de la planète :");
 			labelMassePlaneteval = new Label("     ");
 		}
-		hBoxVitXPlanete=new HBox(labelVitXPlanete, labelVitXPlaneteval);
-		hBoxVitYPlanete= new HBox(labelVitYPlanete, labelVitYPlaneteval);
-		hBoxForcePlanete=new HBox(labelForceSurPlanete,labelForceSurPlaneteval);
-		hBoxMassePlanete=new HBox(labelMassePlanete,labelMassePlaneteval);
-		vBoxInfoPlanete= new VBox();
-		vBoxInfoPlanete.getChildren().addAll(labelPlanete, hBoxVitXPlanete, hBoxVitYPlanete, hBoxForcePlanete, hBoxMassePlanete);
-		List<Label> labelplanete = new ArrayList<>();
-		labelplanete.add(labelPlanete);
-		labelplanete.add(labelForceSurPlanete);
-		labelplanete.add(labelForceSurPlaneteval);
-		labelplanete.add(labelVitXPlanete);
-		labelplanete.add(labelVitXPlaneteval);
-		labelplanete.add(labelVitYPlanete);
-		labelplanete.add(labelVitYPlaneteval);
-		labelplanete.add(labelForceSurPlanete);
-		labelplanete.add(labelForceSurPlaneteval);
-		labelplanete.add(labelMassePlanete);
-		labelplanete.add(labelMassePlaneteval);
-		applyStyleOnLabel(Color.WHITE, labelplanete);
-
-		return labelplanete;
 	}
 
 	/**
@@ -392,6 +403,12 @@ public class RenderSystem implements Observer {
 		this.hb.getChildren().addAll(renderSystem, renderInfo);
 
 		renderSystem.setFocusTraversable(true);
+		
+		this.addEventRenderSystem();
+	}
+
+	private void addEventRenderSystem() {
+		// TODO Auto-generated method stub
 		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
 			KeyCode key = e.getCode();
 			if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
@@ -508,6 +525,6 @@ public class RenderSystem implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-
+		
 	}
 }
