@@ -1,7 +1,5 @@
 package model.entity;
 
-import java.util.Observable;
-
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.movement.Vecteur;
