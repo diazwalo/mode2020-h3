@@ -10,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -107,16 +108,16 @@ public class RenderSystem implements Observer {
 	private Button pause;
 	private Button quitter;
 	private Button zoom;
-	private boolean etat;
+	private boolean onPause;
 	private Timer t;
 
 	public RenderSystem(double rayon, Univers univers) {
-		etat=false;
+		onPause=false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
 		this.createBackground(Color.BLACK);
 		this.univers = univers;
-		this.applicateScailOnSystem();
+		//this.applicateScailOnSystem();
 		this.putPlaneteOnSysteme(univers.getEntities());
 		this.format = NumberFormat.getInstance();
 		format.setMaximumIntegerDigits(2);
@@ -168,7 +169,7 @@ public class RenderSystem implements Observer {
 	private Vecteur getDrawPosition(Entity entity) {
 		Vecteur pos = entity.getPosition();
 		return new Vecteur(	pos.getx() + this.getHeightWindow()/2,
-				this.getHeightWindow()/2 - pos.gety());
+							this.getHeightWindow()/2 - pos.gety());
 	}
 
 	/**
@@ -191,7 +192,6 @@ public class RenderSystem implements Observer {
 				tempo.getTransforms().add(new Translate(drawPos.getx(),drawPos.gety()));
 				tempo.getTransforms().add(new javafx.scene.transform.Scale(entity.getRayon()*this.scale.getScale(),entity.getRayon()*this.scale.getScale()));
 				tempo.getTransforms().add(new Rotate(((Vaisseau) entity).getAngle()));
-				animate(false, false);
 			} else {
 				tempo = new Circle(	drawPos.getx(),
 						drawPos.gety(),
@@ -216,7 +216,6 @@ public class RenderSystem implements Observer {
 		Shape recule;
 		if(vaisseauAvance) {
 			vaisseau.useFuel();
-
 			avance = new Polygon(new double[] {
 					-0.5,0.75,
 					-1,0,
@@ -225,8 +224,9 @@ public class RenderSystem implements Observer {
 
 			avance.getTransforms().add(new Translate(vaisseau.getPosition().getx()-1.5,vaisseau.getPosition().gety()));
 			avance.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
-			avance.getTransforms().add(new Rotate(vaisseau.getAngle()));
+			avance.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
 			avance.setFill(Color.YELLOW);
+//			System.out.println("LE POLYGONE QUI AVANCE X : "+ (vaisseau.getPosition().getx()-1.5) + "  | Y : " + vaisseau.getPosition().gety());
 			this.shapes.add(avance);
 		} if(vaisseauRecule) {
 			vaisseau.useFuel();
@@ -239,7 +239,7 @@ public class RenderSystem implements Observer {
 
 			recule.getTransforms().add(new Translate(vaisseau.getPosition().getx()-1.5,vaisseau.getPosition().gety()));
 			recule.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
-			recule.getTransforms().add(new Rotate(vaisseau.getAngle()));
+			recule.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
 			recule.setFill(Color.RED);
 			this.shapes.add(recule);
 		}
@@ -304,9 +304,6 @@ public class RenderSystem implements Observer {
 		this.hboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 
 		creerStyle();
-
-
-
 	}
 
 	public static void setInsetsAuto(VBox vb, List<Label> list) {
@@ -477,7 +474,7 @@ public class RenderSystem implements Observer {
 		labelfonction =  new Label("Utilitaires :");
 		List<Button> res = new ArrayList<>();
 
-		zoom = zoom();
+		zoom = new Button("Zoom");
 		pause = new Button("Pause");
 		quitter = new Button("Quitter");
 		hBoxBoutton = new HBox(zoom, pause, quitter);
@@ -488,24 +485,9 @@ public class RenderSystem implements Observer {
 		hboxFonctionnalite.getChildren().add(pause);
 		hboxFonctionnalite.getChildren().add(quitter);
 
-		res.add(zoom());
+		res.add(zoom);
 
 		return res;
-	}
-
-	/**
-	 * Renvoie le bouton permettant le zoom
-	 * @return
-	 */
-	public Button zoom() {
-		Button button = new Button("Zoom");
-
-		button.setOnMouseClicked(event ->{
-			this.scale = new Scale(univers , this.getHeightWindow() + 500);
-		});
-
-
-		return button;
 	}
 
 	/**
@@ -520,26 +502,12 @@ public class RenderSystem implements Observer {
 		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
 		t = new Timer();
-		etat = false;
+		onPause = false;
 		t.scheduleAtFixedRate(new Task(),0,1);
 
-		pause.setOnMouseClicked(e ->{
-			if(!etat) {
-				t.cancel();
-				pause.setText("Resume");
-				etat=true;
-			}else {
-				t.purge();
-				t = new Timer();
-				t.scheduleAtFixedRate(new Task(),0,1);
-				pause.setText("Pause");
-				etat=false;
-
-			}
-		});
-		quitter.setOnMouseClicked(e ->{
-			System.exit(1);
-		});
+		setActionOnPause();
+		setActionOnZoom();
+		setActionOnQuit();
 
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
@@ -549,13 +517,18 @@ public class RenderSystem implements Observer {
 		this.hb.getChildren().addAll(renderSystem, renderInfo);
 
 		renderSystem.setFocusTraversable(true);
+		setActionOnVaisseau();
+	}
+	
+	private void setActionOnVaisseau() {
+		// TODO Auto-generated method stub
 		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
 			KeyCode key = e.getCode();
 			String osName = System.getProperty("os.name");
 			if(vaisseau.getFuel() > 0) {
 				if(osName.contentEquals("Mac OS X")) {
 					if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
-						System.out.println(key);
+						//System.out.println(key);
 						boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
 						switch(key) {
 						case W :
@@ -634,6 +607,37 @@ public class RenderSystem implements Observer {
 		});
 	}
 
+	private void setActionOnZoom() {
+		// TODO Auto-generated method stub
+		zoom.setOnMouseClicked(event ->{
+			this.scale = new Scale(univers , this.getHeightWindow() + 500);
+		});
+	}
+
+	private void setActionOnQuit() {
+		// TODO Auto-generated method stub
+		quitter.setOnMouseClicked(e ->{
+			System.exit(0);
+		});
+	}
+
+	private void setActionOnPause() {
+		// TODO Auto-generated method stub
+		pause.setOnMouseClicked(e ->{
+			if(!onPause) {
+				t.cancel();
+				pause.setText("Resume");
+				onPause=true;
+			}else {
+				t.purge();
+				t = new Timer();
+				t.scheduleAtFixedRate(new Task(),0,1);
+				pause.setText("Pause");
+				onPause=false;
+			}
+		});
+	}
+
 	/**
 	 * La nouvelle liste de corps est mise en place dans la vue.
 	 * Les paramètre du tableau de bord sont modifiéessi nécessaire.
@@ -666,7 +670,7 @@ public class RenderSystem implements Observer {
 			univers.majForce();
 			update(entitytargeted, new Object());
 			suiviPoints = new ArrayList<Circle>();
-
+			
 			Platform.runLater(() ->{
 				putPlaneteOnSysteme(univers.getEntities());
 				animate(vaisseauAvance, vaisseauRecule);
@@ -694,18 +698,23 @@ public class RenderSystem implements Observer {
 	public void setMouseEventOnSysteme() {
 		this.renderSystem.setOnMouseClicked(e -> {
 			this.entitytargeted = this.getEntityTargeted(e);
-			this.update();
+			this.updateInfo();
 
 			if(this.entitytargeted != null) {
 				update(entitytargeted, e);
 			}
 		});
 		this.renderSystem.setOnScroll(e -> {
-			System.out.println("X : "+e.getSceneX() + ", Y : "+ e.getSceneY());
-		});
+			System.out.println("Y : " + e.getDeltaY());
+			if(e.getDeltaY() > 0) {
+				this.scale.setScale(this.scale.getScale()+1);
+			}else {
+				this.scale.setScale(this.scale.getScale()-1);			
+			}
+		});	
 	}
 
-	public void update() {
+	public void updateInfo() {
 		labelVitXVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().getx()) +" m/s");
 		labelVitYVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().gety()) +" m/s");
 		labelForceSurVaisseauval.setText("    * " + format.format(this.vaisseau.getForce()));
