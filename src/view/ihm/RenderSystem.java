@@ -10,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -104,7 +103,6 @@ public class RenderSystem implements Observer {
 
 	private List<Label> listlabelvaisseauval;
 	private List<Label> listlabelplaneteval;
-	private List<Node> listButton;
 	private Button pause;
 	private Button quitter;
 	private Button zoom;
@@ -342,6 +340,7 @@ public class RenderSystem implements Observer {
 				+ "-fx-padding: 10px;"
 				+ "");
 		labelPlanete.setStyle(labelVaisseau.getStyle());
+
 		labelfonction.setStyle(labelVaisseau.getStyle());
 		labelfonction.setTextFill(Color.WHITE);
 		String styleForVal = "-fx-font-weight: normal;";
@@ -382,29 +381,8 @@ public class RenderSystem implements Observer {
 
 	public List<Label> infoVaisseau() {
 		this.vaisseau = Vaisseau.getInstance();
-		vaisseau.setForce(vaisseau.createForce(univers));
-		labelVaisseau=  new Label("Informations vaisseau :");
-		labelVitXVaisseau = new Label("Vitesse en x :");
-		labelVitYVaisseau = new Label("Vitesse en y :");
-		labelVitXVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().getx()) + " m/s");
-		labelVitYVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().gety()) + " m/s");
-		labelForceSurVaisseau = new Label("Force subie par le vaisseau :");
-		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce() );
-		labelMasseVaisseau = new Label("Masse du vaisseau :");
-		labelMasseVaisseauval = new Label("     " + format.format(vaisseau.getMasse()) + " kg");
-		fuel = new ProgressBar(vaisseau.getFuel());
 
-		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitXVaisseauval.setText("     " + format.format(nnew) +" m/s");
-			});
-		});
-
-		vaisseau.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitYVaisseauval.setText("     " + format.format(nnew) +" m/s");
-			});
-		});
+		this.iniLabelVaisseau();		
 
 		hBoxVitXVaisseau = new HBox(labelVitXVaisseau, labelVitXVaisseauval);
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
@@ -432,8 +410,65 @@ public class RenderSystem implements Observer {
 	private void majFuel() {
 		fuel.setProgress(vaisseau.getFuel()/Vaisseau.FUELMAX);
 	}
+	
+	private void iniLabelVaisseau() {
+		// TODO Auto-generated method stub
+		labelVaisseau=  new Label("Informations vaisseau :");
+		labelVitXVaisseau = new Label("Vitesse en x :");
+		labelVitYVaisseau = new Label("Vitesse en y :");
+		labelVitXVaisseauval = new Label("     " + vaisseau.getVitesse().getx()+" km/h");
+		labelVitYVaisseauval = new Label("     " + vaisseau.getVitesse().gety()+" km/h");
+		labelForceSurVaisseau = new Label("Force subie par le vaisseau :");
+		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce());
+		labelMasseVaisseau = new Label("Masse du vaisseau :");
+		labelMasseVaisseauval = new Label("     " + vaisseau.getMasse());
+
+		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
+			Platform.runLater(() -> {
+				labelVitXVaisseauval.setText("     " + nnew +" km/h");
+			});
+		});
+
+		vaisseau.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
+			Platform.runLater(() -> {
+				labelVitYVaisseauval.setText("     " + nnew +" km/h");
+			});
+		});
+
+		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce());
+	}
 
 	public List<Label> infoPlanete(){
+		this.initLabelPlanete(entitytargeted);
+		
+		hBoxVitXPlanete=new HBox(labelVitXPlanete, labelVitXPlaneteval);
+		hBoxVitYPlanete= new HBox(labelVitYPlanete, labelVitYPlaneteval);
+		hBoxForcePlanete=new HBox(labelForceSurPlanete,labelForceSurPlaneteval);
+		hBoxMassePlanete=new HBox(labelMassePlanete,labelMassePlaneteval);
+		vBoxInfoPlanete= new VBox();
+		vBoxInfoPlanete.getChildren().addAll(labelPlanete, hBoxVitXPlanete, hBoxVitYPlanete, hBoxForcePlanete, hBoxMassePlanete);
+		List<Label> labelplanete = new ArrayList<>();
+
+		labelplanete.add(labelPlanete);
+		labelplanete.add(labelForceSurPlanete);
+		labelplanete.add(labelForceSurPlaneteval);
+		labelplanete.add(labelVitXPlanete);
+		labelplanete.add(labelVitXPlaneteval);
+		labelplanete.add(labelVitYPlanete);
+		labelplanete.add(labelVitYPlaneteval);
+		labelplanete.add(labelForceSurPlanete);
+		labelplanete.add(labelForceSurPlaneteval);
+		labelplanete.add(labelMassePlanete);
+		labelplanete.add(labelMassePlaneteval);
+		applyStyleOnLabel(Color.WHITE, labelplanete);
+
+		return labelplanete;
+	}
+	
+	
+
+	private void initLabelPlanete(Entity entitytargeted) {
+		// TODO Auto-generated method stub
 		if(entitytargeted != null) {
 			entitytargeted.setForce(entitytargeted.createForce(univers));
 			labelPlanete =  new Label("Informations " + entitytargeted.getNom() + " :");
@@ -475,27 +510,6 @@ public class RenderSystem implements Observer {
 			labelMassePlanete = new Label("Masse de la planète :");
 			labelMassePlaneteval = new Label("     ");
 		}
-		hBoxVitXPlanete=new HBox(labelVitXPlanete, labelVitXPlaneteval);
-		hBoxVitYPlanete= new HBox(labelVitYPlanete, labelVitYPlaneteval);
-		hBoxForcePlanete=new HBox(labelForceSurPlanete,labelForceSurPlaneteval);
-		hBoxMassePlanete=new HBox(labelMassePlanete,labelMassePlaneteval);
-		vBoxInfoPlanete= new VBox();
-		vBoxInfoPlanete.getChildren().addAll(labelPlanete, hBoxVitXPlanete, hBoxVitYPlanete, hBoxForcePlanete, hBoxMassePlanete);
-		List<Label> labelplanete = new ArrayList<>();
-		labelplanete.add(labelPlanete);
-		labelplanete.add(labelForceSurPlanete);
-		labelplanete.add(labelForceSurPlaneteval);
-		labelplanete.add(labelVitXPlanete);
-		labelplanete.add(labelVitXPlaneteval);
-		labelplanete.add(labelVitYPlanete);
-		labelplanete.add(labelVitYPlaneteval);
-		labelplanete.add(labelForceSurPlanete);
-		labelplanete.add(labelForceSurPlaneteval);
-		labelplanete.add(labelMassePlanete);
-		labelplanete.add(labelMassePlaneteval);
-		applyStyleOnLabel(Color.WHITE, labelplanete);
-
-		return labelplanete;
 	}
 
 	/**
@@ -549,11 +563,15 @@ public class RenderSystem implements Observer {
 		this.hb.getChildren().addAll(renderSystem, renderInfo);
 
 		renderSystem.setFocusTraversable(true);
+		
 		setActionOnVaisseau();
 	}
 	
 	private void setActionOnVaisseau() {
-		// TODO Auto-generated method stub
+		this.addEventRenderSystem();
+	}
+
+	private void addEventRenderSystem() {
 		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
 			KeyCode key = e.getCode();
 			String osName = System.getProperty("os.name");
@@ -777,6 +795,6 @@ public class RenderSystem implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-
+		
 	}
 }
