@@ -22,7 +22,6 @@ public class Core extends Application{
 		}
 		Univers.createUnivers(rfs.getListeCorpsCeleste(), rfs);
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), Univers.getUnivers());
-		Univers.getUnivers().addObserver(rs);
 		Stage stageRs = rs.createRender();
 		stageRs.show();
 	}

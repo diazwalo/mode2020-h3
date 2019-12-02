@@ -4,8 +4,6 @@ import java.awt.GraphicsEnvironment;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,7 +45,7 @@ import model.movement.Vecteur;
  */
 
 
-public class RenderSystem implements Observer {
+public class RenderSystem {
 	private Stage st;
 	private Scene sc;
 	private HBox hb;
@@ -212,8 +210,6 @@ public class RenderSystem implements Observer {
 	private void animate(boolean vaisseauAvance, boolean vaisseauRecule) {
 		Shape avance;
 		Shape recule;
-		Circle clignoGauche;
-		Circle clignoDroit;
 		if(vaisseauAvance) {
 			vaisseau.useFuel();
 			avance = new Polygon(new double[] {
@@ -381,7 +377,6 @@ public class RenderSystem implements Observer {
 
 	public List<Label> infoVaisseau() {
 		this.vaisseau = Vaisseau.getInstance();
-
 		this.iniLabelVaisseau();		
 
 		hBoxVitXVaisseau = new HBox(labelVitXVaisseau, labelVitXVaisseauval);
@@ -422,18 +417,6 @@ public class RenderSystem implements Observer {
 		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce());
 		labelMasseVaisseau = new Label("Masse du vaisseau :");
 		labelMasseVaisseauval = new Label("     " + vaisseau.getMasse());
-
-		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitXVaisseauval.setText("     " + nnew +" km/h");
-			});
-		});
-
-		vaisseau.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitYVaisseauval.setText("     " + nnew +" km/h");
-			});
-		});
 
 		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce());
 	}
@@ -480,24 +463,6 @@ public class RenderSystem implements Observer {
 			labelForceSurPlaneteval = new Label("     " + format.format(entitytargeted.getForce()) );
 			labelMassePlanete = new Label("Masse de la planète :");
 			labelMassePlaneteval = new Label("     " + format.format(entitytargeted.getMasse()) + " kg");
-
-			entitytargeted.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelVitXPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-				});
-			});
-
-			entitytargeted.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelVitYPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-				});
-			});
-
-			entitytargeted.getForceProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelForceSurVaisseauval.setText("    * " + format.format(nnew));
-				});
-			});
 
 		}else {
 			labelPlanete =  new Label("Informations ... :");
@@ -606,6 +571,8 @@ public class RenderSystem implements Observer {
 								break;
 							case S :
 								vaisseauRecule = false;
+								break;
+							default:
 								break;
 							}
 						}
@@ -748,26 +715,6 @@ public class RenderSystem implements Observer {
 		this.renderSystem.setOnMouseClicked(e -> {
 			this.entitytargeted = this.getEntityTargeted(e);
 			this.updateInfo();
-
-			if(this.entitytargeted != null) {
-				entitytargeted.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelVitXPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-					});
-				});
-
-				entitytargeted.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelVitYPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-					});
-				});
-
-				entitytargeted.getForceProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelForceSurVaisseauval.setText("    * " + format.format(nnew));
-					});
-				});
-			}
 		});
 		this.renderSystem.setOnScroll(e -> {
 			System.out.println("Y : " + e.getDeltaY());
@@ -790,11 +737,5 @@ public class RenderSystem implements Observer {
 			labelVitYPlaneteval.setText("    * " + format.format(this.entitytargeted.getVitesse().gety()) +"");
 			labelForceSurPlaneteval.setText("    * " + format.format(this.vaisseau.getForce()));
 		}
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
 	}
 }

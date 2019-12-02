@@ -2,6 +2,7 @@ package model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
 import controller.fileprocessor.RecupFichierSource;
 import model.movement.Vecteur;
@@ -45,10 +46,10 @@ public class Univers {
 	public RecupFichierSource getRFS() {
 		return source;
 	}
-	
+		
 	public void majAcceleration() {
-		for(Entity e : entities) {
-			e.createAcceleration(getUnivers());
+		for(Entity entity : entities) {
+			entity.createAcceleration(getUnivers());
 		}
 	}
 	public void majVitesse() {
@@ -68,12 +69,5 @@ public class Univers {
 		for(Entity entity : entities) {
 			entity.setForce(entity.createForce(this));
 		}
-	}
-	
-	public void addObserver(RenderSystem rs) {
-		for(Entity entity : entities) {
-			entity.addObserver(rs);
-		}
-	}
-	
+	}	
 }
