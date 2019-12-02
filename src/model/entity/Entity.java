@@ -13,7 +13,7 @@ import model.movement.Vecteur;
  *	notamment les étoiles, les planètes et le vaisseau.
  */
 
-public abstract class Entity extends Observable {
+public abstract class Entity implements IEulerExplicite {
 	protected double masse;
 	protected double rayon;
 	protected double force;
@@ -45,20 +45,11 @@ public abstract class Entity extends Observable {
 	}
 
 	public Vecteur getMOmega(Entity other) {
-		return new Vecteur(other.getPosition().getx()-this.position.getx(), other.position.gety()-this.position.gety());
-	}
-
-	public double forceForEachEntity(Entity other) {
-		return (Univers.getUnivers().getRFS().getG()*this.getMasse()*other.getMasse()) / (Math.pow(getMOmega(other).getNorme(), 2));
+		return IEulerExplicite.getMOmega(this, other);
 	}
 
 	public double createForce(Univers others) {
-		double force = 0;
-		for(Entity other : others.getEntities()) {
-			if(! this.equals(other))
-				force += forceForEachEntity(other);
-		}
-		return force;
+		return IEulerExplicite.createForce(this, others);
 	}
 	
 	public void setForce(double value) {
@@ -69,29 +60,8 @@ public abstract class Entity extends Observable {
 		return force;
 	}
 
-	public Vecteur createAccelerationForEachEntity(Entity other) {
-		double Gmm = Univers.getUnivers().getRFS().getG()*this.getMasse()*other.getMasse();
-		Vecteur MOmega = getMOmega(other);
-		
-		double MOCube = Math.pow(MOmega.getNorme(), 3);
-		return new Vecteur(((Gmm/MOCube)*MOmega.getx())/this.masse,
-							((Gmm/MOCube)*MOmega.gety())/this.masse);
-	}
-
 	public void createAcceleration(Univers others) {
-		double ax = 0;
-		double ay = 0;
-		for(Entity entity : others.getEntities()) {
-			if(!(this instanceof ObjetFixe) && !this.equals(entity)) {
-				ax += createAccelerationForEachEntity(entity).getx();
-				ay += createAccelerationForEachEntity(entity).gety();
-			}
-		}
-		setAcceleration(new Vecteur(ax, ay));
-	}
-
-	public double getK() {
-		return Univers.getUnivers().getRFS().getG() * getMasse();
+		IEulerExplicite.createAcceleration(this, others);
 	}
 
 	public double getMasse() {
@@ -112,15 +82,11 @@ public abstract class Entity extends Observable {
 	public void setPosition(Vecteur newPosition) {
 		position.setx(newPosition.getx());
 		position.sety(newPosition.gety());
-		setChanged();
-		notifyObservers();
 	}
 
 	public void setVitesse(Vecteur newVitesse) {
 		vitesse.setx(newVitesse.getx());
 		vitesse.sety(newVitesse.gety());
-		setChanged();
-		notifyObservers();
 	}
 
 	public Vecteur getVitesse() {
@@ -130,22 +96,16 @@ public abstract class Entity extends Observable {
 	public void setVitesse(double x, double y) {
 		this.vitesse.setx(x);
 		this.vitesse.sety(y);
-		setChanged();
-		notifyObservers();
 	}
 
 	public void setAcceleration(Vecteur newAcceleration) {
 		acceleration.setx(newAcceleration.getx());
 		acceleration.sety(newAcceleration.gety());
-		setChanged();
-		notifyObservers();
 	}
 
 	public void setAcceleration(double x, double y) {
 		acceleration.setx(x);
 		acceleration.sety(y);
-		setChanged();
-		notifyObservers();
 	}
 
 	public Vecteur getAcceleration() {

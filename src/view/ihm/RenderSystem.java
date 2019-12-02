@@ -48,7 +48,7 @@ import model.movement.Vecteur;
  */
 
 
-public class RenderSystem implements Observer {
+public class RenderSystem {
 	private Stage st;
 	private Scene sc;
 	private HBox hb;
@@ -557,6 +557,8 @@ public class RenderSystem implements Observer {
 							case S :
 								vaisseauRecule = false;
 								break;
+							default:
+								break;
 							}
 						}
 					}
@@ -668,7 +670,6 @@ public class RenderSystem implements Observer {
 			univers.majVitesse();
 			univers.majPosition();
 			univers.majForce();
-			update(entitytargeted, new Object());
 			suiviPoints = new ArrayList<Circle>();
 			
 			Platform.runLater(() ->{
@@ -699,10 +700,6 @@ public class RenderSystem implements Observer {
 		this.renderSystem.setOnMouseClicked(e -> {
 			this.entitytargeted = this.getEntityTargeted(e);
 			this.updateInfo();
-
-			if(this.entitytargeted != null) {
-				update(entitytargeted, e);
-			}
 		});
 		this.renderSystem.setOnScroll(e -> {
 			System.out.println("Y : " + e.getDeltaY());
@@ -724,22 +721,6 @@ public class RenderSystem implements Observer {
 			labelVitXPlaneteval.setText("    * " + format.format(this.entitytargeted.getVitesse().getx()) +"");
 			labelVitYPlaneteval.setText("    * " + format.format(this.entitytargeted.getVitesse().gety()) +"");
 			labelForceSurPlaneteval.setText("    * " + format.format(this.vaisseau.getForce()));
-		}
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		labelVitXVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().getx()) +" m/s");
-		labelVitYVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().gety()) +" m/s");
-		labelForceSurVaisseauval.setText("    * " + format.format(this.vaisseau.getForce()));
-
-		if(o != null) {
-			Entity updated = (Entity) o;
-
-			labelPlanete.setText("Informations " + updated.getNom() + " :");
-			labelVitXPlaneteval.setText("    * " + format.format(updated.getVitesse().getx()) +"");
-			labelVitYPlaneteval.setText("    * " + format.format(updated.getVitesse().gety()) +"");
-			labelForceSurPlaneteval.setText("    * " + format.format(updated.getForce()));
 		}
 	}
 }
