@@ -418,6 +418,8 @@ public class RenderSystem {
 		labelMasseVaisseau = new Label("Masse du vaisseau :");
 		labelMasseVaisseauval = new Label("     " + vaisseau.getMasse());
 
+		fuel = new ProgressBar(vaisseau.getFuel());
+		
 		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce());
 	}
 
