@@ -740,4 +740,5 @@ public class RenderSystem {
 			labelForceSurPlaneteval.setText("    * " + format.format(this.vaisseau.getForce()));
 		}
 	}
+
 }

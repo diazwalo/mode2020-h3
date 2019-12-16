@@ -2,6 +2,7 @@ package model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
 import controller.fileprocessor.RecupFichierSource;
 import model.movement.Vecteur;
@@ -12,18 +13,18 @@ public class Univers {
 	private static Univers univers = null;
 	private RecupFichierSource source;
 
-	
+
 	private Univers(List<Entity> entities, RecupFichierSource source) {
 		this.entities = entities;
 		this.source = source;
 	}
-	
+
 	public static Univers getUnivers() {
 		if(univers == null)
 			createUnivers();
 		return univers;
 	}
-	
+
 	public static void createUnivers() {
 		RecupFichierSource rfs = new RecupFichierSource();
 		ArrayList<Entity> newEntities = new ArrayList<Entity>();
@@ -33,22 +34,22 @@ public class Univers {
 		}
 		univers = new Univers(newEntities, rfs);
 	}
-	
+
 	public static void createUnivers(List<Entity> entities, RecupFichierSource source) {
 		univers = new Univers(entities, source);
 	}
-	
+
 	public List<Entity> getEntities() {
 		return entities;
 	}
-	
+
 	public RecupFichierSource getRFS() {
 		return source;
 	}
-	
+
 	public void majAcceleration() {
-		for(Entity e : entities) {
-			e.createAcceleration(getUnivers());
+		for(Entity entity : entities) {
+			entity.createAcceleration(getUnivers());
 		}
 	}
 	public void majVitesse() {
@@ -56,18 +57,19 @@ public class Univers {
 			entity.setVitesse(entity.getVitesse().addOtherVecteur((entity.getAcceleration().multiplyWithVariable(source.getDt() * source.getFa()))));
 		}
 	}
-	
+
 	public void majPosition() {
 		for(Entity entity : entities) {
 			//System.out.println(entity.getNom() + " " + entity.getPosition());
 			entity.setPosition(entity.getPosition().addOtherVecteur((entity.getVitesse().multiplyWithVariable(source.getDt() * source.getFa()))));
 		}
 	}
-	
+
 	public void majForce() {
 		for(Entity entity : entities) {
 			entity.setForce(entity.createForce(this));
 		}
 	}
+
 	
 }
