@@ -2,6 +2,8 @@ package core;
 
 import controller.fileprocessor.RecupFichierSource;
 import javafx.application.Application;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.entity.Univers;
 import view.ihm.RenderSystem;

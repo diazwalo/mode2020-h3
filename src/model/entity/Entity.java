@@ -113,6 +113,10 @@ public abstract class Entity implements IEulerExplicite {
 	public Color getColor() {
 		return color;
 	}
+	
+	public void setColor(Color color) {
+		this.color = color;
+	}
 
 	public Image getSprite() {
 		return sprite;
