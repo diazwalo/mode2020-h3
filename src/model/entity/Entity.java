@@ -46,7 +46,7 @@ public abstract class Entity extends Observable {
 	}
 
 	public Vecteur getMOmega(Entity other) {
-		return new Vecteur(this.getPosition().getx()-other.position.getx(), this.position.gety()-other.position.gety());
+		return new Vecteur(other.getPosition().getx()-this.position.getx(), other.position.gety()-this.position.gety());
 	}
 
 	public double forceForEachEntity(Entity other) {
@@ -76,9 +76,11 @@ public abstract class Entity extends Observable {
 
 	public Vecteur createAccelerationForEachEntity(Entity other) {
 		double Gmm = Univers.getUnivers().getRFS().getG()*this.getMasse()*other.getMasse();
-		double MOCube = Math.pow(getMOmega(other).getNorme(), 3);
-		return new Vecteur(((Gmm/MOCube)*getMOmega(other).getx())/this.masse,
-							((Gmm/MOCube)*getMOmega(other).gety())/this.masse);
+		Vecteur MOmega = getMOmega(other);
+		
+		double MOCube = Math.pow(MOmega.getNorme(), 3);
+		return new Vecteur(((Gmm/MOCube)*MOmega.getx())/this.masse,
+							((Gmm/MOCube)*MOmega.gety())/this.masse);
 	}
 
 	public void createAcceleration(Univers others) {

@@ -26,4 +26,8 @@ public class Scale {
 	public void setScale(double px, double expected) {
 		this.newScale = expected / px;
 	}
+	
+	public void setScale(double newScale) {
+		this.newScale = newScale;
+	}
 }

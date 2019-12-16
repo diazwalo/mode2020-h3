@@ -4,20 +4,17 @@ import java.awt.GraphicsEnvironment;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Platform;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -35,7 +32,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import model.entity.Entity;
-import model.entity.ObjetFixe;
 import model.entity.ObjetSimule;
 import model.entity.Univers;
 import model.entity.Vaisseau;
@@ -49,7 +45,7 @@ import model.movement.Vecteur;
  */
 
 
-public class RenderSystem implements Observer {
+public class RenderSystem {
 	private Stage st;
 	private Scene sc;
 	private HBox hb;
@@ -58,7 +54,6 @@ public class RenderSystem implements Observer {
 	private List<Shape> shapes;
 	private List<Circle> suiviPoints;
 	private Univers univers;
-	private ObjetFixe etoile;
 	private Shape background;
 	private Scale scale;
 	private Entity entitytargeted;
@@ -68,7 +63,7 @@ public class RenderSystem implements Observer {
 	private boolean vaisseauAvance;
 	private boolean vaisseauRecule;
 
-	private VBox vBoxInfoVaiseau;
+	private VBox vBoxInfoVaisseau;
 	private VBox vBoxInfoPlanete;
 	private VBox vBoxFonctionnalite;
 	private HBox hboxFonctionnalite;
@@ -88,11 +83,11 @@ public class RenderSystem implements Observer {
 	private Label labelVitYVaisseau;
 	private Label labelVitXVaisseauval;
 	private Label labelVitYVaisseauval;
-	private Label labelForceSurVaiseau;
-	private Label labelForceSurVaiseauval;
+	private Label labelForceSurVaisseau;
+	private Label labelForceSurVaisseauval;
 	private Label labelMasseVaisseau;
 	private Label labelMasseVaisseauval;
-	private Slider sliderZoom;
+	private ProgressBar fuel;
 
 	private Label labelPlanete;
 	private Label labelVitXPlanete;
@@ -106,20 +101,19 @@ public class RenderSystem implements Observer {
 
 	private List<Label> listlabelvaisseauval;
 	private List<Label> listlabelplaneteval;
-	private List<Node> listButton;
 	private Button pause;
 	private Button quitter;
 	private Button zoom;
-	private boolean etat;
+	private boolean onPause;
 	private Timer t;
 
 	public RenderSystem(double rayon, Univers univers) {
-		etat=false;
+		onPause=false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
 		this.createBackground(Color.BLACK);
 		this.univers = univers;
-		this.applicateScailOnSystem();
+		//this.applicateScailOnSystem();
 		this.putPlaneteOnSysteme(univers.getEntities());
 		this.format = NumberFormat.getInstance();
 		format.setMaximumIntegerDigits(2);
@@ -156,17 +150,22 @@ public class RenderSystem implements Observer {
 
 	private void applicateScailOnSystem() {
 		for (Entity entity : univers.getEntities()) {
-			Vecteur posTempo = entity.getPosition();
+			/*Vecteur posTempo = entity.getPosition();
 			//posTempo.setx(posTempo.getx() * this.scale.getScale());
 			//posTempo.sety(posTempo.gety() * this.scale.getScale());
 			System.out.println(posTempo);
 			posTempo.setx(posTempo.getx() + this.getHeightWindow()/2);
-			posTempo.sety(posTempo.gety() + this.getHeightWindow()/2);
+			posTempo.sety(this.getHeightWindow()/2 - posTempo.gety());
 			entity.setPosition(posTempo);
-			entity.setVitesse(entity.getVitesse().multiplyWithVariable(this.scale.getScale()));
 			entity.setRayon(entity.getRayon()* this.scale.getScale());
-			System.out.println(posTempo);
+			System.out.println(posTempo);*/
 		}
+	}
+
+	private Vecteur getDrawPosition(Entity entity) {
+		Vecteur pos = entity.getPosition();
+		return new Vecteur(	pos.getx() + this.getHeightWindow()/2,
+							this.getHeightWindow()/2 - pos.gety());
 	}
 
 	/**
@@ -177,6 +176,7 @@ public class RenderSystem implements Observer {
 		this.shapes = new ArrayList<Shape>();
 		Color c = new Color(0.6, 0.0, 0.6, 1);
 		for (Entity entity : corps) {
+			Vecteur drawPos = getDrawPosition(entity); 
 			Shape tempo;
 			if(entity instanceof Vaisseau) {
 				tempo = new Polygon(new double[] {
@@ -185,14 +185,13 @@ public class RenderSystem implements Observer {
 						-0.5,-1
 				});
 
-				tempo.getTransforms().add(new Translate(entity.getPosition().getx(),entity.getPosition().gety()));
-				tempo.getTransforms().add(new javafx.scene.transform.Scale(entity.getRayon(),entity.getRayon()));
+				tempo.getTransforms().add(new Translate(drawPos.getx(),drawPos.gety()));
+				tempo.getTransforms().add(new javafx.scene.transform.Scale(entity.getRayon()*this.scale.getScale(),entity.getRayon()*this.scale.getScale()));
 				tempo.getTransforms().add(new Rotate(((Vaisseau) entity).getAngle()));
-				animate(false, false);
 			} else {
-				tempo = new Circle(entity.getPosition().getx(), 
-						entity.getPosition().gety(), 
-						entity.getRayon());
+				tempo = new Circle(	drawPos.getx(),
+						drawPos.gety(),
+						entity.getRayon()*this.scale.getScale());
 			}
 
 			if(entity.getSprite() != null) {
@@ -212,25 +211,29 @@ public class RenderSystem implements Observer {
 		Shape avance;
 		Shape recule;
 		if(vaisseauAvance) {
+			vaisseau.useFuel();
 			avance = new Polygon(new double[] {
-					-0.5,1,
-					0.5,0,
-					-0.5,-1
+					-0.5,0.75,
+					-1,0,
+					-0.5,-0.75
 			});
 
-			avance.getTransforms().add(new Translate(vaisseau.getPosition().getx()-0.5,vaisseau.getPosition().gety()));
+			avance.getTransforms().add(new Translate(vaisseau.getPosition().getx()-1.5,vaisseau.getPosition().gety()));
 			avance.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
 			avance.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
 			avance.setFill(Color.YELLOW);
+//			System.out.println("LE POLYGONE QUI AVANCE X : "+ (vaisseau.getPosition().getx()-1.5) + "  | Y : " + vaisseau.getPosition().gety());
 			this.shapes.add(avance);
 		} if(vaisseauRecule) {
+			vaisseau.useFuel();
+
 			recule = new Polygon(new double[] {
-					-0.5,1,
-					1,0,
-					-0.5,-1
+					-0.5,0.75,
+					-1,0,
+					-0.5,-0.75
 			});
 
-			recule.getTransforms().add(new Translate(vaisseau.getPosition().getx(),vaisseau.getPosition().gety()));
+			recule.getTransforms().add(new Translate(vaisseau.getPosition().getx()-1.5,vaisseau.getPosition().gety()));
 			recule.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
 			recule.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
 			recule.setFill(Color.RED);
@@ -271,8 +274,8 @@ public class RenderSystem implements Observer {
 
 		listlabelvaisseauval.add(labelVitXVaisseauval);
 		listlabelvaisseauval.add(labelVitYVaisseauval);
-		listlabelvaisseauval.add(labelForceSurVaiseauval);
-		listlabelvaisseauval.add(labelForceSurVaiseauval);
+		listlabelvaisseauval.add(labelForceSurVaisseauval);
+		listlabelvaisseauval.add(labelForceSurVaisseauval);
 		listlabelvaisseauval.add(labelMasseVaisseauval);
 
 		listlabelplaneteval.add(labelForceSurPlaneteval);
@@ -282,17 +285,21 @@ public class RenderSystem implements Observer {
 
 		List<Button> listFonction = fonctionnalite();
 		vBoxFonctionnalite = new VBox(); 
-		vBoxFonctionnalite.getChildren().addAll(labelfonction, hboxFonctionnalite, sliderZoom);
+		vBoxFonctionnalite.getChildren().addAll(labelfonction, hboxFonctionnalite);
 		this.renderInfo = new VBox();
-		this.renderInfo.getChildren().addAll(vBoxInfoVaiseau, vBoxInfoPlanete, vBoxFonctionnalite);
-		this.vBoxInfoVaiseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+
+		//		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vboxFonctionnalite);
+		//		this.vBoxInfoVaisseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		//		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		//		this.vboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
+		//		setInsetsAuto(vBoxInfoVaisseau, listlabelVaisseau);
+
+		this.renderInfo.getChildren().addAll(vBoxInfoVaisseau, vBoxInfoPlanete, vBoxFonctionnalite);
+		this.vBoxInfoVaisseau.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 		this.vBoxInfoPlanete.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 		this.hboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 
 		creerStyle();
-
-
-
 	}
 
 	public static void setInsetsAuto(VBox vb, List<Label> list) {
@@ -316,7 +323,7 @@ public class RenderSystem implements Observer {
 				+ "-fx-padding: 15px;"
 				+ "-fx-background-color: #00134d;");
 		applyStyle("-fx-padding :20px;", hbox);
-		labelVaisseau.setMinWidth(vBoxInfoVaiseau.getMaxWidth());
+		labelVaisseau.setMinWidth(vBoxInfoVaisseau.getMaxWidth());
 		labelVaisseau.setStyle("-fx-font-family: \"arial\";"
 				+ "-fx-font-size: 20px;"
 				+ "-fx-color: white;"
@@ -329,6 +336,7 @@ public class RenderSystem implements Observer {
 				+ "-fx-padding: 10px;"
 				+ "");
 		labelPlanete.setStyle(labelVaisseau.getStyle());
+
 		labelfonction.setStyle(labelVaisseau.getStyle());
 		labelfonction.setTextFill(Color.WHITE);
 		String styleForVal = "-fx-font-weight: normal;";
@@ -342,9 +350,9 @@ public class RenderSystem implements Observer {
 		quitter.setStyle(pause.getStyle());
 		zoom.setStyle(pause.getStyle());
 		hBoxBoutton.setStyle("-fx-padding-left : 10px;");
-		vBoxInfoVaiseau.setAlignment(Pos.CENTER);
-		vBoxInfoPlanete.setAlignment(vBoxInfoVaiseau.getAlignment());
-		vBoxFonctionnalite.setAlignment(vBoxInfoVaiseau.getAlignment());
+		vBoxInfoVaisseau.setAlignment(Pos.CENTER);
+		vBoxInfoPlanete.setAlignment(vBoxInfoVaisseau.getAlignment());
+		vBoxFonctionnalite.setAlignment(vBoxInfoVaisseau.getAlignment());
 		hboxFonctionnalite.setAlignment(Pos.CENTER);
 		hboxFonctionnalite.setStyle("-fx-padding: 5px;");
 	}
@@ -369,40 +377,19 @@ public class RenderSystem implements Observer {
 
 	public List<Label> infoVaisseau() {
 		this.vaisseau = Vaisseau.getInstance();
-		vaisseau.setForce(vaisseau.createForce(univers));
-		labelVaisseau=  new Label("Informations vaisseau :");
-		labelVitXVaisseau = new Label("Vitesse en x :");
-		labelVitYVaisseau = new Label("Vitesse en y :");
-		labelVitXVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().getx()) + " m/s");
-		labelVitYVaisseauval = new Label("     " + format.format(vaisseau.getVitesse().gety()) + " m/s");
-		labelForceSurVaiseau = new Label("Force subie par le vaisseau :");
-		labelForceSurVaiseauval = new Label("     " + vaisseau.getForce() );
-		labelMasseVaisseau = new Label("Masse du vaisseau :");
-		labelMasseVaisseauval = new Label("     " + format.format(vaisseau.getMasse()) + " kg");
-
-		vaisseau.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitXVaisseauval.setText("     " + format.format(nnew) +" m/s");
-			});
-		});
-
-		vaisseau.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-			Platform.runLater(() -> {
-				labelVitYVaisseauval.setText("     " + format.format(nnew) +" m/s");
-			});
-		});
+		this.iniLabelVaisseau();		
 
 		hBoxVitXVaisseau = new HBox(labelVitXVaisseau, labelVitXVaisseauval);
 		hBoxVitYVaisseau = new HBox(labelVitYVaisseau, labelVitYVaisseauval);
-		hBoxForceVaisseau = new HBox(labelForceSurVaiseau, labelForceSurVaiseauval);
+		hBoxForceVaisseau = new HBox(labelForceSurVaisseau, labelForceSurVaisseauval);
 		hBoxMasseVaisseau = new HBox(labelMasseVaisseau, labelMasseVaisseauval);
 
-		vBoxInfoVaiseau = new VBox();
-		vBoxInfoVaiseau.getChildren().addAll(labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau);
+		vBoxInfoVaisseau = new VBox();
+		vBoxInfoVaisseau.getChildren().addAll(labelVaisseau, hBoxVitXVaisseau, hBoxVitYVaisseau, hBoxForceVaisseau, hBoxMasseVaisseau, fuel);
 
 		List<Label> listlabelvaisseau = new ArrayList<>();
-		listlabelvaisseau.add(labelForceSurVaiseau);
-		listlabelvaisseau.add(labelForceSurVaiseauval);
+		listlabelvaisseau.add(labelForceSurVaisseau);
+		listlabelvaisseau.add(labelForceSurVaisseauval);
 		listlabelvaisseau.add(labelVaisseau);
 		listlabelvaisseau.add(labelVitXVaisseau);
 		listlabelvaisseau.add(labelVitXVaisseauval);
@@ -415,48 +402,30 @@ public class RenderSystem implements Observer {
 		return listlabelvaisseau;
 	}
 
+	private void majFuel() {
+		fuel.setProgress(vaisseau.getFuel()/Vaisseau.FUELMAX);
+	}
+	
+	private void iniLabelVaisseau() {
+		// TODO Auto-generated method stub
+		labelVaisseau=  new Label("Informations vaisseau :");
+		labelVitXVaisseau = new Label("Vitesse en x :");
+		labelVitYVaisseau = new Label("Vitesse en y :");
+		labelVitXVaisseauval = new Label("     " + vaisseau.getVitesse().getx()+" km/h");
+		labelVitYVaisseauval = new Label("     " + vaisseau.getVitesse().gety()+" km/h");
+		labelForceSurVaisseau = new Label("Force subie par le vaisseau :");
+		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce());
+		labelMasseVaisseau = new Label("Masse du vaisseau :");
+		labelMasseVaisseauval = new Label("     " + vaisseau.getMasse());
+
+		fuel = new ProgressBar(vaisseau.getFuel());
+		
+		labelForceSurVaisseauval = new Label("     " + vaisseau.getForce());
+	}
+
 	public List<Label> infoPlanete(){
-		if(entitytargeted != null) {
-			entitytargeted.setForce(entitytargeted.createForce(univers));
-			labelPlanete =  new Label("Informations " + entitytargeted.getNom() + " :");
-			labelVitXPlanete = new Label("Vitesse en x : ");
-			labelVitYPlanete = new Label("Vitesse en y : ");
-			labelVitXPlaneteval = new Label("     " + format.format(entitytargeted.getVitesse().getx()) +"");
-			labelVitYPlaneteval = new Label("     " + format.format(entitytargeted.getVitesse().gety()) +"");
-			labelForceSurPlanete = new Label("Attraction de la planète :");
-			labelForceSurPlaneteval = new Label("     " + format.format(entitytargeted.getForce()) );
-			labelMassePlanete = new Label("Masse de la planète :");
-			labelMassePlaneteval = new Label("     " + format.format(entitytargeted.getMasse()) + " kg");
-
-			entitytargeted.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelVitXPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-				});
-			});
-
-			entitytargeted.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelVitYPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-				});
-			});
-
-			entitytargeted.getForceProperty().addListener((obj,old,nnew) -> {
-				Platform.runLater(() -> {
-					labelForceSurVaiseauval.setText("    * " + format.format(nnew));
-				});
-			});
-
-		}else {
-			labelPlanete =  new Label("Informations ... :");
-			labelVitXPlanete = new Label("Vitesse en x : ");
-			labelVitYPlanete = new Label("Vitesse en y : ");
-			labelVitXPlaneteval = new Label("     0.00 m/s");
-			labelVitYPlaneteval = new Label("     0.00 m/s");
-			labelForceSurPlanete = new Label("Force subie par la planète :");
-			labelForceSurPlaneteval = new Label("     ");
-			labelMassePlanete = new Label("Masse de la planète :");
-			labelMassePlaneteval = new Label("     ");
-		}
+		this.initLabelPlanete(entitytargeted);
+		
 		hBoxVitXPlanete=new HBox(labelVitXPlanete, labelVitXPlaneteval);
 		hBoxVitYPlanete= new HBox(labelVitYPlanete, labelVitYPlaneteval);
 		hBoxForcePlanete=new HBox(labelForceSurPlanete,labelForceSurPlaneteval);
@@ -464,6 +433,7 @@ public class RenderSystem implements Observer {
 		vBoxInfoPlanete= new VBox();
 		vBoxInfoPlanete.getChildren().addAll(labelPlanete, hBoxVitXPlanete, hBoxVitYPlanete, hBoxForcePlanete, hBoxMassePlanete);
 		List<Label> labelplanete = new ArrayList<>();
+
 		labelplanete.add(labelPlanete);
 		labelplanete.add(labelForceSurPlanete);
 		labelplanete.add(labelForceSurPlaneteval);
@@ -479,6 +449,35 @@ public class RenderSystem implements Observer {
 
 		return labelplanete;
 	}
+	
+	
+
+	private void initLabelPlanete(Entity entitytargeted) {
+		// TODO Auto-generated method stub
+		if(entitytargeted != null) {
+			entitytargeted.setForce(entitytargeted.createForce(univers));
+			labelPlanete =  new Label("Informations " + entitytargeted.getNom() + " :");
+			labelVitXPlanete = new Label("Vitesse en x : ");
+			labelVitYPlanete = new Label("Vitesse en y : ");
+			labelVitXPlaneteval = new Label("     " + format.format(entitytargeted.getVitesse().getx()) +"");
+			labelVitYPlaneteval = new Label("     " + format.format(entitytargeted.getVitesse().gety()) +"");
+			labelForceSurPlanete = new Label("Attraction de la planète :");
+			labelForceSurPlaneteval = new Label("     " + format.format(entitytargeted.getForce()) );
+			labelMassePlanete = new Label("Masse de la planète :");
+			labelMassePlaneteval = new Label("     " + format.format(entitytargeted.getMasse()) + " kg");
+
+		}else {
+			labelPlanete =  new Label("Informations ... :");
+			labelVitXPlanete = new Label("Vitesse en x : ");
+			labelVitYPlanete = new Label("Vitesse en y : ");
+			labelVitXPlaneteval = new Label("     0.00 m/s");
+			labelVitYPlaneteval = new Label("     0.00 m/s");
+			labelForceSurPlanete = new Label("Force subie par la planète :");
+			labelForceSurPlaneteval = new Label("     ");
+			labelMassePlanete = new Label("Masse de la planète :");
+			labelMassePlaneteval = new Label("     ");
+		}
+	}
 
 	/**
 	 * Renvoie les listes des boutons, c'est a dire des differentes fonctionnalitées
@@ -488,38 +487,20 @@ public class RenderSystem implements Observer {
 		labelfonction =  new Label("Utilitaires :");
 		List<Button> res = new ArrayList<>();
 
-		zoom = zoom();
+		zoom = new Button("Zoom");
 		pause = new Button("Pause");
 		quitter = new Button("Quitter");
-		sliderZoom = new Slider(0, 100, 20);
 		hBoxBoutton = new HBox(zoom, pause, quitter);
-		
+
 		hboxFonctionnalite = new HBox();
 		hboxFonctionnalite.getChildren().add(labelfonction);
 		hboxFonctionnalite.getChildren().add(zoom);
 		hboxFonctionnalite.getChildren().add(pause);
 		hboxFonctionnalite.getChildren().add(quitter);
 
-
-
-		res.add(zoom());
+		res.add(zoom);
 
 		return res;
-	}
-
-	/**
-	 * Renvoie le bouton permettant le zoom
-	 * @return
-	 */
-	public Button zoom() {
-		Button button = new Button("Zoom");
-
-		button.setOnMouseClicked(event ->{
-			this.scale = new Scale(univers , this.getHeightWindow() + 500);
-		});
-
-
-		return button;
 	}
 
 	/**
@@ -534,27 +515,12 @@ public class RenderSystem implements Observer {
 		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
 		t = new Timer();
-		etat = false;
+		onPause = false;
 		t.scheduleAtFixedRate(new Task(),0,1);
 
-		pause.setOnMouseClicked(e ->{
-			if(!etat) {
-				t.cancel();
-				pause.setText("Resume");
-				etat=true;
-			}else {
-				t.purge();
-				t = new Timer();
-				t.scheduleAtFixedRate(new Task(),0,1);
-				pause.setText("Pause");
-				etat=false;
-
-			}
-		});
-		quitter.setOnMouseClicked(e ->{
-			System.exit(1);
-		});
-
+		setActionOnPause();
+		setActionOnZoom();
+		setActionOnQuit();
 
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
@@ -564,66 +530,129 @@ public class RenderSystem implements Observer {
 		this.hb.getChildren().addAll(renderSystem, renderInfo);
 
 		renderSystem.setFocusTraversable(true);
+		
+		setActionOnVaisseau();
+	}
+	
+	private void setActionOnVaisseau() {
+		this.addEventRenderSystem();
+	}
+
+	private void addEventRenderSystem() {
 		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
 			KeyCode key = e.getCode();
 			String osName = System.getProperty("os.name");
-			System.out.println(osName);
-			if(osName.contentEquals("Mac OS X")) {
-				if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
-					System.out.println(key);
-					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-					switch(key) {
-					case W :
-						vaisseau.setPprincipalIsOn(state);
-						break;
-					case S :
-						vaisseau.setPretroIsOn(state);
-						break;
-					case A :
-						vaisseau.gauche();
-						break;
-					case D :
-						vaisseau.droite();
-						break;
-					default:
-						break;
-					}
-
-				}
-			}else {
-				if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
-					boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-
-					switch(key) {
-					case Z :
-						vaisseau.setPprincipalIsOn(state);
-						vaisseauAvance = true;
-						break;
-					case S :
-						vaisseau.setPretroIsOn(state);
-						vaisseauRecule = true;
-						break;
-					case Q :
-						vaisseau.gauche();
-						break;
-					case D :
-						vaisseau.droite();
-						break;
-					default:
-						break;
-					}
-
-					if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+			if(vaisseau.getFuel() > 0) {
+				if(osName.contentEquals("Mac OS X")) {
+					if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
+						//System.out.println(key);
+						boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
 						switch(key) {
-						case Z :
-							vaisseauAvance = false;
+						case W :
+							vaisseau.setPprincipalIsOn(state);
+							vaisseauAvance = true;
 							break;
 						case S :
-							vaisseauRecule = false;
+							vaisseau.setPretroIsOn(state);
+							vaisseauRecule = true;
 							break;
+						case A :
+							vaisseau.gauche();
+							break;
+						case D :
+							vaisseau.droite();
+							break;
+						default:
+							break;
+						}
+
+						if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+							switch(key) {
+							case W:
+								vaisseauAvance = false;
+								break;
+							case S :
+								vaisseauRecule = false;
+								break;
+							default:
+								break;
+							}
+						}
+					}
+				}else {
+					if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
+						boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
+
+						switch(key) {
+						case Z :
+							vaisseau.setPprincipalIsOn(state);
+							vaisseauAvance = true;
+							break;
+						case S :
+							vaisseau.setPretroIsOn(state);
+							vaisseauRecule = true;
+							break;
+						case Q :
+							vaisseau.gauche();
+							break;
+						case D :
+							vaisseau.droite();
+							break;
+						default:
+							break;
+						}
+
+						if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+							switch(key) {
+							case Z :
+								vaisseauAvance = false;
+								break;
+							case S :
+								vaisseauRecule = false;
+								break;
+							default:
+								break;
+							}
 						}
 					}
 				}
+			} else {
+				vaisseau.setPprincipalIsOn(false);
+				vaisseau.setPretroIsOn(false);
+				vaisseauAvance = false;
+				vaisseauRecule = false;
+			}
+
+		});
+	}
+
+	private void setActionOnZoom() {
+		// TODO Auto-generated method stub
+		zoom.setOnMouseClicked(event ->{
+			this.scale = new Scale(univers , this.getHeightWindow() + 500);
+		});
+	}
+
+	private void setActionOnQuit() {
+		// TODO Auto-generated method stub
+		quitter.setOnMouseClicked(e ->{
+			System.exit(0);
+		});
+	}
+
+	private void setActionOnPause() {
+		// TODO Auto-generated method stub
+		pause.setOnMouseClicked(e ->{
+			if(!onPause) {
+				t.cancel();
+				pause.setText("Resume");
+				onPause=true;
+			}else {
+				t.purge();
+				t = new Timer();
+				t.scheduleAtFixedRate(new Task(),0,1);
+				pause.setText("Pause");
+				onPause=false;
 			}
 		});
 	}
@@ -659,10 +688,11 @@ public class RenderSystem implements Observer {
 			univers.majPosition();
 			univers.majForce();
 			suiviPoints = new ArrayList<Circle>();
-
+			
 			Platform.runLater(() ->{
 				putPlaneteOnSysteme(univers.getEntities());
 				animate(vaisseauAvance, vaisseauRecule);
+				majFuel();
 				placerPoint(univers.getEntities());
 				renderSystem.getChildren().addAll(suiviPoints);
 				majSystem();
@@ -670,7 +700,6 @@ public class RenderSystem implements Observer {
 			});
 
 		}
-
 	}
 
 	public Entity getEntityTargeted(MouseEvent e) {
@@ -687,37 +716,22 @@ public class RenderSystem implements Observer {
 	public void setMouseEventOnSysteme() {
 		this.renderSystem.setOnMouseClicked(e -> {
 			this.entitytargeted = this.getEntityTargeted(e);
-			this.update();
-
-			if(this.entitytargeted != null) {
-				entitytargeted.getVitesse().getXProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelVitXPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-					});
-				});
-
-				entitytargeted.getVitesse().getYProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelVitYPlaneteval.setText("    * " + format.format(nnew) +" m/s");
-					});
-				});
-
-				entitytargeted.getForceProperty().addListener((obj,old,nnew) -> {
-					Platform.runLater(() -> {
-						labelForceSurVaiseauval.setText("    * " + format.format(nnew));
-					});
-				});
-			}
+			this.updateInfo();
 		});
 		this.renderSystem.setOnScroll(e -> {
-			System.out.println("X : "+e.getSceneX() + ", Y : "+ e.getSceneY());
-		});
+			System.out.println("Y : " + e.getDeltaY());
+			if(e.getDeltaY() > 0) {
+				this.scale.setScale(this.scale.getScale()+1);
+			}else {
+				this.scale.setScale(this.scale.getScale()-1);			
+			}
+		});	
 	}
 
-	public void update() {
+	public void updateInfo() {
 		labelVitXVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().getx()) +" m/s");
 		labelVitYVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().gety()) +" m/s");
-		labelForceSurVaiseauval.setText("    * " + format.format(this.vaisseau.getForce()));
+		labelForceSurVaisseauval.setText("    * " + format.format(this.vaisseau.getForce()));
 
 		if(this.entitytargeted != null) {
 			labelPlanete.setText("Informations " + this.entitytargeted.getNom() + " :");
@@ -725,11 +739,5 @@ public class RenderSystem implements Observer {
 			labelVitYPlaneteval.setText("    * " + format.format(this.entitytargeted.getVitesse().gety()) +"");
 			labelForceSurPlaneteval.setText("    * " + format.format(this.vaisseau.getForce()));
 		}
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-
 	}
 }

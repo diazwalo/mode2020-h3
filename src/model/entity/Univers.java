@@ -48,7 +48,6 @@ public class Univers {
 	
 	public void majAcceleration() {
 		for(Entity e : entities) {
-			
 			e.createAcceleration(getUnivers());
 		}
 	}
@@ -60,6 +59,7 @@ public class Univers {
 	
 	public void majPosition() {
 		for(Entity entity : entities) {
+			//System.out.println(entity.getNom() + " " + entity.getPosition());
 			entity.setPosition(entity.getPosition().addOtherVecteur((entity.getVitesse().multiplyWithVariable(source.getDt() * source.getFa()))));
 		}
 	}
@@ -67,12 +67,6 @@ public class Univers {
 	public void majForce() {
 		for(Entity entity : entities) {
 			entity.setForce(entity.createForce(this));
-		}
-	}
-	
-	public void addObserver(RenderSystem rs) {
-		for(Entity entity : entities) {
-			entity.addObserver(rs);
 		}
 	}
 	

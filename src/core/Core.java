@@ -3,9 +3,7 @@ package core;
 import controller.fileprocessor.RecupFichierSource;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import model.entity.Entity;
 import model.entity.Univers;
-import model.entity.Vaisseau;
 import view.ihm.RenderSystem;
 
 /**
@@ -24,17 +22,6 @@ public class Core extends Application{
 		}
 		Univers.createUnivers(rfs.getListeCorpsCeleste(), rfs);
 		RenderSystem rs = new RenderSystem(rfs.getRayon(), Univers.getUnivers());
-		Univers.getUnivers().addObserver(rs);
-
-
-		// change la vitesse du vaisseau juste pour tester
-		for(Entity entities : Univers.getUnivers().getEntities()) {
-			if(entities instanceof Vaisseau) {
-				((Vaisseau) entities).setPprincipal(0.1);
-				((Vaisseau) entities).setPretro(0.1);
-			}
-		}
-		
 		Stage stageRs = rs.createRender();
 		stageRs.show();
 	}

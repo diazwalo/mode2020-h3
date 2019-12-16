@@ -191,6 +191,7 @@ public class RecupFichierSource {
                     
                     rayon = this.rayonGraceMasse(masse, true);
 
+                   // System.out.println(nomf + " " +position);
                     of= new ObjetFixe(nomf, masse, rayon, position, 0, 0, null, c);
 
 
