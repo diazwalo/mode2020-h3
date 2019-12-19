@@ -7,14 +7,19 @@ import controller.fileprocessor.RecupFichierSource;
 import model.movement.Vecteur;
 
 public class Univers {
-	private List<Entity> entities;
+	
+	protected List<Entity> entities;
 	private static Univers univers = null;
-	private RecupFichierSource source;
-
+	protected RecupFichierSource source;
+	protected Entity entitytargeted;
 	
 	private Univers(List<Entity> entities, RecupFichierSource source) {
 		this.entities = entities;
 		this.source = source;
+		for(Entity entity : entities) {
+			if(entity instanceof ObjetFixe)
+				entitytargeted = entity;
+		}
 	}
 	
 	public static Univers getUnivers() {
@@ -43,6 +48,10 @@ public class Univers {
 	
 	public RecupFichierSource getRFS() {
 		return source;
+	}
+	
+	public Entity getEntitytargeted() {
+		return entitytargeted;
 	}
 		
 	public void majAcceleration() {
