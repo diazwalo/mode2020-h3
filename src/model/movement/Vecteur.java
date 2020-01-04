@@ -1,7 +1,5 @@
 package model.movement;
 
-import javafx.beans.property.SimpleDoubleProperty;
-
 /**
  * 
  * @author cleme
@@ -10,13 +8,13 @@ import javafx.beans.property.SimpleDoubleProperty;
  */
 public class Vecteur {
 
-	private SimpleDoubleProperty x;
-	private SimpleDoubleProperty y;
+	private double x;
+	private double y;
 	private static final double G = 6.67E-11;
 	
 	public Vecteur(double x, double y) {
-		this.x = new SimpleDoubleProperty(x);
-		this.y = new SimpleDoubleProperty(y);
+		this.x = x;
+		this.y = y;
 	}
 	
 	public Vecteur() {
@@ -24,31 +22,31 @@ public class Vecteur {
 	}
 
 	public double getx() {
-		return x.doubleValue();
+		return x;
 	}
 
 	public void setx(double x) {
-		this.x.setValue(x);
+		this.x = x;
 	}
 
 	public double gety() {
-		return y.doubleValue();
+		return y;
 	}
 
 	public void sety(double y) {
-		this.y.setValue(y);
+		this.y = y;
 	}
 	
 	public double getNorme() {
-		return Math.sqrt(this.x.doubleValue()*this.x.doubleValue()+this.y.doubleValue()*this.y.doubleValue());
+		return Math.sqrt(this.x*this.x+this.y*this.y);
 	}
 	
 	public Vecteur multiplyWithVariable(double variable){
-		return new Vecteur(this.x.doubleValue() * variable, this.y.doubleValue() * variable);
+		return new Vecteur(this.x * variable, this.y * variable);
 	}
 	
 	public Vecteur addOtherVecteur(Vecteur other) {
-		return new Vecteur(this.x.doubleValue() + other.getx(), this.y.doubleValue() + other.gety());
+		return new Vecteur(this.x + other.getx(), this.y + other.gety());
 	}
 	
 	public static double getG() {
@@ -60,21 +58,13 @@ public class Vecteur {
 	}
 	
 	public boolean between(double posXMouseOnScreen, double posYMouseOnScreen, double rayon) {
-		return posXMouseOnScreen < this.x.doubleValue() + rayon && 
-				posXMouseOnScreen > this.x.doubleValue() - rayon &&
-				posYMouseOnScreen < this.y.doubleValue() + rayon && 
-				posYMouseOnScreen > this.y.doubleValue() - rayon;
-	}
-	
-	public SimpleDoubleProperty getXProperty() {
-		return x;
-	}
-	
-	public SimpleDoubleProperty getYProperty() {
-		return y;
+		return posXMouseOnScreen < this.x + rayon && 
+				posXMouseOnScreen > this.x - rayon &&
+				posYMouseOnScreen < this.y + rayon && 
+				posYMouseOnScreen > this.y - rayon;
 	}
 	
 	public String toString() {
-		return "{ vX : "+ x.doubleValue() +" , vY : "+ y.doubleValue() +" }";
+		return "{ vX : "+ x +" , vY : "+ y +" }";
 	}
 }

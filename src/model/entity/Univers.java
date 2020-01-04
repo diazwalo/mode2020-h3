@@ -5,7 +5,6 @@ import java.util.List;
 
 import controller.fileprocessor.RecupFichierSource;
 import model.movement.Vecteur;
-import view.ihm.RenderSystem;
 
 public class Univers {
 	private List<Entity> entities;
@@ -45,10 +44,10 @@ public class Univers {
 	public RecupFichierSource getRFS() {
 		return source;
 	}
-	
+		
 	public void majAcceleration() {
-		for(Entity e : entities) {
-			e.createAcceleration(getUnivers());
+		for(Entity entity : entities) {
+			entity.createAcceleration(getUnivers());
 		}
 	}
 	public void majVitesse() {
@@ -68,12 +67,5 @@ public class Univers {
 		for(Entity entity : entities) {
 			entity.setForce(entity.createForce(this));
 		}
-	}
-	
-	public void addObserver(RenderSystem rs) {
-		for(Entity entity : entities) {
-			entity.addObserver(rs);
-		}
-	}
-	
+	}	
 }

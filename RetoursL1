@@ -1,0 +1,11 @@
+Le résultat n'est pas satisfaisant, malgré un travail assez régulier.
+
+Les choses que vous n'avez pas réussi (ou que je n'ai pas pu corriger à cause d'un dysfonctionnement):
+- la simulationt physique est incorrecte
+- le vaisseau n'est pas orienté
+- je n'ai pas réussi à contrôler le vaisseau
+- les options implémentées sont très basiques
+
+Points à améliorer:
+- attention à ajouter des commentaires dans votre code
+- attention aux méthodes trop longues dans la vue et le parseur
