@@ -57,7 +57,8 @@ public class RenderSystem {
 	private Shape background;
 	private Scale scale;
 	private Entity entitytargeted;
-	private Vaisseau vaisseau;
+	
+private Vaisseau vaisseau;
 	private GraphicsEnvironment graphicsEnvironment;
 	private NumberFormat format;
 	private boolean vaisseauAvance;
@@ -742,4 +743,5 @@ public class RenderSystem {
 			labelForceSurPlaneteval.setText("    * " + format.format(this.vaisseau.getForce()));
 		}
 	}
+
 }
