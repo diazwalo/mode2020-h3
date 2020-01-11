@@ -89,11 +89,12 @@ public class ViewInfosGlobal {
 	private Button quitter;
 	private Button zoom;
 	private boolean onPause;
+	private boolean onResume;
 	private Timer t;
 	
-	
 	public ViewInfosGlobal(Univers univers) {
-		onPause=false;
+		onPause = false;
+		onResume = false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
 		this.createBackground(Color.BLACK);
@@ -137,7 +138,8 @@ public class ViewInfosGlobal {
 	 * 		- Les informations relatives au vaisseau.
 	 * 		- Les informations relatives a la planète séléctionnée.
 	 */
-	public VBox createRenderInformation() {
+	public VBox createRenderInformation(Timer t) {
+		this.t = t;
 		List<Label> listlabelVaisseau = infoVaisseau();
 		List<Label> listlabelPlanete = infoPlanete();
 		listlabelvaisseauval = new ArrayList<>();
@@ -171,6 +173,10 @@ public class ViewInfosGlobal {
 		this.hboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 
 		creerStyle();
+		
+		setActionOnPause();
+		setActionOnZoom();
+		setActionOnQuit();
 		
 		return this.renderInfo;
 	}
@@ -468,7 +474,6 @@ public class ViewInfosGlobal {
 		});
 	}
 	
-	
 	public Entity getEntityTargeted(MouseEvent e) {
 		// TODO : Les position sont bizard (ca marche pour le soleil mais pas la Terre
 		for (Entity entity : this.univers.getEntities()) {
@@ -493,52 +498,6 @@ public class ViewInfosGlobal {
 		}
 	}
 	
-	/**
-	 * Recupère le tableau de bord ainsi que la vue du système et les renvoie dans un Stage.
-	 * @return Le Stage 
-	 */
-	public Stage createRender() {
-		this.createRenderInformation();
-
-
-		this.createRenderSystem();
-
-		this.sc = new Scene(hb, this.getWidthWindow(), this.getHeightWindow());
-
-		this.st.setScene(sc);
-		this.st.setTitle("Modélisation Système");
-		this.st.setResizable(false);
-
-		return st;
-	}
-	
-	/**
-	 * Crée la partie gauche du programme : la vue du Système.
-	 * Cette vue contient :
-	 * 		- Les planètes ainsi que le vaiseau.
-	 * Elle gère aussi l'entrée Z Q S et D pour bouger le vaisseau.
-	 */
-	public void createRenderSystem() {
-		this.st = new Stage();
-		this.renderSystem = new Pane();
-		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
-
-		onPause = false;
-
-		setActionOnPause();
-		setActionOnZoom();
-		setActionOnQuit();
-
-		//this.setMouseEventOnSysteme();
-
-		this.hb = new HBox();
-		this.hb.getChildren().addAll(renderSystem, renderInfo);
-
-		renderSystem.setFocusTraversable(true);
-		
-		setActionOnVaisseau();
-	}
-	
 	private void setActionOnZoom() {
 		// TODO Auto-generated method stub
 		zoom.setOnMouseClicked(event ->{
@@ -558,10 +517,15 @@ public class ViewInfosGlobal {
 		pause.setOnMouseClicked(e ->{
 			if(!onPause) {
 				pause.setText("Resume");
-				onPause=true;
+				t.cancel();
+				t.purge();
+				/*onPause = true;
+				onResume = true;*/
 			}else {
 				pause.setText("Pause");
-				onPause=false;
+				t = new Timer();
+				/*onPause = false;
+				onResume = false;*/
 			}
 		});
 	}
@@ -573,6 +537,18 @@ public class ViewInfosGlobal {
 
 	public boolean getOnPause() {
 		return this.onPause;
+	}
+	
+	public void setOnPause() {
+		this.onPause = false;
+	}
+	
+	public boolean getOnResume() {
+		return this.onResume;
+	}
+	
+	public void setOnResume() {
+		this.onResume = false;
 	}
 }
 

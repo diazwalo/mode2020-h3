@@ -93,7 +93,6 @@ public class RecupFichierSource {
 			InputStreamReader lecture1=new InputStreamReader(flux1);
 			BufferedReader buff1=new BufferedReader(lecture1);
 			String ligne1 = buff1.readLine();
-			System.out.println(ligne1);
 			
 			InputStream flux=new FileInputStream("././ressource/astro/04_ExempleDuSujet.astro");
 			InputStreamReader lecture=new InputStreamReader(flux);

@@ -3,10 +3,7 @@ package view.renderUnivers;
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -35,8 +32,6 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 	private Vaisseau vaisseau;
 	
 	private Pane renderSystem;
-	private Timer t;
-	private boolean onPause;
 	private Univers univers;
 	private List<Circle> suiviPoints;
 	private boolean vaisseauAvance;
@@ -45,7 +40,6 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 	private Entity entitytargeted;
 
 	public ViewUniversGlobal(Univers univers) {
-		this.onPause = false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
 		this.createBackground(Color.BLACK);
@@ -163,17 +157,13 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 		this.renderSystem = new Pane();
 		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
-		t = new Timer();
-		onPause = false;
-		t.scheduleAtFixedRate(new Task(),0,1);
-
 		//setActionOnPause();
 		//setActionOnZoom();
 		//setActionOnQuit();
 
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
-		//this.setMouseEventOnSysteme();
+		this.setMouseEventOnSysteme();
 		/**
 		 * A REMETTRE APRES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		 */
@@ -288,29 +278,6 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 		});
 	}
 
-	private class Task extends TimerTask{
-
-		@Override
-		public void run() {
-			univers.majAcceleration();
-			univers.majVitesse();
-			univers.majPosition();
-			univers.majForce();
-			suiviPoints = new ArrayList<Circle>();
-			
-			Platform.runLater(() ->{
-				putPlaneteOnSystemeGlobal(univers.getEntities());
-				animate(vaisseauAvance, vaisseauRecule);
-				//majFuel();
-				placerPoint(univers.getEntities());
-				renderSystem.getChildren().addAll(suiviPoints);
-				majSystem();
-				//update();
-			});
-
-		}
-	}
-
 	private void placerPoint(List<Entity> corps){
 		for(Entity e : corps){
 			if(e.getClass().equals(ObjetSimule.class)){
@@ -362,6 +329,7 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 	@Override
 	public void majViewUnivers() {
 		// TODO Auto-generated method stub
+		suiviPoints = new ArrayList<Circle>();
 		putPlaneteOnSystemeGlobal(univers.getEntities());
 		animate(vaisseauAvance, vaisseauRecule);
 		//majFuel();

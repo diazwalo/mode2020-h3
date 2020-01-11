@@ -40,7 +40,7 @@ public class Render {
 	
 	public Stage createRender() {
 		Pane renderSystem = this.avu.createRenderSystem();
-		VBox renderInfo = this.vig.createRenderInformation();
+		VBox renderInfo = this.vig.createRenderInformation(this.t);
 		view.getChildren().addAll(renderSystem, renderInfo);
 		Scene sc = new Scene(view, this.getWidthWindow(), this.getHeightWindow());
 		
@@ -78,13 +78,10 @@ public class Render {
 			
 			Platform.runLater(() ->{
 				avu.majViewUnivers();
-				if(! vig.getOnPause()) {
-					t.cancel();
-					t.purge();
-				}/*else {
-					t = new Timer();
-					t.scheduleAtFixedRate(new Task(),0,1);
-				}*/
+				if(vig.getOnResume()) {
+					//t.scheduleAtFixedRate(new Task(),0,1);
+					vig.setOnResume();
+				}
 				vig.majViewInfo(avu.getEntityTargeted());
 			});
 
