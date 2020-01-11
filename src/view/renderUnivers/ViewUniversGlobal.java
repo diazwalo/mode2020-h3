@@ -9,7 +9,7 @@ import java.util.TimerTask;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -42,6 +42,7 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 	private boolean vaisseauAvance;
 	private boolean vaisseauRecule;	
 	private Shape background;
+	private Entity entitytargeted;
 
 	public ViewUniversGlobal(Univers univers) {
 		this.onPause = false;
@@ -51,6 +52,7 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 		this.univers = univers;
 		this.putPlaneteOnSystemeGlobal(univers.getEntities());
 		this.vaisseau = Vaisseau.getInstance();
+		this.entitytargeted = null;
 		vaisseauAvance = false;
 		vaisseauRecule = false;
 	}
@@ -319,7 +321,32 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 			}
 		}
 	}
+	
+	public void setMouseEventOnSysteme() {
+		this.renderSystem.setOnMouseClicked(e -> {
+			this.entitytargeted = this.getEntityTargeted(e);
+		});
+		this.renderSystem.setOnScroll(e -> {
+			System.out.println("Y : " + e.getDeltaY());
+			if(e.getDeltaY() > 0) {
+				this.scale.setScale(this.scale.getScale()+1);
+			}else {
+				this.scale.setScale(this.scale.getScale()-1);			
+			}
+		});	
+	}
 
+	public Entity getEntityTargeted(MouseEvent e) {
+		// TODO : Les position sont bizard (ca marche pour le soleil mais pas la Terre
+		for (Entity entity : this.univers.getEntities()) {
+			Vecteur posEntTempo = entity.getPosition();
+			if(posEntTempo.between(e.getSceneX(), e.getSceneY(), entity.getRayon())) {
+				return entity;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * La nouvelle liste de corps est mise en place dans la vue.
 	 * Les paramètre du tableau de bord sont modifiéessi nécessaire.
@@ -330,4 +357,23 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 		renderSystem.getChildren().add(background);
 		renderSystem.getChildren().addAll(shapes);
 	}
+	
+
+	@Override
+	public void majViewUnivers() {
+		// TODO Auto-generated method stub
+		putPlaneteOnSystemeGlobal(univers.getEntities());
+		animate(vaisseauAvance, vaisseauRecule);
+		//majFuel();
+		placerPoint(univers.getEntities());
+		renderSystem.getChildren().addAll(suiviPoints);
+		majSystem();
+	}
+
+	@Override
+	public Entity getEntityTargeted() {
+		// TODO Auto-generated method stub
+		return this.entitytargeted;
+	}
+
 }

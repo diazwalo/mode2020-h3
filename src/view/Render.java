@@ -1,7 +1,10 @@
 package view;
 
 import java.awt.GraphicsEnvironment;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -17,6 +20,8 @@ public class Render {
 	AbstractViewUnivers avu;
 	ViewInfosGlobal vig;
 	Univers univers;
+	Timer t;
+	boolean onPause;
 	
 	HBox view;
 	private GraphicsEnvironment graphicsEnvironment;
@@ -28,6 +33,9 @@ public class Render {
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		avu = new ViewUniversGlobal(this.univers);
 		vig = new ViewInfosGlobal(this.univers);
+		t = new Timer();
+		t.scheduleAtFixedRate(new Task(),0,1);
+		onPause = false;
 	}
 	
 	public Stage createRender() {
@@ -57,5 +65,29 @@ public class Render {
 	 */
 	private double getHeightWindow() {
 		return graphicsEnvironment.getMaximumWindowBounds().height;
+	}
+
+	private class Task extends TimerTask{
+
+		@Override
+		public void run() {
+			univers.majAcceleration();
+			univers.majVitesse();
+			univers.majPosition();
+			univers.majForce();
+			
+			Platform.runLater(() ->{
+				avu.majViewUnivers();
+				if(! vig.getOnPause()) {
+					t.cancel();
+					t.purge();
+				}/*else {
+					t = new Timer();
+					t.scheduleAtFixedRate(new Task(),0,1);
+				}*/
+				vig.majViewInfo(avu.getEntityTargeted());
+			});
+
+		}
 	}
 }

@@ -5,9 +5,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -22,7 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
@@ -31,7 +28,6 @@ import model.entity.Univers;
 import model.entity.Vaisseau;
 import model.movement.Vecteur;
 import view.ihm.Scale;
-import view.renderUnivers.*;
 
 public class ViewInfosGlobal {
 
@@ -484,21 +480,6 @@ public class ViewInfosGlobal {
 		return null;
 	}
 
-	public void setMouseEventOnSysteme() {
-		this.renderSystem.setOnMouseClicked(e -> {
-			this.entitytargeted = this.getEntityTargeted(e);
-			this.updateInfo();
-		});
-		this.renderSystem.setOnScroll(e -> {
-			System.out.println("Y : " + e.getDeltaY());
-			if(e.getDeltaY() > 0) {
-				this.scale.setScale(this.scale.getScale()+1);
-			}else {
-				this.scale.setScale(this.scale.getScale()-1);			
-			}
-		});	
-	}
-
 	public void updateInfo() {
 		labelVitXVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().getx()) +" m/s");
 		labelVitYVaisseauval.setText("    * " + format.format(this.vaisseau.getVitesse().gety()) +" m/s");
@@ -542,17 +523,13 @@ public class ViewInfosGlobal {
 		this.renderSystem = new Pane();
 		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
-		t = new Timer();
 		onPause = false;
-		t.scheduleAtFixedRate(new Task(),0,1);
 
 		setActionOnPause();
 		setActionOnZoom();
 		setActionOnQuit();
 
-		//this.renderSystem.getChildren().add(background);
-		//this.renderSystem.getChildren().addAll(shapes);
-		this.setMouseEventOnSysteme();
+		//this.setMouseEventOnSysteme();
 
 		this.hb = new HBox();
 		this.hb.getChildren().addAll(renderSystem, renderInfo);
@@ -580,38 +557,23 @@ public class ViewInfosGlobal {
 		// TODO Auto-generated method stub
 		pause.setOnMouseClicked(e ->{
 			if(!onPause) {
-				t.cancel();
 				pause.setText("Resume");
 				onPause=true;
 			}else {
-				t.purge();
-				t = new Timer();
-				t.scheduleAtFixedRate(new Task(),0,1);
 				pause.setText("Pause");
 				onPause=false;
 			}
 		});
 	}
-	
-	private class Task extends TimerTask{
 
-		@Override
-		public void run() {
-			univers.majAcceleration();
-			univers.majVitesse();
-			univers.majPosition();
-			univers.majForce();
-			//suiviPoints = new ArrayList<Circle>();
-			
-			Platform.runLater(() ->{
-				
-			});
-
-		}
+	public void majViewInfo(Entity entityTargeted) {
+		this.entitytargeted = entityTargeted;
+		updateInfo();
 	}
 
-
-
+	public boolean getOnPause() {
+		return this.onPause;
+	}
 }
 
 
