@@ -4,7 +4,7 @@ import controller.fileprocessor.RecupFichierSource;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.entity.Univers;
-import view.ihm.RenderSystem;
+import view.renderInfos.ViewInfosGlobal;
 
 /**
  * 
@@ -21,8 +21,9 @@ public class Core extends Application{
 			System.exit(1);
 		}
 		Univers.createUnivers(rfs.getListeCorpsCeleste(), rfs);
-		RenderSystem rs = new RenderSystem(rfs.getRayon(), Univers.getUnivers());
-		Stage stageRs = rs.createRender();
+		//RenderSystem rs = new RenderSystem(rfs.getRayon(), Univers.getUnivers());
+		ViewInfosGlobal vig = new ViewInfosGlobal(rfs.getRayon(), Univers.getUnivers(), 1);
+		Stage stageRs = vig.createRender();
 		stageRs.show();
 	}
 
