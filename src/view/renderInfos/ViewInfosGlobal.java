@@ -96,20 +96,12 @@ public class ViewInfosGlobal {
 	private Timer t;
 	
 	
-	public ViewInfosGlobal(double rayon, Univers univers, int typeOfView) {
+	public ViewInfosGlobal(Univers univers) {
 		onPause=false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
 		this.createBackground(Color.BLACK);
 		this.univers = univers;
-		//this.applicateScailOnSystem();
-		switch (typeOfView) {
-		case 1:
-			//this.putPlaneteOnSystemeGlobal(univers.getEntities());
-			break;
-
-		}
-		//this.putPlaneteOnSysteme(univers.getEntities());
 		this.format = NumberFormat.getInstance();
 		format.setMaximumIntegerDigits(2);
 		vaisseauAvance = false;
@@ -149,7 +141,7 @@ public class ViewInfosGlobal {
 	 * 		- Les informations relatives au vaisseau.
 	 * 		- Les informations relatives a la planète séléctionnée.
 	 */
-	public void createRenderInformation() {
+	public VBox createRenderInformation() {
 		List<Label> listlabelVaisseau = infoVaisseau();
 		List<Label> listlabelPlanete = infoPlanete();
 		listlabelvaisseauval = new ArrayList<>();
@@ -183,6 +175,8 @@ public class ViewInfosGlobal {
 		this.hboxFonctionnalite.setPrefSize(this.getWidthWindow() - this.getHeightWindow(), this.getHeightWindow()/3.0);
 
 		creerStyle();
+		
+		return this.renderInfo;
 	}
 
 	public static void setInsetsAuto(VBox vb, List<Label> list) {

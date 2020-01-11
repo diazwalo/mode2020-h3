@@ -108,7 +108,7 @@ private Vaisseau vaisseau;
 	private boolean onPause;
 	private Timer t;
 
-	public RenderSystem(double rayon, Univers univers) {
+	public RenderSystem(Univers univers) {
 		onPause=false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
@@ -118,8 +118,6 @@ private Vaisseau vaisseau;
 		this.putPlaneteOnSysteme(univers.getEntities());
 		this.format = NumberFormat.getInstance();
 		format.setMaximumIntegerDigits(2);
-		vaisseauAvance = false;
-		vaisseauRecule = false;
 	}
 
 	/**
@@ -511,7 +509,7 @@ private Vaisseau vaisseau;
 	 * Elle gère aussi l'entrée Z Q S et D pour bouger le vaisseau.
 	 */
 	public void createRenderSystem() {
-		this.st = new Stage();
+		//this.st = new Stage();
 		this.renderSystem = new Pane();
 		this.renderSystem.setPrefSize(this.getHeightWindow(), this.getHeightWindow());
 
