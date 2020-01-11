@@ -87,15 +87,14 @@ public class RecupFichierSource {
 	public int donneeFichier(String cheminFichier){
 		int i;
 		try{
-			Runtime r = Runtime.getRuntime();
-			Process p = r.exec("find "+cheminFichier+" > ~/git/repository/mode2020-h3/ressource/absolut.txt");			
-			InputStream flux1=new FileInputStream("././ressource/absolut.txt");
-			InputStreamReader lecture1=new InputStreamReader(flux1);
-			BufferedReader buff1=new BufferedReader(lecture1);
-			String ligne1 = buff1.readLine();
-			System.out.println(ligne1);
+			if(cheminFichier.charAt(0)=='~') {
+				System.out.println("Impossible de charger un fichier source via un chemin relatif\n"
+						+ "merci d'utiliser le chemin absolu\n"
+						+ "FileInputStream ne prend pas en charge les chemin relatifs");
+				System.exit(3);
+			}
 			
-			InputStream flux=new FileInputStream("././ressource/astro/04_ExempleDuSujet.astro");
+			InputStream flux=new FileInputStream(cheminFichier);
 			InputStreamReader lecture=new InputStreamReader(flux);
 			BufferedReader buff=new BufferedReader(lecture);
 			String ligne;
