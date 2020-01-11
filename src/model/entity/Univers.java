@@ -2,11 +2,9 @@ package model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
 import controller.fileprocessor.RecupFichierSource;
 import model.movement.Vecteur;
-import view.ihm.RenderSystem;
 
 public class Univers {
 	private List<Entity> entities;

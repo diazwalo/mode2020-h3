@@ -11,7 +11,7 @@ import model.movement.Vecteur;
  *	notamment les étoiles, les planètes et le vaisseau.
  */
 
-public abstract class Entity implements IEulerExplicite {
+public abstract class Entity{
 	protected double masse;
 	protected double rayon;
 	protected double force;
@@ -21,6 +21,7 @@ public abstract class Entity implements IEulerExplicite {
 	protected Image sprite;
 	protected String nom;
 	protected Color color;
+	protected IMethodeCalcul methode;
 
 	public Entity(double masse, double rayon, Vecteur position, Vecteur vitesse, Image sprite, String nom, Color c) {
 		this.masse=masse;
@@ -32,8 +33,9 @@ public abstract class Entity implements IEulerExplicite {
 		this.color=c;
 		this.acceleration = new Vecteur(0, 0);
 		force = 0;
+		
+		this.methode = new EulerExplicite();
 	}
-
 	public Entity(double masse, double rayon, Vecteur position, double vx, double vy, Image sprite, String nom, Color c) {
 		this(masse, rayon, position, new Vecteur(vx,vy), sprite, nom, c);
 	}
@@ -43,11 +45,11 @@ public abstract class Entity implements IEulerExplicite {
 	}
 
 	public Vecteur getMOmega(Entity other) {
-		return IEulerExplicite.getMOmega(this, other);
+		return methode.getMOmega(this, other);
 	}
 
 	public double createForce(Univers others) {
-		return IEulerExplicite.createForce(this, others);
+		return methode.createForce(this, others);
 	}
 	
 	public void setForce(double value) {
@@ -59,7 +61,7 @@ public abstract class Entity implements IEulerExplicite {
 	}
 
 	public void createAcceleration(Univers others) {
-		IEulerExplicite.createAcceleration(this, others);
+		methode.createAcceleration(this, others);
 	}
 
 	public double getMasse() {
@@ -112,6 +114,10 @@ public abstract class Entity implements IEulerExplicite {
 
 	public Color getColor() {
 		return color;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	public Image getSprite() {
