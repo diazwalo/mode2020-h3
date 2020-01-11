@@ -58,12 +58,4 @@ public class Render {
 	private double getHeightWindow() {
 		return graphicsEnvironment.getMaximumWindowBounds().height;
 	}
-	
-	/*
-	 * Render r = new Render(primaryStage, Univers.getUnivers());
-	 * Stage st = r.createRender();
-	 * st.show();
-	 */
-	
-	
 }
