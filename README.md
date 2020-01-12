@@ -1,6 +1,6 @@
 Information :
-- pour changer de vue, utilisez la commande Ctrl + cliquer sur l'entité
-que vous souhaitez fixé au centre.
+- pour changer de vue, utilisez la commande Ctrl + cliquer sur l'entitée
+que vous souhaitez fixer au centre.
 
 
 Étudiants :
