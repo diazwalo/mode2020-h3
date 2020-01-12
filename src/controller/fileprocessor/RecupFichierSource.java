@@ -88,12 +88,13 @@ public class RecupFichierSource {
 		int i;
 		try{
 
-			if(cheminFichier.charAt(0)=='~') {
-				System.out.println("Impossible de charger un fichier source via un chemin relatif\n"
+			/*if(cheminFichier.charAt(0)=='~') {
+				System.out.println("<!!> Impossible de charger un fichier source via un chemin relatif\n"
 						+ "merci d'utiliser le chemin absolu\n"
-						+ "FileInputStream ne prend pas en charge les chemin relatifs");
+						+ "FileInputStream ne prend pas en charge les chemin relatifs\n"
+						+ "Sous linux ou MacOs la commande \"find ~/Répertoire/exemple.astro\" permet d'obtenir le chemin absolu");
 				System.exit(3);
-			}
+			}*/
 			
 			InputStream flux=new FileInputStream(cheminFichier);
 			InputStreamReader lecture=new InputStreamReader(flux);
