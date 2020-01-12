@@ -32,7 +32,7 @@ public class Render {
 		this.view = new HBox();
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		avu = new ViewUniversGlobal(this.univers);
-		vig = new ViewInfosGlobal(this.univers);
+		vig = new ViewInfosGlobal(this.univers, this);
 		t = new Timer();
 		t.scheduleAtFixedRate(new Task(),0,1);
 		onPause = false;
@@ -67,7 +67,7 @@ public class Render {
 		return graphicsEnvironment.getMaximumWindowBounds().height;
 	}
 
-	private class Task extends TimerTask{
+	public class Task extends TimerTask{
 
 		@Override
 		public void run() {

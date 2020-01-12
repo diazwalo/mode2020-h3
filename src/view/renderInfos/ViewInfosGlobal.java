@@ -27,6 +27,8 @@ import model.entity.Entity;
 import model.entity.Univers;
 import model.entity.Vaisseau;
 import model.movement.Vecteur;
+import view.Render;
+import view.Render.Task;
 import view.ihm.Scale;
 
 public class ViewInfosGlobal {
@@ -91,8 +93,10 @@ public class ViewInfosGlobal {
 	private boolean onPause;
 	private boolean onResume;
 	private Timer t;
+	private Render r;
 	
-	public ViewInfosGlobal(Univers univers) {
+	public ViewInfosGlobal(Univers univers, Render r) {
+		this.r = r;
 		onPause = false;
 		onResume = false;
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -524,6 +528,7 @@ public class ViewInfosGlobal {
 			}else {
 				pause.setText("Pause");
 				t = new Timer();
+				t.scheduleAtFixedRate(r.new Task(),0,1);
 				/*onPause = false;
 				onResume = false;*/
 			}
