@@ -14,6 +14,13 @@ les chemins relatif pour les ressources ne semblent pas fonctionner sur Windows 
 Responsabilités par membre Livrable 2:
 
 DESSINGUÉ Clément :
+- Calculs Euler explicite fonctionnels et souci de non-attraction entre les corps réglé.
+- Animations du vaisseau.
+- Sprites et couleurs fonctionnels.
+- Propulsion du vaisseau.
+- Système de temps de propulsion limité.
+- Implémentation MVC.
+- Changement de méthode de calcul grâce à une interface.
 
 
 FORESTAL Virgil :
