@@ -1,12 +1,17 @@
 package controller.fileprocessor;
 
 import view.renderUnivers.AbstractViewUnivers;
-import view.renderUnivers.ViewUniversVaisseau;
+import view.renderUnivers.ViewUniversEntity;
 
+/**
+ * Controlleur
+ * @author DELL
+ *
+ */
 public class ControllerViewRender {
 	
 	/**
-	 * met dans le param "avu" un object ViewUniversGlobal si view égale à 1 ou ViewUniversVaisseau sinon
+	 * met dans le param "avu" un object ViewUniversGlobal si view égale à 1 ou ViewUniversEntity sinon
 	 * @param view
 	 * @param avu
 	 */
@@ -14,7 +19,7 @@ public class ControllerViewRender {
 		if(view == 1) {
 			//avu = new ViewUniversGlobal();
 		}else {
-			avu = new ViewUniversVaisseau();
+			avu = new ViewUniversEntity();
 		}
 	}
 }
