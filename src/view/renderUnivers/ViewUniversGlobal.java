@@ -4,10 +4,7 @@ import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
@@ -132,10 +129,13 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 			Vecteur posEntTempo = entity.getPosition();
 			
 			if(posEntTempo.between((e.getSceneX()-this.getHeightWindow()/2), (e.getSceneY()-this.getHeightWindow()/2), entity.getRayon()+this.scale.getScale())) {
-				System.out.println(" Nom : " + entity.getNom());
 				return entity;
 			}
 		}
 		return null;
+	}
+	
+	public Entity getEntityTargetedByView() {
+		return this.entityTargetedByView;
 	}
 }

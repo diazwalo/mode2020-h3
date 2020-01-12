@@ -1,7 +1,10 @@
 package controller.fileprocessor;
 
+import model.entity.Entity;
+import model.entity.Univers;
 import view.renderUnivers.AbstractViewUnivers;
 import view.renderUnivers.ViewUniversEntity;
+import view.renderUnivers.ViewUniversGlobal;
 
 /**
  * Controlleur
@@ -15,11 +18,20 @@ public class ControllerViewRender {
 	 * @param view
 	 * @param avu
 	 */
-	public void switchViewUnivers(int view, AbstractViewUnivers avu) {
-		if(view == 1) {
-			//avu = new ViewUniversGlobal();
-		}else {
-			avu = new ViewUniversEntity();
+	public static boolean switchViewUnivers(AbstractViewUnivers avu, Univers univers, Entity entityTargeted, boolean changementDeVueFait) {
+		System.out.println(changementDeVueFait);
+		if(entityTargeted != null && avu instanceof ViewUniversGlobal && !changementDeVueFait){
+			System.out.println("ChangeToEntity");
+			avu = new ViewUniversEntity(univers, entityTargeted);
+			return true;
 		}
+		
+		/*if(entityTargeted == null && avu instanceof ViewUniversEntity && sameInstance && toDo.equals(new Integer(-1))) {
+			System.out.println("ChangeToGlobal");
+			toDo = new Integer(0);
+			avu = new ViewUniversGlobal(univers);
+			return true;
+		}*/
+		return false;
 	}
 }

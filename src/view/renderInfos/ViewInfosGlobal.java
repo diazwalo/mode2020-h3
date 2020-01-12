@@ -9,12 +9,9 @@ import java.util.Timer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -22,23 +19,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
 import model.entity.Entity;
 import model.entity.Univers;
 import model.entity.Vaisseau;
 import model.movement.Vecteur;
 import view.Render;
-import view.Render.Task;
 import view.ihm.Scale;
 
 public class ViewInfosGlobal {
 
 	
-	private Stage st;
-	private Scene sc;
-	private HBox hb;
 	private VBox renderInfo;
-	private Pane renderSystem;
 	private Univers univers;
 	private Shape background;
 	private Scale scale;
@@ -46,8 +37,6 @@ public class ViewInfosGlobal {
 	private Vaisseau vaisseau;
 	private GraphicsEnvironment graphicsEnvironment;
 	private NumberFormat format;
-	private boolean vaisseauAvance;
-	private boolean vaisseauRecule;
 
 	private VBox vBoxInfoVaisseau;
 	private VBox vBoxInfoPlanete;
@@ -105,8 +94,6 @@ public class ViewInfosGlobal {
 		this.univers = univers;
 		this.format = NumberFormat.getInstance();
 		format.setMaximumIntegerDigits(2);
-		vaisseauAvance = false;
-		vaisseauRecule = false;
 	}
 	
 	/**
@@ -385,99 +372,7 @@ public class ViewInfosGlobal {
 
 		return res;
 	}
-	
-	private void setActionOnVaisseau() {
-		this.addEventRenderSystem();
-	}
 
-	private void addEventRenderSystem() {
-		renderSystem.addEventHandler(KeyEvent.ANY, e -> {
-			KeyCode key = e.getCode();
-			String osName = System.getProperty("os.name");
-			if(vaisseau.getFuel() > 0) {
-				if(osName.contentEquals("Mac OS X")) {
-					if(key.equals(KeyCode.W) || key.equals(KeyCode.S) || key.equals(KeyCode.A) || key.equals(KeyCode.D)) {
-						//System.out.println(key);
-						boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-						switch(key) {
-						case W :
-							vaisseau.setPprincipalIsOn(state);
-							vaisseauAvance = true;
-							break;
-						case S :
-							vaisseau.setPretroIsOn(state);
-							vaisseauRecule = true;
-							break;
-						case A :
-							vaisseau.gauche();
-							break;
-						case D :
-							vaisseau.droite();
-							break;
-						default:
-							break;
-						}
-
-						if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
-							switch(key) {
-							case W:
-								vaisseauAvance = false;
-								break;
-							case S :
-								vaisseauRecule = false;
-								break;
-							default:
-								break;
-							}
-						}
-					}
-				}else {
-					if(key.equals(KeyCode.Z) || key.equals(KeyCode.S) || key.equals(KeyCode.Q) || key.equals(KeyCode.D)) {
-						boolean state = e.getEventType().equals(KeyEvent.KEY_PRESSED) ||  e.getEventType().equals(KeyEvent.KEY_TYPED);
-
-						switch(key) {
-						case Z :
-							vaisseau.setPprincipalIsOn(state);
-							vaisseauAvance = true;
-							break;
-						case S :
-							vaisseau.setPretroIsOn(state);
-							vaisseauRecule = true;
-							break;
-						case Q :
-							vaisseau.gauche();
-							break;
-						case D :
-							vaisseau.droite();
-							break;
-						default:
-							break;
-						}
-
-						if(e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
-							switch(key) {
-							case Z :
-								vaisseauAvance = false;
-								break;
-							case S :
-								vaisseauRecule = false;
-								break;
-							default:
-								break;
-							}
-						}
-					}
-				}
-			} else {
-				vaisseau.setPprincipalIsOn(false);
-				vaisseau.setPretroIsOn(false);
-				vaisseauAvance = false;
-				vaisseauRecule = false;
-			}
-
-		});
-	}
-	
 	public Entity getEntityTargeted(MouseEvent e) {
 		// TODO : Les position sont bizard (ca marche pour le soleil mais pas la Terre
 		for (Entity entity : this.univers.getEntities()) {

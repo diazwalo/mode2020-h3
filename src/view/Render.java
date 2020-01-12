@@ -4,6 +4,7 @@ import java.awt.GraphicsEnvironment;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import controller.fileprocessor.ControllerViewRender;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 import model.entity.Univers;
 import view.renderInfos.ViewInfosGlobal;
 import view.renderUnivers.AbstractViewUnivers;
+import view.renderUnivers.ViewUniversEntity;
 import view.renderUnivers.ViewUniversGlobal;
 
 public class Render {
@@ -22,16 +24,17 @@ public class Render {
 	Univers univers;
 	Timer t;
 	boolean onPause;
+	boolean changementDeVueFait = false;
 	
-	HBox view;
+	HBox render;
 	private GraphicsEnvironment graphicsEnvironment;
 	
 	public Render (Stage stage, Univers univers) {
 		this.stage = stage;
 		this.univers = univers;
-		this.view = new HBox();
+		this.render = new HBox();
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		avu = new ViewUniversGlobal(this.univers);
+		avu = new ViewUniversEntity(this.univers, this.univers.getEntities().get(3));
 		vig = new ViewInfosGlobal(this.univers, this);
 		t = new Timer();
 		t.scheduleAtFixedRate(new Task(),0,1);
@@ -41,8 +44,8 @@ public class Render {
 	public Stage createRender() {
 		Pane renderSystem = this.avu.createRenderSystem();
 		VBox renderInfo = this.vig.createRenderInformation(this.t);
-		view.getChildren().addAll(renderSystem, renderInfo);
-		Scene sc = new Scene(view, this.getWidthWindow(), this.getHeightWindow());
+		render.getChildren().addAll(renderSystem, renderInfo);
+		Scene sc = new Scene(render, this.getWidthWindow(), this.getHeightWindow());
 		
 		this.stage.setScene(sc);
 		this.stage.setTitle("Modélisation Système");
@@ -78,11 +81,37 @@ public class Render {
 			
 			Platform.runLater(() ->{
 				avu.majViewUnivers();
-				if(vig.getOnResume()) {
+				//ne marche pas
+				/*if(vig.getOnResume()) {
 					//t.scheduleAtFixedRate(new Task(),0,1);
 					vig.setOnResume();
-				}
+				}*/
 				vig.majViewInfo(avu.getEntityTargeted());
+				
+				/*if(ControllerViewRender.switchViewUnivers(avu, univers, avu.getEntityTargetedByView(), changementDeVueFait)) {
+					Pane renderSystem = avu.createRenderSystem();
+					VBox renderInfo = vig.createRenderInformation(t);
+					render = new HBox();
+					render.getChildren().addAll(renderSystem, renderInfo);
+					Scene sc = new Scene(render, getWidthWindow(), getHeightWindow());
+					
+					stage.setScene(sc);
+					
+					changementDeVueFait = true;
+				}*/
+				/*changementDeVueFait = ControllerViewRender.switchViewUnivers(avu, univers, avu.getEntityTargetedByView(), changementDeVueFait);
+				if(!changementDeVueFait) {
+					System.out.println("in");
+					Pane renderSystem = avu.createRenderSystem();
+					VBox renderInfo = vig.createRenderInformation(t);
+					render = new HBox();
+					render.getChildren().addAll(renderSystem, renderInfo);
+					Scene sc = new Scene(render, getWidthWindow(), getHeightWindow());
+					
+					stage.setScene(sc);
+					
+					changementDeVueFait = true;
+				}*/
 			});
 
 		}

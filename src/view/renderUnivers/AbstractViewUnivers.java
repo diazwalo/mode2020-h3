@@ -40,6 +40,7 @@ public abstract class AbstractViewUnivers {
 	public abstract void animate(boolean vaisseauAvance, boolean vaisseauRecule);
 	public abstract void placerPoint(List<Entity> corps);
 	public abstract Entity getEntityTargeted(MouseEvent e);
+	public abstract Entity getEntityTargetedByView();
 	
 	/**
 	 * Retourne la largeur de l'écran.
@@ -189,7 +190,6 @@ public abstract class AbstractViewUnivers {
 		this.renderSystem.setOnMouseClicked(e -> {
 			this.entitytargeted = getEntityTargeted(e);
 			if(e.isControlDown()) {
-				System.out.print("CTRL DOWN -");
 				this.entityTargetedByView = getEntityTargeted(e);
 			}
 		});
