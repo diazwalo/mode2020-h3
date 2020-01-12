@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import model.entity.Univers;
 import view.Render;
-import view.renderInfos.ViewInfosGlobal;
 
 /**
  * 

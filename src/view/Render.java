@@ -11,12 +11,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.entity.Entity;
 import model.entity.Univers;
 import view.renderInfos.ViewInfosGlobal;
 import view.renderUnivers.AbstractViewUnivers;
 import view.renderUnivers.ViewUniversEntity;
 import view.renderUnivers.ViewUniversGlobal;
 
+/**
+ * Class regroupant la partie de droite de la vue et la partie de gauche.
+ * Elle gere aussi le Timer qui fait tourner la simulation.
+ * @author Virgil
+ *
+ */
 public class Render {
 	Stage stage;
 	AbstractViewUnivers avu;
@@ -25,6 +32,7 @@ public class Render {
 	Timer t;
 	boolean onPause;
 	boolean changementDeVueFait = true;
+	boolean derniereChance = true;
 	
 	HBox render;
 	private GraphicsEnvironment graphicsEnvironment;
@@ -81,25 +89,26 @@ public class Render {
 			
 			Platform.runLater(() ->{
 				avu.majViewUnivers();
-				//ne marche pas
-				/*if(vig.getOnResume()) {
-					//t.scheduleAtFixedRate(new Task(),0,1);
-					vig.setOnResume();
-				}*/
+
 				vig.majViewInfo(avu.getEntityTargeted());
 
+				System.out.println(avu.getEntityTargetedByView());
+				System.out.println(avu instanceof ViewUniversEntity);
+				
 				changementDeVueFait = ControllerViewRender.switchViewUnivers(avu, univers, avu.getEntityTargetedByView(), changementDeVueFait);
-				if(!changementDeVueFait) {
-					System.out.println("in");
+				if(!changementDeVueFait && derniereChance) {
+					Entity targeted = avu.getEntityTargetedByView();
+					avu = new ViewUniversEntity(univers, targeted);
+					
 					Pane renderSystem = avu.createRenderSystem();
 					VBox renderInfo = vig.createRenderInformation(t);
 					render = new HBox();
 					render.getChildren().addAll(renderSystem, renderInfo);
+					
 					Scene sc = new Scene(render, getWidthWindow(), getHeightWindow());
 					
 					stage.setScene(sc);
-					
-					changementDeVueFait = true;
+					derniereChance = false;
 				}
 			});
 

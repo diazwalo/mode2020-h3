@@ -18,15 +18,17 @@ import model.entity.ObjetSimule;
 import model.entity.Univers;
 import model.entity.Vaisseau;
 import model.movement.Vecteur;
-import view.ihm.Scale;
+import view.Scale;
 
 /**
- * Vue de la partie gauche de l'écran ou l'affichage est relatif à un entitée choisie
+ * Vue de l'univers centrée sur une entitée passée en parametre à l'instanciation
+ * C'est la partie gauche de l'affichage qui est crée ici.
  * @author Virgil
  *
  */
 public class ViewUniversEntity extends AbstractViewUnivers{
 	public ViewUniversEntity(Univers univers, Entity targeted) {
+		//System.out.println("VIEW UNIVERS ENTITY");
 		super.entityTargetedByView = targeted;
 		super.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());

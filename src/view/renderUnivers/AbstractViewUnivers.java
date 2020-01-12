@@ -16,8 +16,13 @@ import model.entity.Entity;
 import model.entity.Univers;
 import model.entity.Vaisseau;
 import model.movement.Vecteur;
-import view.ihm.Scale;
+import view.Scale;
 
+/**
+ * Classe abstraite jouant le role de scelette de la partie gauche de la vue c'est à dire la vue de l'univers aves ces entitées.
+ * @author Virgil
+ *
+ */
 public abstract class AbstractViewUnivers {
 	protected List<Shape> shapes;
 	protected List<Circle> suiviPoints;

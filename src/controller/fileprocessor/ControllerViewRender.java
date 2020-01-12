@@ -7,8 +7,9 @@ import view.renderUnivers.ViewUniversEntity;
 import view.renderUnivers.ViewUniversGlobal;
 
 /**
- * Controlleur
- * @author DELL
+ * Controlleur faisant la transition entre les différentes vue 
+ * Celle cetrée sur le soleil et celle centrée sur une entité particulière.
+ * @author Virgil
  *
  */
 public class ControllerViewRender {
@@ -19,19 +20,10 @@ public class ControllerViewRender {
 	 * @param avu
 	 */
 	public static boolean switchViewUnivers(AbstractViewUnivers avu, Univers univers, Entity entityTargeted, boolean changementDeVueFait) {
-		System.out.println(changementDeVueFait);
 		if(entityTargeted != null && avu instanceof ViewUniversGlobal && changementDeVueFait){
-			System.out.println("ChangeToEntity");
 			avu = new ViewUniversEntity(univers, entityTargeted);
 			return false;
 		}
-		
-		/*if(entityTargeted == null && avu instanceof ViewUniversEntity && sameInstance && toDo.equals(new Integer(-1))) {
-			System.out.println("ChangeToGlobal");
-			toDo = new Integer(0);
-			avu = new ViewUniversGlobal(univers);
-			return true;
-		}*/
 		return true;
 	}
 }

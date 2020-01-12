@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -24,8 +23,14 @@ import model.entity.Univers;
 import model.entity.Vaisseau;
 import model.movement.Vecteur;
 import view.Render;
-import view.ihm.Scale;
+import view.Scale;
 
+/**
+ * Vue de la partie droite de l'écran. 
+ * Cela contient les informations relative aux entité et certains Buttons.
+ * @author Virgil
+ *
+ */
 public class ViewInfosGlobal {
 
 	
@@ -434,6 +439,7 @@ public class ViewInfosGlobal {
 	public void majViewInfo(Entity entityTargeted) {
 		this.entitytargeted = entityTargeted;
 		updateInfo();
+		majFuel();
 	}
 
 	public boolean getOnPause() {

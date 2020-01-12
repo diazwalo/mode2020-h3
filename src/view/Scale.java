@@ -1,8 +1,13 @@
-package view.ihm;
+package view;
 
 import model.entity.Entity;
 import model.entity.Univers;
 
+/**
+ * Classe gérant l'échelle par rapport à la taille de l'écran et celles des entités
+ * @author Virgil
+ *
+ */
 public class Scale {
 	private double newScale;
 	

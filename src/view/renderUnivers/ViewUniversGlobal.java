@@ -18,8 +18,14 @@ import model.entity.ObjetSimule;
 import model.entity.Univers;
 import model.entity.Vaisseau;
 import model.movement.Vecteur;
-import view.ihm.Scale;
+import view.Scale;
 
+/**
+ * Vue de l'univers centrée sur le Soleil
+ * C'est la partie gauche de l'affichage qui est crée ici.
+ * @author Virgil
+ *
+ */
 public class ViewUniversGlobal extends AbstractViewUnivers{
 	public ViewUniversGlobal(Univers univers) {
 		super.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -31,6 +37,7 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 		this.entitytargeted = null;
 		vaisseauAvance = false;
 		vaisseauRecule = false;
+		super.entityTargetedByView = null;
 	}
 	
 	public Vecteur getDrawPosition(Entity entity) {
@@ -93,7 +100,7 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 			avance.getTransforms().add(new javafx.scene.transform.Scale(vaisseau.getRayon(),vaisseau.getRayon()));
 			avance.getTransforms().add(new Rotate(vaisseau.getAngle()-180));
 			avance.setFill(Color.YELLOW);
-//			System.out.println("LE POLYGONE QUI AVANCE X : "+ (vaisseau.getPosition().getx()-1.5) + "  | Y : " + vaisseau.getPosition().gety());
+			System.out.println("LE POLYGONE QUI AVANCE X : "+ (vaisseau.getPosition().getx()-1.5) + "  | Y : " + vaisseau.getPosition().gety());
 			this.shapes.add(avance);
 		} if(vaisseauRecule) {
 			vaisseau.useFuel();
