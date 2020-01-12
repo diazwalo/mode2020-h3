@@ -91,9 +91,6 @@ public class Render {
 				avu.majViewUnivers();
 
 				vig.majViewInfo(avu.getEntityTargeted());
-
-				System.out.println(avu.getEntityTargetedByView());
-				System.out.println(avu instanceof ViewUniversEntity);
 				
 				changementDeVueFait = ControllerViewRender.switchViewUnivers(avu, univers, avu.getEntityTargetedByView(), changementDeVueFait);
 				if(!changementDeVueFait && derniereChance) {
