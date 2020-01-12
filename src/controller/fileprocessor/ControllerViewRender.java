@@ -20,10 +20,10 @@ public class ControllerViewRender {
 	 */
 	public static boolean switchViewUnivers(AbstractViewUnivers avu, Univers univers, Entity entityTargeted, boolean changementDeVueFait) {
 		System.out.println(changementDeVueFait);
-		if(entityTargeted != null && avu instanceof ViewUniversGlobal && !changementDeVueFait){
+		if(entityTargeted != null && avu instanceof ViewUniversGlobal && changementDeVueFait){
 			System.out.println("ChangeToEntity");
 			avu = new ViewUniversEntity(univers, entityTargeted);
-			return true;
+			return false;
 		}
 		
 		/*if(entityTargeted == null && avu instanceof ViewUniversEntity && sameInstance && toDo.equals(new Integer(-1))) {
@@ -32,6 +32,6 @@ public class ControllerViewRender {
 			avu = new ViewUniversGlobal(univers);
 			return true;
 		}*/
-		return false;
+		return true;
 	}
 }

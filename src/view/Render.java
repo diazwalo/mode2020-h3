@@ -34,7 +34,7 @@ public class Render {
 		this.univers = univers;
 		this.render = new HBox();
 		this.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		avu = new ViewUniversEntity(this.univers, this.univers.getEntities().get(3));
+		avu = new ViewUniversGlobal(this.univers);
 		vig = new ViewInfosGlobal(this.univers, this);
 		t = new Timer();
 		t.scheduleAtFixedRate(new Task(),0,1);
@@ -87,19 +87,8 @@ public class Render {
 					vig.setOnResume();
 				}*/
 				vig.majViewInfo(avu.getEntityTargeted());
-				
-				/*if(ControllerViewRender.switchViewUnivers(avu, univers, avu.getEntityTargetedByView(), changementDeVueFait)) {
-					Pane renderSystem = avu.createRenderSystem();
-					VBox renderInfo = vig.createRenderInformation(t);
-					render = new HBox();
-					render.getChildren().addAll(renderSystem, renderInfo);
-					Scene sc = new Scene(render, getWidthWindow(), getHeightWindow());
-					
-					stage.setScene(sc);
-					
-					changementDeVueFait = true;
-				}*/
-				/*changementDeVueFait = ControllerViewRender.switchViewUnivers(avu, univers, avu.getEntityTargetedByView(), changementDeVueFait);
+
+				changementDeVueFait = ControllerViewRender.switchViewUnivers(avu, univers, avu.getEntityTargetedByView(), changementDeVueFait);
 				if(!changementDeVueFait) {
 					System.out.println("in");
 					Pane renderSystem = avu.createRenderSystem();
@@ -111,7 +100,7 @@ public class Render {
 					stage.setScene(sc);
 					
 					changementDeVueFait = true;
-				}*/
+				}
 			});
 
 		}
