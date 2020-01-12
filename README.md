@@ -2,7 +2,7 @@ Information :
 - pour changer de vue, utilisez la commande Ctrl + clique gauche sur l'entitée
 que vous souhaitez fixer au centre.
 - Si possible, lancer le programme en ligne de commande sur Linux ou MacOs,
-les chemins relatif ne semblent pas fonctionner sur Windows de notre côté.
+les chemins relatif pour les ressources ne semblent pas fonctionner sur Windows de notre côté.
 
 
 Étudiants :
