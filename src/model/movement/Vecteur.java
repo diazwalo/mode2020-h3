@@ -58,10 +58,16 @@ public class Vecteur {
 	}
 	
 	public boolean between(double posXMouseOnScreen, double posYMouseOnScreen, double rayon) {
-		return posXMouseOnScreen < this.x + rayon && 
-				posXMouseOnScreen > this.x - rayon &&
-				posYMouseOnScreen < this.y + rayon && 
-				posYMouseOnScreen > this.y - rayon;
+		System.out.println("RAYON : " + rayon);
+		System.out.println(posXMouseOnScreen + " < " + (this.x + rayon) + " && \n" +
+				posXMouseOnScreen + " > " + (this.x - rayon) + " &&\n" +
+				posYMouseOnScreen + " < " + (this.y + rayon) +" &&\n" + 
+				posYMouseOnScreen + " > " + (this.y - rayon) + ";");
+						
+		return Math.abs(posXMouseOnScreen) < Math.abs(this.x) + rayon && 
+				Math.abs(posXMouseOnScreen) > Math.abs(this.x) - rayon &&
+				Math.abs(posYMouseOnScreen) < Math.abs(this.y) + rayon && 
+				Math.abs(posYMouseOnScreen) > Math.abs(this.y) - rayon;
 	}
 	
 	public String toString() {

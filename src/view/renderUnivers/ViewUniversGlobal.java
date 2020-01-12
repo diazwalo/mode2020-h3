@@ -4,6 +4,8 @@ import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -164,9 +166,6 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 		this.renderSystem.getChildren().add(background);
 		this.renderSystem.getChildren().addAll(shapes);
 		this.setMouseEventOnSysteme();
-		/**
-		 * A REMETTRE APRES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		 */
 
 		renderSystem.setFocusTraversable(true);
 		
@@ -307,7 +306,12 @@ public class ViewUniversGlobal extends AbstractViewUnivers{
 		// TODO : Les position sont bizard (ca marche pour le soleil mais pas la Terre
 		for (Entity entity : this.univers.getEntities()) {
 			Vecteur posEntTempo = entity.getPosition();
-			if(posEntTempo.between(e.getSceneX(), e.getSceneY(), entity.getRayon())) {
+			
+			/*System.out.println("Expected : " + (e.getSceneX()-this.getHeightWindow()/2) + ":" + (e.getSceneY()-this.getHeightWindow()/2));
+			System.out.println("Tested : " + posEntTempo);*/
+			System.out.print(entity.getNom() + " ");
+			if(posEntTempo.between((e.getSceneX()-this.getHeightWindow()/2), (e.getSceneY()-this.getHeightWindow()/2), entity.getRayon()+this.scale.getScale())) {
+				System.out.println("in");
 				return entity;
 			}
 		}

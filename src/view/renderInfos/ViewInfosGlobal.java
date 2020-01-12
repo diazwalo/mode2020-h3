@@ -529,6 +529,7 @@ public class ViewInfosGlobal {
 				pause.setText("Pause");
 				t = new Timer();
 				t.scheduleAtFixedRate(r.new Task(),0,1);
+				System.out.println("in");
 				/*onPause = false;
 				onResume = false;*/
 			}
