@@ -1,5 +1,5 @@
 Information :
-- pour changer de vue, utilisez la commande Ctrl + cliquer sur l'entitée
+- pour changer de vue, utilisez la commande Ctrl + clique gauche sur l'entitée
 que vous souhaitez fixer au centre.
 
 
@@ -15,7 +15,10 @@ DESSINGUÉ Clément :
 
 
 FORESTAL Virgil :
-
+- Factorisation du code à l'aide du découpage du MVC.
+- Implémentation complète du MVC (ft Louis).
+- Factorisation du code gérant les méthode de calcule (ft Clément).
+- Calcule de la méthode RK4.
 
 GAMBIER Louis 
 - Ajout du lancement du programme avec passage de paramètres pour les ressources
