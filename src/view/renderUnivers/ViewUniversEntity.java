@@ -45,7 +45,7 @@ public class ViewUniversEntity extends AbstractViewUnivers{
 		Vecteur pos = entity.getPosition();
 		// C4EST ICIIIII LUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 		return new Vecteur(	pos.getx() + super.getHeightWindow()/2 - this.entityTargetedByView.getPosition().getx(),
-							super.getHeightWindow()/2 - pos.gety() + this.entityTargetedByView.getPosition().getx());
+							super.getHeightWindow()/2 - pos.gety() + this.entityTargetedByView.getPosition().gety());
 	}
 
 	@Override
