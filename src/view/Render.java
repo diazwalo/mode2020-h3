@@ -24,7 +24,7 @@ public class Render {
 	Univers univers;
 	Timer t;
 	boolean onPause;
-	boolean changementDeVueFait = false;
+	boolean changementDeVueFait = true;
 	
 	HBox render;
 	private GraphicsEnvironment graphicsEnvironment;

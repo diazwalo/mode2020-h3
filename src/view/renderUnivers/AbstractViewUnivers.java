@@ -31,7 +31,7 @@ public abstract class AbstractViewUnivers {
 	protected Vaisseau vaisseau;
 	
 	protected Entity entitytargeted;
-	protected Entity entityTargetedByView = null;
+	protected Entity entityTargetedByView;
 	protected boolean vaisseauAvance;
 	protected boolean vaisseauRecule;
 	

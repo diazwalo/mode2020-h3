@@ -27,9 +27,10 @@ import view.ihm.Scale;
  */
 public class ViewUniversEntity extends AbstractViewUnivers{
 	public ViewUniversEntity(Univers univers, Entity targeted) {
+		super.entityTargetedByView = targeted;
 		super.graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.scale = new Scale(univers , this.getHeightWindow());
-		this.createBackground(Color.RED);
+		this.createBackground(Color.BLACK);
 		this.univers = univers;
 		this.putPlaneteOnSystemeGlobal(univers.getEntities());
 		this.vaisseau = Vaisseau.getInstance();
@@ -42,8 +43,9 @@ public class ViewUniversEntity extends AbstractViewUnivers{
 	public Vecteur getDrawPosition(Entity entity) {
 		// TODO Auto-generated method stub
 		Vecteur pos = entity.getPosition();
-		return new Vecteur(	pos.getx() + super.getHeightWindow()/2,
-							super.getHeightWindow()/2 - pos.gety());
+		// C4EST ICIIIII LUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+		return new Vecteur(	pos.getx() + super.getHeightWindow()/2 - this.entityTargetedByView.getPosition().getx(),
+							super.getHeightWindow()/2 - pos.gety() + this.entityTargetedByView.getPosition().getx());
 	}
 
 	@Override
